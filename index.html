@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 News Brain - Financial Announcements Tracker</title>
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📚</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 News Brain</h1>
+            <p>Financial Announcements Knowledge System</p>
+        </header>
+        <div class="dashboard">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCompanies">0</div>
+                <div class="stat-label">Total Companies</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="expectedThisMonth">0</div>
+                <div class="stat-label">Expected This Month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="overdueCount">0</div>
+                <div class="stat-label">Overdue (180+ days)</div>
+            </div>
+        </div>
+
+        <div class="alerts-section" id="alertsSection"></div>
+
+        <!-- QUICK UPDATE PANEL -->
+        <div id="quickUpdatePanel" style="
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 18px 24px; margin: 16px 0;
+        ">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <span style="font-weight:700; font-size:15px; white-space:nowrap;">⚡ Quick Update</span>
+
+                <!-- Company selector -->
+                <select id="quCompany" style="flex:1; min-width:160px; padding:8px 10px;
+                    border:1px solid #ddd; border-radius:8px; font-size:14px; background:#fff;">
+                    <option value="">— Select company —</option>
+                </select>
+
+                <!-- Tab toggle -->
+                <div style="display:flex; border:1px solid #ddd; border-radius:8px; overflow:hidden; flex-shrink:0;">
+                    <button type="button" id="quTabPast" onclick="quSetTab('past')" style="
+                        padding:7px 14px; font-size:13px; font-weight:600; border:none; cursor:pointer;
+                        background:#3182ce; color:#fff;">
+                        📊 Past Results
+                    </button>
+                    <button type="button" id="quTabUpcoming" onclick="quSetTab('upcoming')" style="
+                        padding:7px 14px; font-size:13px; font-weight:600; border:none; cursor:pointer;
+                        background:#fff; color:#666;">
+                        📅 Upcoming Date
+                    </button>
+                </div>
+
+                <!-- Date picker -->
+                <input type="date" id="quDate" style="
+                    padding:8px 10px; border:1px solid #ddd; border-radius:8px;
+                    font-size:14px; flex-shrink:0;">
+
+                <!-- Optional URL -->
+                <input type="text" id="quUrl" placeholder="Article URL (optional)" style="
+                    flex:2; min-width:180px; padding:8px 10px; border:1px solid #ddd;
+                    border-radius:8px; font-size:13px; color:#444;">
+
+                <!-- Save button -->
+                <button type="button" onclick="quSave()" style="
+                    padding:8px 20px; background:#38a169; color:#fff; border:none;
+                    border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;
+                    white-space:nowrap; flex-shrink:0;">
+                    ✓ Save
+                </button>
+            </div>
+            <div id="quHint" style="font-size:12px; color:#718096; margin-top:8px;">
+                <b>Past Results</b> → updates "Last Announcement" + recalculates Expected Next &nbsp;|&nbsp;
+                <b>Upcoming Date</b> → sets the confirmed earnings date in "Upcoming Earnings" column
+            </div>
+        </div>
+
+        <div class="controls">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="🔍 Search company name..."
+                autocomplete="off"
+            >
+            <div class="filter-buttons">
+                <button type="button" class="filter-btn active" onclick="filterByRegion('all')">All</button>
+                <button type="button" class="filter-btn" onclick="filterByRegion('North America')">N.America</button>
+                <button type="button" class="filter-btn" onclick="filterByRegion('Europe')">Europe</button>
+                <button type="button" class="filter-btn" onclick="filterByRegion('Asia')">Asia</button>
+                <button type="button" class="filter-btn" onclick="filterByRegion('Africa')">Africa</button>
+                <button type="button" class="filter-btn" onclick="filterByRegion('Latin America')">LatAm</button>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <table class="companies-table">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Region</th>
+                        <th>Last Announcement</th>
+                        <th>Days Ago</th>
+                        <th>Expected Next</th>
+                        <th>Upcoming Earnings</th>
+                        <th>Best Source</th>
+                        <th style="text-align:center; width:40px;">News</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="8" style="text-align:center;padding:30px;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>Last updated: <span id="lastUpdated"></span> | Total companies: <strong id="footerCount">0</strong></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="features.js"></script>
+    <script src="text-parser.js"></script>
+    <script src="fixes.js"></script>
+</body>
+</html>
