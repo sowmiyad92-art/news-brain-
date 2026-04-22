@@ -1,0 +1,730 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #667eea;
+    --primary-dark: #764ba2;
+    --success: #48bb78;
+    --warning: #f6ad55;
+    --danger: #f56565;
+    --light: #f7fafc;
+    --dark: #2d3748;
+    --border: #e2e8f0;
+    --purple: #a78bfa;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--dark);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    background: var(--light);
+    border-bottom: 1px solid var(--border);
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #718096;
+    font-weight: 500;
+}
+
+/* DRAG-DROP ZONE */
+.drag-drop-zone {
+    margin: 20px 30px 0;
+    padding: 30px;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    background: #f9fafb;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.drag-drop-zone.drag-over {
+    background: #e0e7ff;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.drag-drop-content h3 {
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+
+.drag-drop-content p {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.news-url-input {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.news-url-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* TEXT/BULK UPLOAD ZONE */
+.text-upload-zone {
+    margin: 20px 30px 0;
+    padding: 30px;
+    border: 2px solid var(--purple);
+    border-radius: 12px;
+    background: #f3f0ff;
+    text-align: center;
+}
+
+.text-upload-content h3 {
+    color: var(--dark);
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.text-upload-content p {
+    color: #718096;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.announcement-textarea {
+    width: 100%;
+    max-width: 800px;
+    height: 120px;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.announcement-textarea:focus {
+    outline: none;
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+}
+
+.submit-text-btn {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: var(--purple);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.submit-text-btn:hover {
+    background: #9f7aea;
+}
+
+.submit-text-btn:active {
+    transform: scale(0.98);
+}
+
+/* NOTIFICATIONS */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    z-index: 1000;
+    transform: translateY(150px);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateY(0);
+}
+
+.notification-success {
+    background: var(--success);
+    color: white;
+}
+
+.notification-error {
+    background: var(--danger);
+    color: white;
+}
+
+.notification-info {
+    background: var(--primary);
+    color: white;
+}
+
+.notification-warning {
+    background: var(--warning);
+    color: white;
+}
+
+.alerts-section {
+    padding: 30px;
+    background: var(--light);
+    border-bottom: 1px solid var(--border);
+    display: none;
+}
+
+.alert {
+    background: #fff5f5;
+    border-left: 4px solid var(--danger);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #742a2a;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.controls {
+    padding: 30px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.controls input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+}
+
+.controls input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s;
+    color: var(--dark);
+}
+
+.filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.table-section {
+    padding: 30px;
+    overflow-x: auto;
+}
+
+.companies-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.companies-table thead {
+    background: var(--light);
+}
+
+.companies-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+}
+
+.companies-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.companies-table tbody tr {
+    transition: background 0.2s;
+}
+
+.companies-table tbody tr:hover {
+    background: var(--light);
+}
+
+.companies-table tbody tr.overdue {
+    background: #fff5f5;
+}
+
+.companies-table tbody tr.newly-updated {
+    background: #f0fdf4 !important;
+    animation: pulse-green 0.5s ease-in-out;
+}
+
+@keyframes pulse-green {
+    0% { background-color: #86efac; }
+    100% { background-color: #f0fdf4; }
+}
+
+.company-name {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.days-overdue {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.days-ok {
+    color: var(--success);
+    font-weight: 600;
+}
+
+.days-future {
+    color: var(--purple);
+    font-weight: 600;
+    background: #e0e7ff;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.source-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #edf2f7;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.ir-link {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--primary);
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+    transition: background 0.3s;
+}
+
+.ir-link:hover {
+    background: var(--primary-dark);
+}
+
+footer {
+    padding: 20px 30px;
+    background: var(--light);
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: #718096;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .companies-table {
+        font-size: 12px;
+    }
+    
+    .companies-table th,
+    .companies-table td {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 24px;
+    }
+    
+    .filter-buttons {
+        flex-direction: column;
+    }
+    
+    .filter-btn {
+        width: 100%;
+    }
+    
+    .text-upload-zone {
+        margin: 20px 15px 0;
+    }
+    
+    .announcement-textarea {
+        height: 100px;
+    }
+}
+/* ═══════════════════════════════════════════
+   PASTE THESE AT THE BOTTOM OF YOUR style.css
+   ═══════════════════════════════════════════ */
+
+/* Tomorrow highlight — pulsing yellow row */
+tr.due-tomorrow {
+    background: linear-gradient(90deg, #fffbea, #fef3c7) !important;
+    animation: tomorrowPulse 2s ease-in-out infinite;
+}
+tr.due-tomorrow td {
+    border-left: 3px solid #f59e0b;
+}
+@keyframes tomorrowPulse {
+    0%, 100% { background-color: #fffbea; }
+    50%       { background-color: #fde68a; }
+}
+
+/* "Tomorrow!" badge next to company name */
+.tomorrow-badge {
+    display: inline-block;
+    background: #f59e0b;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+}
+
+/* News column badges */
+.news-badge, .news-badge-empty {
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.15s;
+    display: inline-block;
+}
+.news-badge:hover, .news-badge-empty:hover {
+    transform: scale(1.3);
+}
+.news-badge-empty {
+    color: #bbb;
+    font-size: 18px;
+    line-height: 1;
+}
+/* ═══════════════════════════════════════════════════
+   ADD THESE TO THE BOTTOM OF YOUR style.css
+   (for features.js — daily reminder + search upgrade)
+   ═══════════════════════════════════════════════════ */
+
+/* Date filter dropdown row */
+#advancedFilterRow select {
+    transition: border-color 0.2s;
+}
+#advancedFilterRow select:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49,130,206,0.15);
+}
+#clearFiltersBtn:hover {
+    background: #edf2f7 !important;
+    border-color: #aaa !important;
+}
+
+/* Search result count badge */
+#searchResultCount {
+    font-size: 12px;
+    color: #3182ce;
+    font-weight: 600;
+    background: #ebf8ff;
+    padding: 3px 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+#searchResultCount:empty {
+    display: none;
+}
+
+/* Reminder modal rows hover */
+#reminderOverlay table tbody tr:hover {
+    background: #f7fafc !important;
+}
+/* ═══════════════════════════════════════════════════
+   ADD THESE TO THE BOTTOM OF YOUR style.css
+   (for features.js — daily reminder + search upgrade)
+   ═══════════════════════════════════════════════════ */
+
+/* Date filter dropdown row */
+#advancedFilterRow select {
+    transition: border-color 0.2s;
+}
+#advancedFilterRow select:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49,130,206,0.15);
+}
+#clearFiltersBtn:hover {
+    background: #edf2f7 !important;
+    border-color: #aaa !important;
+}
+
+/* Search result count badge */
+#searchResultCount {
+    font-size: 12px;
+    color: #3182ce;
+    font-weight: 600;
+    background: #ebf8ff;
+    padding: 3px 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+#searchResultCount:empty {
+    display: none;
+}
+
+/* Reminder modal rows hover */
+#reminderOverlay table tbody tr:hover {
+    background: #f7fafc !important;
+}
+
+/* ── Enhanced Search Dropdown ── */
+#searchWrapper { position: relative; }
+
+#searchDropdown { scrollbar-width: thin; }
+#searchDropdown::-webkit-scrollbar { width: 5px; }
+#searchDropdown::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+.sd-item:hover, .sd-active {
+    background: #f0f7ff !important;
+}
+.sd-item .sd-del:hover { color: #e53e3e !important; }
+
+/* Search result count badge */
+#searchResultCount {
+    font-size: 12px; color: #3182ce; font-weight: 600;
+    background: #ebf8ff; padding: 3px 10px;
+    border-radius: 10px; display: inline-block;
+}
+#searchResultCount:empty { display: none; }
+
+/* Highlighted match in table */
+#tableBody mark {
+    background: #fef08a;
+    border-radius: 2px;
+    padding: 0 1px;
+    font-style: normal;
+}
+
+/* ── Announced Date column ── */
+.announced-date-confirmed {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #f0fff4; border: 1px solid #68d391;
+    color: #276749; border-radius: 6px;
+    padding: 3px 8px; font-size: 12px; font-weight: 600;
+    white-space: nowrap;
+}
+.announced-link {
+    text-decoration: none; font-size: 13px;
+    transition: transform 0.15s;
+}
+.announced-link:hover { transform: scale(1.2); }
+.announced-clear {
+    cursor: pointer; color: #fc8181; font-size: 15px;
+    font-weight: bold; line-height: 1;
+    margin-left: 2px;
+}
+.announced-clear:hover { color: #e53e3e; }
+
+.announced-date-empty {
+    color: #a0aec0; font-size: 12px; cursor: pointer;
+    border: 1px dashed #cbd5e0; border-radius: 6px;
+    padding: 3px 8px; transition: all 0.15s;
+    white-space: nowrap;
+}
+.announced-date-empty:hover {
+    color: #3182ce; border-color: #3182ce;
+    background: #ebf8ff;
+}
+
+/* Expected Next badges */
+.badge-confirmed {
+    display: inline-block; background: #c6f6d5;
+    color: #22543d; font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 8px;
+    margin-left: 4px; vertical-align: middle;
+}
+.badge-estimated {
+    display: inline-block; background: #edf2f7;
+    color: #718096; font-size: 10px;
+    padding: 1px 6px; border-radius: 8px;
+    margin-left: 4px; vertical-align: middle;
+}
+/* ═══════════════════════════════════════════════════════
+   PASTE THIS AT THE BOTTOM OF YOUR style.css FILE
+   (Enhanced Search & Column Tooltips)
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Search Result Count Badge ── */
+#searchResultCount {
+    font-size: 12px;
+    color: #3182ce;
+    font-weight: 600;
+    background: #ebf8ff;
+    padding: 3px 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-left: 8px;
+    transition: all 0.2s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+#searchResultCount:empty {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ── Highlighted Search Terms in Table ── */
+#tableBody mark {
+    background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    color: #854d0e;
+    box-shadow: 0 1px 2px rgba(133, 77, 14, 0.1);
+    font-style: normal;
+}
+
+/* ── Table Header Tooltips (Enhanced) ── */
+.companies-table thead th[title] {
+    cursor: help;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+.companies-table thead th[title]:hover {
+    background: #e2e8f0;
+}
+
+/* Optional: Add tooltip arrow on hover (advanced) */
+.companies-table thead th[title]:hover::after {
+    content: '💡';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* ── Search Input Enhancement ── */
+#searchInput:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+}
+
+/* ── No Results Message ── */
+#tableBody tr td[colspan] {
+    color: #718096;
+    font-style: italic;
+}
+
+/* ── Row Highlighting on Search Match ── */
+.companies-table tbody tr.search-match {
+    background: #f0f9ff;
+    border-left: 3px solid #3182ce;
+}
+
+.companies-table tbody tr.search-match:hover {
+    background: #e0f2fe;
+}
+
+/* ── Search Loading State (Optional) ── */
+#searchInput.searching {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="%233182ce" stroke-width="2"><animate attributeName="stroke-dasharray" from="0 63" to="63 0" dur="1s" repeatCount="indefinite"/></circle></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
