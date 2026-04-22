@@ -1,0 +1,782 @@
+{
+  "companies": [
+    {
+      "name": "Netflix",
+      "region": "North America",
+      "irWebsite": "https://about.netflix.com/en/newsroom",
+      "bestSource": "IR Website",
+      "sourceReliability": 5,
+      "lastAnnouncement": "2026-04-20",
+      "expectedNext": "2026-07-19",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/why-netflix-nflx-international-revenue-131501710.html"
+    },
+    {
+      "name": "Disney",
+      "region": "North America",
+      "irWebsite": "https://thewaltdisneycompany.com/news/",
+      "bestSource": "IR Website",
+      "sourceReliability": 5,
+      "lastAnnouncement": "2026-02-05",
+      "expectedNext": "2026-05-06",
+      "articleUrl": "https://thewaltdisneycompany.com/press-releases/"
+    },
+    {
+      "name": "Viaplay Group",
+      "region": "Europe",
+      "irWebsite": "https://www.viaplaygroup.com/en/newsroom",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-04-09",
+      "expectedNext": "2026-07-08",
+      "articleUrl": "https://www.viaplaygroup.com/en/newsroom/newsroom-0"
+    },
+    {
+      "name": "RTL Group",
+      "region": "Europe",
+      "irWebsite": "https://company.rtl.com/en/media/overview/press-releases-and-news/",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-03-26",
+      "expectedNext": "2026-06-24",
+      "articleUrl": "https://www.bertelsmann.com/en/investor-relations/"
+    },
+    {
+      "name": "Amazon",
+      "region": "North America",
+      "irWebsite": "https://ir.aboutamazon.com/overview/default.aspx",
+      "bestSource": "GNews",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-01-30",
+      "expectedNext": "2026-04-28"
+    },
+    {
+      "name": "Paramount",
+      "region": "North America",
+      "irWebsite": "https://ir.paramount.com/press-releases",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-02-14",
+      "expectedNext": "2026-05-10"
+    },
+    {
+      "name": "Warner Bros Discovery",
+      "region": "North America",
+      "irWebsite": "https://ir.corporate.discovery.com/news-and-events/financial-news/default.aspx",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-02-12",
+      "expectedNext": "2026-05-08"
+    },
+    {
+      "name": "AMC Networks",
+      "region": "North America",
+      "irWebsite": "https://investors.amcnetworks.com/financial-releases",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-04-16",
+      "expectedNext": "2026-07-15",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/amc-networks-amcx-buy-sell-105027501.html"
+    },
+    {
+      "name": "Lionsgate",
+      "region": "North America",
+      "irWebsite": "https://investors.lionsgate.com/news-events/news/default.aspx",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-02-28",
+      "expectedNext": "2026-05-29",
+      "articleUrl": "https://finance.yahoo.com/news/does-street-think-lionsgate-studios-094021333.html"
+    },
+    {
+      "name": "BCE",
+      "region": "North America",
+      "irWebsite": "https://www.bce.ca/news-and-media/newsroom?category=Financial",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-04-15",
+      "expectedNext": "2026-05-07",
+      "articleUrl": "https://www.bce.ca/news-and-media/newsroom?category=Financial"
+    },
+    {
+      "name": "Cineplex",
+      "region": "North America",
+      "irWebsite": "https://corp.cineplex.com/news",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-10",
+      "expectedNext": "2026-05-11",
+      "articleUrl": "https://corp.cineplex.com/news"
+    },
+    {
+      "name": "Sony",
+      "region": "Asia",
+      "irWebsite": "https://www.sony.com/en/SonyInfo/IR/",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-02-15",
+      "expectedNext": "2026-05-20"
+    },
+    {
+      "name": "Comcast",
+      "region": "North America",
+      "irWebsite": "https://www.cmcsa.com/investor-news",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-04-20",
+      "expectedNext": "2026-07-19",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/countdown-comcast-cmcsa-q1-earnings-131502488.html"
+    },
+    {
+      "name": "Curiosity Stream",
+      "region": "North America",
+      "irWebsite": "https://investors.curiositystream.com/press-releases/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-03-12",
+      "expectedNext": "2026-06-10",
+      "articleUrl": "https://finance.yahoo.com/news/curiositystream-inc-curi-q4-2025-030050500.html"
+    },
+    {
+      "name": "Fox Corporation",
+      "region": "North America",
+      "irWebsite": "https://www.foxcorporation.com/news/press-releases/",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-04-20",
+      "expectedNext": "2026-07-19",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/fox-corporation-executives-discuss-third-160000410.html"
+    },
+    {
+      "name": "Gaia",
+      "region": "North America",
+      "irWebsite": "https://ir.gaia.com/news-events/press-releases",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-03-03",
+      "expectedNext": "2026-06-01",
+      "articleUrl": "https://finance.yahoo.com/news/gaia-inc-gaia-q4-2025-050200977.html"
+    },
+    {
+      "name": "Universal Music Group",
+      "region": "Europe",
+      "irWebsite": "https://investors.universalmusic.com/news/",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-02-11",
+      "expectedNext": "2026-05-11"
+    },
+    {
+      "name": "TV Asahi",
+      "region": "Asia",
+      "irWebsite": "https://www.tv-asahihd.co.jp/e/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-03-31",
+      "expectedNext": "2026-06-29",
+      "articleUrl": "https://www.tv-asahihd.co.jp/e/presentation/index.html"
+    },
+    {
+      "name": "Canal+",
+      "region": "Europe",
+      "irWebsite": "https://www.canalplusgroup.com/en/results-and-publications",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-17",
+      "expectedNext": "2026-07-16",
+      "articleUrl": "https://www.canalplusgroup.com/en/press/press-240"
+    },
+    {
+      "name": "Banijay",
+      "region": "Europe",
+      "irWebsite": "https://group.banijay.com/press-releases/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2024-05-27",
+      "expectedNext": "2024-08-25",
+      "articleUrl": "https://group.banijay.com/results-center/"
+    },
+    {
+      "name": "MBC Group",
+      "region": "Middle East",
+      "irWebsite": "https://www.mbc.net/ir",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-10",
+      "expectedNext": "2026-07-09",
+      "articleUrl": "https://www.mbc.net/ir/reports-and-presentations"
+    },
+    {
+      "name": "Gray Television",
+      "region": "North America",
+      "irWebsite": "https://graymedia.com/investor-relations/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-13",
+      "expectedNext": "2026-05-07",
+      "articleUrl": "https://gray.tv/news"
+    },
+    {
+      "name": "Grupo Clarin",
+      "region": "Latin America",
+      "irWebsite": "https://ir.grupoclarin.com/en/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-10",
+      "expectedNext": "2026-07-09",
+      "articleUrl": "https://ir.grupoclarin.com/en/press-releases/"
+    },
+    {
+      "name": "IMAX",
+      "region": "North America",
+      "irWebsite": "https://www.imax.com/en/in/investor-relations",
+      "bestSource": "GNews",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-16",
+      "expectedNext": "2026-04-30",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/imax-corporation-announce-first-quarter-200500982.html"
+    },
+    {
+      "name": "Kartoon Studios",
+      "region": "North America",
+      "irWebsite": "https://ir.kartoonstudios.com/press-releases",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-12-05",
+      "expectedNext": "2026-03-05"
+    },
+    {
+      "name": "Megacable",
+      "region": "Latin America",
+      "irWebsite": "https://inversionistas.megacable.com.mx/en/information-financial-quarterly",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-11-30",
+      "expectedNext": "2026-02-28"
+    },
+    {
+      "name": "Nexstar",
+      "region": "North America",
+      "irWebsite": "https://www.nexstar.tv/investor-relations/#reports",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-09",
+      "expectedNext": "2026-05-07",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/nexstar-media-group-report-2026-110000423.html"
+    },
+    {
+      "name": "Quebecor",
+      "region": "North America",
+      "irWebsite": "https://www.quebecor.com/en/investors/financial-documentation/quebecor-quarterly-documentation",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-26",
+      "expectedNext": "2026-05-27",
+      "articleUrl": "https://www.quebecor.com/en/investors/financial-documentation"
+    },
+    {
+      "name": "Rogers",
+      "region": "North America",
+      "irWebsite": "https://investors.rogers.com/",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-03-24",
+      "expectedNext": "2026-06-22",
+      "articleUrl": "https://investors.rogers.com/news-releases/"
+    },
+    {
+      "name": "Roku",
+      "region": "North America",
+      "irWebsite": "https://www.roku.com/investor/quarterly-results",
+      "bestSource": "GNews",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-09",
+      "expectedNext": "2026-05-09"
+    },
+    {
+      "name": "Sinclair",
+      "region": "North America",
+      "irWebsite": "https://sbgi.net/investor-relations/financial-reports/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-02-25",
+      "expectedNext": "2026-05-26",
+      "articleUrl": "https://sbgi.net/investor-relations/press-releases/"
+    },
+    {
+      "name": "Sphere Entertainment",
+      "region": "North America",
+      "irWebsite": "https://investor.sphereentertainmentco.com/financials/quarterly-results/default.aspx",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-01",
+      "expectedNext": "2026-06-30",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/sphere-entertainment-sphr-buy-sell-215126317.html"
+    },
+    {
+      "name": "TEGNA",
+      "region": "North America",
+      "irWebsite": "https://investors.tegna.com/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-01-28",
+      "expectedNext": "2026-04-28"
+    },
+    {
+      "name": "Telecom Argentina",
+      "region": "Latin America",
+      "irWebsite": "https://inversores.telecom.com.ar/content/cms-investors/ar/en/sec-presentations.html",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-07",
+      "expectedNext": "2026-07-06",
+      "articleUrl": "https://inversores.telecom.com.ar/en/sec-presentations.html"
+    },
+    {
+      "name": "Televisa",
+      "region": "Latin America",
+      "irWebsite": "https://www.televisair.com/en/reports-and-filings/prospectus-and-supplements/2024",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-01",
+      "expectedNext": "2026-06-30",
+      "articleUrl": "https://www.televisair.com/en/news-and-events/press-releases"
+    },
+    {
+      "name": "Warner Music Group",
+      "region": "North America",
+      "irWebsite": "https://investors.wmg.com/financial-information/quarterly-results",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-04-09",
+      "expectedNext": "2026-05-07",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/warner-music-group-corp-conduct-140000700.html"
+    },
+    {
+      "name": "Amagi",
+      "region": "Asia",
+      "irWebsite": "https://www.amagi.com/investors/annual-reports",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-19",
+      "expectedNext": "2026-07-18",
+      "articleUrl": "https://www.amagi.com/newsroom"
+    },
+    {
+      "name": "WildBrain",
+      "region": "North America",
+      "irWebsite": "https://investors.wildbrain.com/financial-information?cat=34",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-08",
+      "expectedNext": "2026-07-07",
+      "articleUrl": "https://investors.wildbrain.com"
+    },
+    {
+      "name": "Damai Holdings",
+      "region": "Asia",
+      "irWebsite": "https://www.damaiholdings.com/en/investor-relations/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-10-15",
+      "expectedNext": "2026-01-15"
+    },
+    {
+      "name": "Avex",
+      "region": "Asia",
+      "irWebsite": "https://avex.com/jp/en/ir/finance/highlight/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-02-09",
+      "expectedNext": "2026-05-09"
+    },
+    {
+      "name": "Balaji Telefilms",
+      "region": "Asia",
+      "irWebsite": "https://www.balajitelefilms.com/investor-data.php",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-21",
+      "expectedNext": "2026-07-20",
+      "articleUrl": "https://economictimes.indiatimes.com/balaji-telefilms-ltd/stocksupdate/companyid-3376.cms"
+    },
+    {
+      "name": "Baweja Studios",
+      "region": "Asia",
+      "irWebsite": "https://www.bawejastudios.com/investors",
+      "bestSource": "IR Website",
+      "sourceReliability": 1,
+      "lastAnnouncement": "2026-04-15",
+      "expectedNext": "2026-07-14",
+      "articleUrl": "https://www.bawejastudios.com/investors"
+    },
+    {
+      "name": "Bilibili",
+      "region": "Asia",
+      "irWebsite": "https://ir.bilibili.com/",
+      "bestSource": "GNews",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-16",
+      "expectedNext": "2026-07-15",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/bilibili-inc-files-2025-annual-102500275.html"
+    },
+    {
+      "name": "CJ ENM",
+      "region": "Asia",
+      "irWebsite": "https://www.cjenm.com/en/investors/ir/activities/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-11-10",
+      "expectedNext": "2026-02-10"
+    },
+    {
+      "name": "DK Karaoke",
+      "region": "Asia",
+      "irWebsite": "https://www.dkkaraoke.co.jp/english/stockinfo/irnews/",
+      "bestSource": "IR Website",
+      "sourceReliability": 1,
+      "lastAnnouncement": "2025-09-15",
+      "expectedNext": "2025-12-15"
+    },
+    {
+      "name": "Dentsu",
+      "region": "Asia",
+      "irWebsite": "https://www.group.dentsu.com/en/news/release/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-04",
+      "expectedNext": "2026-05-04"
+    },
+    {
+      "name": "Digikore",
+      "region": "Asia",
+      "irWebsite": "https://digikore.com/investor-zone/",
+      "bestSource": "IR Website",
+      "sourceReliability": 1,
+      "lastAnnouncement": "2025-11-07",
+      "expectedNext": "2026-02-05",
+      "articleUrl": "https://digikore.com/investor-zone/"
+    },
+    {
+      "name": "Digital Domain",
+      "region": "Asia",
+      "irWebsite": "https://hk.digitaldomain.com/investor-relations/?view=announcements&filter=2026&scroll_to=relations",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-20",
+      "expectedNext": "2026-07-19",
+      "articleUrl": "https://hk.digitaldomain.com/investor-relations/"
+    },
+    {
+      "name": "Eros Media",
+      "region": "Asia",
+      "irWebsite": "https://erosmediaworld.com/investor-relations-eros/eiml-financial-reports/",
+      "bestSource": "IR Website",
+      "sourceReliability": 1,
+      "lastAnnouncement": "2026-04-21",
+      "expectedNext": "2026-07-20",
+      "articleUrl": "https://erosmediaworld.com/investor-relations-eros/eiml-financial-reports/"
+    },
+    {
+      "name": "Fuji Media",
+      "region": "Asia",
+      "irWebsite": "https://www.fujimediahd.co.jp/en/ir/index.html",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-06",
+      "expectedNext": "2026-05-06"
+    },
+    {
+      "name": "Grammy",
+      "region": "Asia",
+      "irWebsite": "https://grammy.listedcompany.com/cg_shareholders_meeting.html",
+      "bestSource": "IR Website",
+      "sourceReliability": 1,
+      "lastAnnouncement": "2025-06-15",
+      "expectedNext": "2025-09-15"
+    },
+    {
+      "name": "Maoyan",
+      "region": "Asia",
+      "irWebsite": "https://ir-en.maoyan.com/Financial-Reports",
+      "bestSource": "GNews",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-09-11",
+      "expectedNext": "2025-12-10",
+      "articleUrl": "https://ir-en.maoyan.com/Financial-Reports"
+    },
+    {
+      "name": "MD Entertainment",
+      "region": "Asia",
+      "irWebsite": "https://mdentertainment.com/press-release/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-02",
+      "expectedNext": "2026-07-01",
+      "articleUrl": "https://mdentertainment.com/press-release/"
+    },
+    {
+      "name": "NetEase",
+      "region": "Asia",
+      "irWebsite": "https://ir.netease.com/financial-information/quarterly-results",
+      "bestSource": "GNews",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-11",
+      "expectedNext": "2026-05-12",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/netease-inc-announces-filing-annual-110200889.html"
+    },
+    {
+      "name": "NW18",
+      "region": "Asia",
+      "irWebsite": "https://www.nw18.com/investors",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-11-05",
+      "expectedNext": "2026-02-05"
+    },
+    {
+      "name": "NTV",
+      "region": "Asia",
+      "irWebsite": "https://www.ntvhd.co.jp/english/ir/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-02-13",
+      "expectedNext": "2026-05-14",
+      "articleUrl": "https://www.ntvhd.co.jp/english/ir/"
+    },
+    {
+      "name": "Saregama",
+      "region": "Asia",
+      "irWebsite": "https://www.saregama.com/static/investors",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-12-31",
+      "expectedNext": "2026-03-31",
+      "articleUrl": "https://www.saregama.com/static/investors"
+    },
+    {
+      "name": "Seven West Media",
+      "region": "Asia",
+      "irWebsite": "https://sevenwestmedia.com.au/investors/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-01-08",
+      "expectedNext": "2026-04-08",
+      "articleUrl": "https://sevenwestmedia.com.au/investors/asx-announcements/"
+    },
+    {
+      "name": "SM Entertainment",
+      "region": "Asia",
+      "irWebsite": "https://www.smentertainment.com/en/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-10",
+      "expectedNext": "2026-05-10"
+    },
+    {
+      "name": "Studio Dragon",
+      "region": "Asia",
+      "irWebsite": "https://www.studiodragon.net/en/ir/activities/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-01-30",
+      "expectedNext": "2026-04-30",
+      "articleUrl": "https://www.studiodragon.net/en/ir/activities/"
+    },
+    {
+      "name": "Tips Industries",
+      "region": "Asia",
+      "irWebsite": "https://tips.in/financialresults",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-01-27",
+      "expectedNext": "2026-04-27",
+      "articleUrl": "https://tipsfilms.in/financial-results-3/"
+    },
+    {
+      "name": "Toei Animation",
+      "region": "Asia",
+      "irWebsite": "https://corp.toei-anim.co.jp/en/ir/library/result.html",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2024-09-27",
+      "expectedNext": "2024-12-26",
+      "articleUrl": "https://corp.toei-anim.co.jp/en/ir/library/result.html"
+    },
+    {
+      "name": "Toho",
+      "region": "Asia",
+      "irWebsite": "https://www.toho.co.jp/en/company/ir/disclosure",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-02-19",
+      "expectedNext": "2026-05-19"
+    },
+    {
+      "name": "Zee Entertainment",
+      "region": "Asia",
+      "irWebsite": "https://www.zee.com/investors/investor-financials/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-08",
+      "expectedNext": "2026-05-09",
+      "articleUrl": "https://www.zee.com/investors/investor-financials/"
+    },
+    {
+      "name": "Emtek",
+      "region": "Asia",
+      "irWebsite": "https://emtek.co.id/id/hubungan-investor/informasi-keuangan/laporan-keuangan",
+      "bestSource": "IR Website",
+      "sourceReliability": 1,
+      "lastAnnouncement": "2025-11-25",
+      "expectedNext": "2026-02-25"
+    },
+    {
+      "name": "Mahaka",
+      "region": "Asia",
+      "irWebsite": "https://www.mahakax.com/investor-relation/",
+      "bestSource": "IR Website",
+      "sourceReliability": 1,
+      "lastAnnouncement": "2025-10-06",
+      "expectedNext": "2026-01-04",
+      "articleUrl": "https://www.mahakax.com/newsroom/"
+    },
+    {
+      "name": "ITV",
+      "region": "Europe",
+      "irWebsite": "https://www.itvplc.com/investors/results-centre/reports-and-results-archive/2025",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2025-12-31",
+      "expectedNext": "2026-03-31",
+      "articleUrl": "https://www.itvplc.com/investors/results-centre"
+    },
+    {
+      "name": "Groupe M6",
+      "region": "Europe",
+      "irWebsite": "https://www.groupem6.fr/en/tarifs-cgv/?_document_type=reports",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-14",
+      "expectedNext": "2026-07-13",
+      "articleUrl": "https://www.groupem6.fr/en/results-and-publications/"
+    },
+    {
+      "name": "MFE MediaForEurope",
+      "region": "Europe",
+      "irWebsite": "https://www.mfemediaforeurope.com/en/investors/financial-results/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-15",
+      "expectedNext": "2026-07-14",
+      "articleUrl": "https://www.mfemediaforeurope.com/en/media/press-releases/"
+    },
+    {
+      "name": "MultiChoice",
+      "region": "Africa",
+      "irWebsite": "https://investors.multichoice.com/latest-results.php",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2024-07-01",
+      "expectedNext": "2024-09-29",
+      "articleUrl": "https://investors.multichoice.com/press-releases.php"
+    },
+    {
+      "name": "PRISA",
+      "region": "Europe",
+      "irWebsite": "https://www.prisa.com/en/datos/resultados-trimestrales",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2025-11-20",
+      "expectedNext": "2026-02-20"
+    },
+    {
+      "name": "ProSiebenSat.1",
+      "region": "Europe",
+      "irWebsite": "https://www.prosiebensat1.com/en/investor-relations/publications/results",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-09",
+      "expectedNext": "2026-07-08",
+      "articleUrl": "https://www.prosiebensat1.com/en/newsroom/newsroom/all-press-releases"
+    },
+    {
+      "name": "Vantiva",
+      "region": "Europe",
+      "irWebsite": "https://www.vantiva.com/investor-center/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2025-12-08",
+      "expectedNext": "2026-03-08"
+    },
+    {
+      "name": "TF1",
+      "region": "Europe",
+      "irWebsite": "https://groupe-tf1.fr/en/investors/results-and-publications",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-03-19",
+      "expectedNext": "2026-06-17",
+      "articleUrl": "https://groupe-tf1.fr/en/investors/results-and-publications"
+    },
+    {
+      "name": "TV2 Denmark",
+      "region": "Europe",
+      "irWebsite": "https://omtv2.tv2.dk/fakta/oekonomi-og-selskabsledelse/regnskabsrapporter/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-02-09",
+      "expectedNext": "2026-05-10",
+      "articleUrl": null
+    },
+    {
+      "name": "Vivendi",
+      "region": "Europe",
+      "irWebsite": "https://www.vivendi.com/en/shareholders-investors/financial-publications-and-reports/financial-results/",
+      "bestSource": "IR Website",
+      "sourceReliability": 4,
+      "lastAnnouncement": "2026-03-31",
+      "expectedNext": "2026-06-29",
+      "articleUrl": "https://www.vivendi.com/en/press/press-releases/"
+    },
+    {
+      "name": "Xilam",
+      "region": "Europe",
+      "irWebsite": "https://xilam.com/en/reports/",
+      "bestSource": "IR Website",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-02",
+      "expectedNext": "2026-07-01",
+      "articleUrl": "https://xilam.com/en/financial-press-releases/"
+    },
+    {
+      "name": "Fubo TV",
+      "region": "North America",
+      "irWebsite": "https://ir.fubo.tv/financials/quarterly-results/default.aspx",
+      "bestSource": "GNews",
+      "sourceReliability": 2,
+      "lastAnnouncement": "2026-04-16",
+      "expectedNext": "2026-05-06",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/fubo-announce-q2-fy26-financial-130000874.html"
+    },
+    {
+      "name": "TKO Group",
+      "region": "North America",
+      "irWebsite": "https://investor.tkogrp.com/financials/quarterly-results/default.aspx",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-08",
+      "expectedNext": "2026-07-07",
+      "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/tko-announce-first-quarter-2026-123000665.html"
+    },
+    {
+      "name": "Scripps",
+      "region": "North America",
+      "irWebsite": "https://scripps.com/press-releases/",
+      "bestSource": "IR Website",
+      "sourceReliability": 3,
+      "lastAnnouncement": "2026-04-16",
+      "expectedNext": "2026-05-07",
+      "articleUrl": "https://scripps.com/press-releases/"
+    }
+  ]
+}
