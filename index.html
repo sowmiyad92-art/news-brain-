@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,55 +30,53 @@
 
         <div class="alerts-section" id="alertsSection"></div>
 
-        <!-- QUICK UPDATE PANEL -->
+        <!-- 3-COLUMN QUICK UPDATE PANEL -->
         <div id="quickUpdatePanel" style="
             background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
             padding: 18px 24px; margin: 16px 0;
         ">
-            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-                <span style="font-weight:700; font-size:15px; white-space:nowrap;">⚡ Quick Update</span>
-
-                <!-- Company selector -->
-                <select id="quCompany" style="flex:1; min-width:160px; padding:8px 10px;
+            <div style="font-weight:700; font-size:15px; margin-bottom:12px;">⚡ Quick Update</div>
+            
+            <!-- Company selector -->
+            <div style="margin-bottom:12px;">
+                <select id="quCompany" style="width:100%; padding:10px 12px;
                     border:1px solid #ddd; border-radius:8px; font-size:14px; background:#fff;">
                     <option value="">— Select company —</option>
                 </select>
-
-                <!-- Tab toggle -->
-                <div style="display:flex; border:1px solid #ddd; border-radius:8px; overflow:hidden; flex-shrink:0;">
-                    <button type="button" id="quTabPast" onclick="quSetTab('past')" style="
-                        padding:7px 14px; font-size:13px; font-weight:600; border:none; cursor:pointer;
-                        background:#3182ce; color:#fff;">
-                        📊 Past Results
-                    </button>
-                    <button type="button" id="quTabUpcoming" onclick="quSetTab('upcoming')" style="
-                        padding:7px 14px; font-size:13px; font-weight:600; border:none; cursor:pointer;
-                        background:#fff; color:#666;">
-                        📅 Upcoming Date
-                    </button>
-                </div>
-
-                <!-- Date picker -->
-                <input type="date" id="quDate" style="
-                    padding:8px 10px; border:1px solid #ddd; border-radius:8px;
-                    font-size:14px; flex-shrink:0;">
-
-                <!-- Optional URL -->
-                <input type="text" id="quUrl" placeholder="Article URL (optional)" style="
-                    flex:2; min-width:180px; padding:8px 10px; border:1px solid #ddd;
-                    border-radius:8px; font-size:13px; color:#444;">
-
-                <!-- Save button -->
-                <button type="button" onclick="quSave()" style="
-                    padding:8px 20px; background:#38a169; color:#fff; border:none;
-                    border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;
-                    white-space:nowrap; flex-shrink:0;">
-                    ✓ Save
-                </button>
             </div>
-            <div id="quHint" style="font-size:12px; color:#718096; margin-top:8px;">
-                <b>Past Results</b> → updates "Last Announcement" + recalculates Expected Next &nbsp;|&nbsp;
-                <b>Upcoming Date</b> → sets the confirmed earnings date in "Upcoming Earnings" column
+
+            <!-- 3 Date Columns -->
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                <div>
+                    <label style="font-size:12px; color:#666; display:block; margin-bottom:4px;">📊 Last Announcement</label>
+                    <input type="date" id="quDatePast" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px;">
+                </div>
+                <div>
+                    <label style="font-size:12px; color:#666; display:block; margin-bottom:4px;">📈 Expected Next</label>
+                    <input type="date" id="quDateExpected" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px;">
+                </div>
+                <div>
+                    <label style="font-size:12px; color:#666; display:block; margin-bottom:4px;">📅 Upcoming Confirmed</label>
+                    <input type="date" id="quDateUpcoming" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px;">
+                </div>
+            </div>
+
+            <!-- URL input -->
+            <div style="margin-bottom:12px;">
+                <input type="text" id="quUrl" placeholder="Article URL (optional)" style="
+                    width:100%; padding:8px 10px; border:1px solid #ddd;
+                    border-radius:8px; font-size:13px; color:#444;">
+            </div>
+
+            <!-- Save button -->
+            <button type="button" onclick="quSave3Column()" style="
+                width:100%; padding:10px 20px; background:#38a169; color:#fff; border:none;
+                border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;">
+                ✓ Save All Changes
+            </button>
+
+            <div style="font-size:12px; color:#718096; margin-top:8px; line-height:1.5;">
+                <b>How it works:</b> Fill any column(s) you want to update, then click Save. Empty fields won't overwrite existing data.
             </div>
         </div>
 
@@ -115,7 +113,7 @@
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <tr><td colspan="8" style="text-align:center;padding:30px;">Loading...</td></tr>
+                    <tr><td colspan="9" style="text-align:center;padding:30px;">Loading...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -129,5 +127,6 @@
     <script src="features.js"></script>
     <script src="text-parser.js"></script>
     <script src="fixes.js"></script>
+    <script src="quick-update-3col.js"></script>
 </body>
 </html>
