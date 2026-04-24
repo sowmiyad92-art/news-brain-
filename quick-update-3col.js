@@ -1,12 +1,11 @@
 // ═══════════════════════════════════════════════════════════════
-// quick-update-3col.js — 3-column independent date entry
-// Each column updates independently, empty fields don't overwrite
+// quick-update-3col.js — 3-column independent date entry (FIXED)
+// Reads/writes localStorage directly, doesn't depend on window.allData
 // ═══════════════════════════════════════════════════════════════
 
 (function() {
     'use strict';
 
-    // Override the original quSave with 3-column version
     window.quSave3Column = function() {
         const company = document.getElementById('quCompany')?.value;
         const pastDate = document.getElementById('quDatePast')?.value;
@@ -15,23 +14,29 @@
         const url = document.getElementById('quUrl')?.value.trim() || null;
 
         if (!company) {
-            if (typeof showNotification === 'function') 
-                showNotification('⚠️ Select a company first', 'warning');
+            alert('⚠️ Select a company first');
             return;
         }
 
         if (!pastDate && !expectedDate && !upcomingDate) {
-            if (typeof showNotification === 'function')
-                showNotification('⚠️ Fill at least one date field', 'warning');
+            alert('⚠️ Fill at least one date field');
             return;
         }
 
-        const companyObj = (window.allData?.companies || []).find(c => c.name === company);
-        if (!companyObj) return;
+        // Read from localStorage directly
+        let companiesData = JSON.parse(localStorage.getItem('companiesData') || '[]');
+        let announcedDates = JSON.parse(localStorage.getItem('announcedDates') || '{}');
+        let newsHistory = JSON.parse(localStorage.getItem('newsHistory') || '[]');
+
+        const companyObj = companiesData.find(c => c.name === company);
+        if (!companyObj) {
+            alert('❌ Company not found');
+            return;
+        }
 
         let updated = [];
 
-        // 1. Update Last Announcement (Past Results)
+        // 1. Update Last Announcement
         if (pastDate) {
             companyObj.lastAnnouncement = pastDate;
             
@@ -43,8 +48,15 @@
             
             if (url) companyObj.articleUrl = url;
             
-            if (typeof addNewsToHistory === 'function') 
-                addNewsToHistory(company, pastDate, url, 'quick-3col-past');
+            // Add to history
+            newsHistory.push({
+                company: company,
+                date: pastDate,
+                url: url,
+                source: 'quick-3col-past',
+                timestamp: new Date().toISOString(),
+                id: Date.now()
+            });
             
             updated.push('Last Announcement');
         }
@@ -57,54 +69,62 @@
 
         // 3. Update Upcoming Confirmed Date
         if (upcomingDate) {
-            if (typeof saveAnnouncedDate === 'function') {
-                saveAnnouncedDate(company, upcomingDate, url);
-            }
-            if (typeof addNewsToHistory === 'function') 
-                addNewsToHistory(company, upcomingDate, url, 'quick-3col-upcoming');
+            announcedDates[company] = {
+                date: upcomingDate,
+                url: url,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to history
+            newsHistory.push({
+                company: company,
+                date: upcomingDate,
+                url: url,
+                source: 'quick-3col-upcoming',
+                timestamp: new Date().toISOString(),
+                id: Date.now()
+            });
+            
             updated.push('Upcoming Confirmed');
         }
 
-        // Save to localStorage
-        const dataToSave = window.allData.companies.map(c => ({
-            name: c.name,
-            region: c.region,
-            lastAnnouncement: c.lastAnnouncement,
-            expectedNext: c.expectedNext,
-            articleUrl: c.articleUrl || null,
-            irWebsite: c.irWebsite || '#',
-            bestSource: c.bestSource || '',
-            sourceReliability: c.sourceReliability || 3,
-        }));
-        localStorage.setItem('companiesData', JSON.stringify(dataToSave));
-
-        // Refresh UI
-        if (typeof renderTable === 'function') renderTable(window.allData.companies);
-        if (typeof updateDashboard === 'function') updateDashboard();
-
-        // Clear inputs
-        document.getElementById('quDatePast').value = '';
-        document.getElementById('quDateExpected').value = '';
-        document.getElementById('quDateUpcoming').value = '';
-        document.getElementById('quUrl').value = '';
-
-        if (typeof showNotification === 'function') {
-            showNotification(`✅ Updated ${company}: ${updated.join(', ')}`, 'success');
+        // Keep only last 100 history entries
+        if (newsHistory.length > 100) {
+            newsHistory = newsHistory.slice(-100);
         }
+
+        // Save to localStorage
+        localStorage.setItem('companiesData', JSON.stringify(companiesData));
+        localStorage.setItem('announcedDates', JSON.stringify(announcedDates));
+        localStorage.setItem('newsHistory', JSON.stringify(newsHistory));
+
+        console.log('✅ Saved to localStorage:', company, updated);
+
+        // Reload page to refresh display
+        window.location.reload();
     };
 
     // Populate company dropdown on load
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             const sel = document.getElementById('quCompany');
-            if (sel && window.allData?.companies) {
-                sel.innerHTML = '<option value="">— Select company —</option>' +
-                    window.allData.companies
-                        .slice().sort((a, b) => a.name.localeCompare(b.name))
-                        .map(c => `<option value="${c.name}">${c.name}</option>`)
-                        .join('');
+            if (!sel) return;
+
+            const companiesData = JSON.parse(localStorage.getItem('companiesData') || '[]');
+            
+            if (companiesData.length === 0) {
+                console.warn('⚠️ No companies in localStorage');
+                return;
             }
-        }, 500);
+
+            sel.innerHTML = '<option value="">— Select company —</option>' +
+                companiesData
+                    .slice().sort((a, b) => a.name.localeCompare(b.name))
+                    .map(c => `<option value="${c.name}">${c.name}</option>`)
+                    .join('');
+            
+            console.log('✅ Loaded', companiesData.length, 'companies into dropdown');
+        }, 1000); // Wait 1 sec for data to load
     });
 
 })();
