@@ -93,31 +93,24 @@ def groq_extract(company, text):
     if not text:
         return None
 
-    prompt = f"""Today is {TODAY}. Extract earnings/financial results dates for: {company}
+    prompt = f"""Today: {TODAY}. Find earnings dates for {company}.
 
-From this content find:
-1. lastAnnouncement — most recent date {company} RELEASED quarterly results (must be a past date)
-2. upcomingDate — next date {company} WILL report (future date, confirmed or estimated)
+From the content below extract:
+- lastAnnouncement: date {company} RELEASED results (past, before {TODAY})
+- upcomingDate: date {company} WILL report (future, after {TODAY})
 
-Rules:
-- Use YYYY-MM-DD format only
-- If not found, use null
-- Do NOT guess — only extract dates explicitly mentioned
-- lastAnnouncement must be before {TODAY}
-- upcomingDate must be after {TODAY}
+Only extract dates explicitly mentioned. Use YYYY-MM-DD or null.
 
-Content:
-{text[:2500]}
+Content: {text[:1500]}
 
-Reply ONLY with this JSON (no markdown, no explanation):
-{{"lastAnnouncement": "YYYY-MM-DD or null", "upcomingDate": "YYYY-MM-DD or null", "confidence": "high/medium/low"}}"""
+Reply ONLY with JSON: {{"lastAnnouncement":"YYYY-MM-DD or null","upcomingDate":"YYYY-MM-DD or null","confidence":"high/medium/low"}}"""
 
     try:
         r = requests.post(
             'https://api.groq.com/openai/v1/chat/completions',
             headers={'Authorization': f'Bearer {GROQ_API_KEY}',
                      'Content-Type': 'application/json'},
-            json={'model': 'llama-3.3-70b-versatile',
+            json={'model': 'llama-3.1-8b-instant',  # 500K tokens/day free vs 100K for 70b
                   'messages': [{'role':'user','content': prompt}],
                   'max_tokens': 120,
                   'temperature': 0},
