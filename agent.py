@@ -301,7 +301,7 @@ def main():
             print(f"\n💾 Checkpoint save at company {i+1}...")
             update_data_json(results)
 
-        time.sleep(1.2)  # polite delay — avoids rate limits
+        time.sleep(2.5)  # 2.5s = ~24 req/min, safely under Groq's 30 RPM limit
 
     # Final save
     print("\n💾 Final save...")
