@@ -57,7 +57,8 @@ if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
             for (const company of allData.companies) {
                 const s = savedMap[company.name];
                 if (s) {
-                    if (s.lastAnnouncement) company.lastAnnouncement = s.lastAnnouncement;
+                    if (s.lastAnnouncement && (!company.lastAnnouncement || s.lastAnnouncement > company.lastAnnouncement)) {
+    company.lastAnnouncement = s.lastAnnouncement;
                     if (s.expectedNext)     company.expectedNext     = s.expectedNext;
                     company.articleUrl = s.articleUrl || null;
                 }
