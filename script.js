@@ -33,7 +33,7 @@ async function loadData() {
             for (const c of saved) savedMap[c.name] = c;
 
            allData = baseData;
-
+           window.allData = allData;
 // 🤖 Merge agent-written announcedDates from data.json into localStorage
 if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
     let stored = {};
