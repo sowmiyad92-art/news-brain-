@@ -117,7 +117,7 @@ Reply ONLY with this JSON (no markdown, no explanation):
             'https://api.groq.com/openai/v1/chat/completions',
             headers={'Authorization': f'Bearer {GROQ_API_KEY}',
                      'Content-Type': 'application/json'},
-            json={'model': 'llama3-70b-8192',
+            json={'model': 'llama-3.3-70b-versatile',
                   'messages': [{'role':'user','content': prompt}],
                   'max_tokens': 120,
                   'temperature': 0},
