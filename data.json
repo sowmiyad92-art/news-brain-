@@ -16,8 +16,8 @@
       "irWebsite": "https://thewaltdisneycompany.com/news/",
       "bestSource": "IR Website",
       "sourceReliability": 5,
-      "lastAnnouncement": "2026-02-05",
-      "expectedNext": "2026-05-06",
+      "lastAnnouncement": "2026-05-06",
+      "expectedNext": "2026-08-04",
       "articleUrl": "https://thewaltdisneycompany.com/press-releases/"
     },
     {
@@ -46,8 +46,8 @@
       "irWebsite": "https://ir.aboutamazon.com/overview/default.aspx",
       "bestSource": "GNews",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-01-30",
-      "expectedNext": "2026-04-28"
+      "lastAnnouncement": "2026-04-29",
+      "expectedNext": "2026-07-28"
     },
     {
       "name": "Paramount",
@@ -55,8 +55,8 @@
       "irWebsite": "https://ir.paramount.com/press-releases",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-02-14",
-      "expectedNext": "2026-05-10"
+      "lastAnnouncement": "2026-05-04",
+      "expectedNext": "2026-08-02"
     },
     {
       "name": "Warner Bros Discovery",
@@ -64,8 +64,8 @@
       "irWebsite": "https://ir.corporate.discovery.com/news-and-events/financial-news/default.aspx",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-02-12",
-      "expectedNext": "2026-05-08"
+      "lastAnnouncement": "2026-05-06",
+      "expectedNext": "2026-08-04"
     },
     {
       "name": "AMC Networks",
@@ -73,8 +73,8 @@
       "irWebsite": "https://investors.amcnetworks.com/financial-releases",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-16",
-      "expectedNext": "2026-07-15",
+      "lastAnnouncement": "2026-05-08",
+      "expectedNext": "2026-08-06",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/amc-networks-amcx-buy-sell-105027501.html"
     },
     {
@@ -93,8 +93,8 @@
       "irWebsite": "https://www.bce.ca/news-and-media/newsroom?category=Financial",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-15",
-      "expectedNext": "2026-05-07",
+      "lastAnnouncement": "2026-05-07",
+      "expectedNext": "2026-08-05",
       "articleUrl": "https://www.bce.ca/news-and-media/newsroom?category=Financial"
     },
     {
@@ -113,8 +113,8 @@
       "irWebsite": "https://www.sony.com/en/SonyInfo/IR/",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-02-15",
-      "expectedNext": "2026-05-20"
+      "lastAnnouncement": "2026-05-08",
+      "expectedNext": "2026-08-06"
     },
     {
       "name": "Comcast",
@@ -122,8 +122,8 @@
       "irWebsite": "https://www.cmcsa.com/investor-news",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-20",
-      "expectedNext": "2026-07-19",
+      "lastAnnouncement": "2026-04-26",
+      "expectedNext": "2026-07-25",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/countdown-comcast-cmcsa-q1-earnings-131502488.html"
     },
     {
@@ -152,8 +152,8 @@
       "irWebsite": "https://ir.gaia.com/news-events/press-releases",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-03-03",
-      "expectedNext": "2026-06-01",
+      "lastAnnouncement": "2026-05-04",
+      "expectedNext": "2026-08-02",
       "articleUrl": "https://finance.yahoo.com/news/gaia-inc-gaia-q4-2025-050200977.html"
     },
     {
@@ -162,8 +162,8 @@
       "irWebsite": "https://investors.universalmusic.com/news/",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-02-11",
-      "expectedNext": "2026-05-11"
+      "lastAnnouncement": "2026-04-29",
+      "expectedNext": "2026-07-28"
     },
     {
       "name": "TV Asahi",
@@ -779,6 +779,19 @@
       "articleUrl": "https://scripps.com/press-releases/"
     }
   ],
-  "announcedDates": {},
+  "announcedDates": {
+    "Curiosity Stream": {
+      "date": "2026-05-14",
+      "url": null,
+      "timestamp": "09/05/2026 12:58:15",
+      "source": "Google News RSS"
+    },
+    "Fox Corporation": {
+      "date": "2026-05-11",
+      "url": null,
+      "timestamp": "09/05/2026 12:58:15",
+      "source": "Google News RSS"
+    }
+  },
   "lastAgentRun": "2026-05-09"
 }
