@@ -17,13 +17,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadData() {
     try {
-        // Always load base data.json for structure
         const response = await fetch('./data.json');
         if (!response.ok) throw new Error('Failed to load data.json');
         const baseData = await response.json();
 
-        // Load announcedDates FIRST so renderTable has them available
         loadAnnouncedDates();
+
+        // Merge agent announcedDates from data.json into localStorage
+        if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
+            let stored = {};
+            try { stored = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
+            let merged = 0;
+            for (const [company, entry] of Object.entries(baseData.announcedDates)) {
+                const existing = stored[company]?.date;
+                if (!existing || entry.date > existing) { stored[company] = entry; merged++; }
+            }
+            if (merged > 0) {
+                localStorage.setItem('announcedDates', JSON.stringify(stored));
+                console.log(`🤖 [agent] Merged ${merged} upcoming dates from data.json`);
+            }
+        }
 
         const savedData = localStorage.getItem('companiesData');
 
@@ -32,28 +45,9 @@ async function loadData() {
             const savedMap = {};
             for (const c of saved) savedMap[c.name] = c;
 
-           allData = baseData;
-           window.allData = allData;
-// 🤖 Merge agent-written announcedDates from data.json into localStorage
-if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
-    let stored = {};
-    try { stored = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
-    let merged = 0;
-    for (const [company, entry] of Object.entries(baseData.announcedDates)) {
-        const existing = stored[company]?.date;
-        if (!existing || entry.date > existing) {
-            stored[company] = entry;
-            merged++;
-        }
-    }
-    if (merged > 0) {
-        localStorage.setItem('announcedDates', JSON.stringify(stored));
-        console.log(`🤖 [agent] Merged ${merged} upcoming dates from data.json`);
-    }
-}
- 
- 
-            // 1. Merge edits into existing base companies
+            allData = baseData;
+            window.allData = allData;
+
             for (const company of allData.companies) {
                 const s = savedMap[company.name];
                 if (s) {
@@ -67,27 +61,26 @@ if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
                 }
             }
 
-            // 2. Re-add any companies the user added that aren't in data.json
             const baseNames = new Set(allData.companies.map(c => c.name));
             for (const s of saved) {
                 if (!baseNames.has(s.name)) {
                     allData.companies.push({
-                        name:             s.name,
-                        region:           s.region           || 'North America',
+                        name: s.name,
+                        region: s.region || 'North America',
                         lastAnnouncement: s.lastAnnouncement || '',
-                        expectedNext:     s.expectedNext     || '',
-                        irWebsite:        s.irWebsite        || '#',
-                        bestSource:       s.bestSource       || 'IR Website',
+                        expectedNext: s.expectedNext || '',
+                        irWebsite: s.irWebsite || '#',
+                        bestSource: s.bestSource || 'IR Website',
                         sourceReliability: s.sourceReliability || 3,
-                        articleUrl:       s.articleUrl       || null,
+                        articleUrl: s.articleUrl || null,
                     });
                     console.log('✅ Restored user-added company:', s.name);
                 }
             }
-
             console.log('✅ Loaded data.json + localStorage —', allData.companies.length, 'total companies');
         } else {
             allData = baseData;
+            window.allData = allData;
             console.log('✅ Loaded fresh data from data.json');
         }
 
