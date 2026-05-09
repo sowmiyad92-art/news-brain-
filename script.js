@@ -32,29 +32,27 @@ async function loadData() {
             const savedMap = {};
             for (const c of saved) savedMap[c.name] = c;
 
-            allData = baseData;
-            // Merge agent-written announcedDates from data.json into localStorage
-// This makes auto-updated dates appear in the dashboard immediately
-if (baseData.announcedDates && typeof baseData.announcedDates === 'object')  {
+           allData = baseData;
+
+// 🤖 Merge agent-written announcedDates from data.json into localStorage
+if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
- 
     let merged = 0;
-    for (const [company, entry] of Object.entries(data.announcedDates)) {
-        // Only write if localStorage doesn't already have a NEWER date for this company
+    for (const [company, entry] of Object.entries(baseData.announcedDates)) {
         const existing = stored[company]?.date;
         if (!existing || entry.date > existing) {
             stored[company] = entry;
             merged++;
         }
     }
- 
     if (merged > 0) {
         localStorage.setItem('announcedDates', JSON.stringify(stored));
         console.log(`🤖 [agent] Merged ${merged} upcoming dates from data.json`);
     }
 }
-
+ 
+ 
             // 1. Merge edits into existing base companies
             for (const company of allData.companies) {
                 const s = savedMap[company.name];
