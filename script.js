@@ -35,7 +35,7 @@ async function loadData() {
             allData = baseData;
             // Merge agent-written announcedDates from data.json into localStorage
 // This makes auto-updated dates appear in the dashboard immediately
-if (data.announcedDates && typeof data.announcedDates === 'object') {
+if (baseData.announcedDates && typeof baseData.announcedDates === 'object')  {
     let stored = {};
     try { stored = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
  
