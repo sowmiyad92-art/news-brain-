@@ -58,8 +58,11 @@ if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
                 const s = savedMap[company.name];
                 if (s) {
                     if (s.lastAnnouncement && (!company.lastAnnouncement || s.lastAnnouncement > company.lastAnnouncement)) {
-    company.lastAnnouncement = s.lastAnnouncement;
-                    if (s.expectedNext)     company.expectedNext     = s.expectedNext;
+                        company.lastAnnouncement = s.lastAnnouncement;
+                    }
+                    if (s.expectedNext && (!company.expectedNext || s.expectedNext > company.expectedNext)) {
+                        company.expectedNext = s.expectedNext;
+                    }
                     company.articleUrl = s.articleUrl || null;
                 }
             }
