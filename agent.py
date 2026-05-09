@@ -117,13 +117,23 @@ Reply ONLY with this JSON (no markdown, no explanation):
             'https://api.groq.com/openai/v1/chat/completions',
             headers={'Authorization': f'Bearer {GROQ_API_KEY}',
                      'Content-Type': 'application/json'},
-            json={'model': 'llama3-70b-8192',
+            json={'model': 'llama-3.3-70b-versatile',   # current stable model name
                   'messages': [{'role':'user','content': prompt}],
                   'max_tokens': 120,
                   'temperature': 0},
             timeout=20
         )
-        raw = r.json()['choices'][0]['message']['content'].strip()
+        resp_json = r.json()
+
+        # Show actual error if Groq rejects the request
+        if 'error' in resp_json:
+            print(f"  [Groq] API error: {resp_json['error'].get('message', resp_json['error'])}")
+            return None
+        if 'choices' not in resp_json:
+            print(f"  [Groq] Unexpected response: {str(resp_json)[:200]}")
+            return None
+
+        raw = resp_json['choices'][0]['message']['content'].strip()
         raw = raw.replace('```json','').replace('```','').strip()
         result = json.loads(raw)
 
@@ -192,8 +202,8 @@ def update_data_json(results):
     is_dict = isinstance(data, dict)
     companies = data.get('companies', []) if is_dict else data
 
-    # Load or init announcedDates section
-    announced = data.get('announcedDates', {}) if is_dict else {}
+    # Load existing announcedDates — NEVER wipe, only add/update
+    announced = (data.get('announcedDates') or {}) if is_dict else {}
 
     updated, skipped = 0, 0
     for co in companies:
