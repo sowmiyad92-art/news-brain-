@@ -1,9 +1,10 @@
 """
-News Brain Agent v2 — auto-updates data.json with earnings dates
-Sources:  1) yfinance (direct ticker lookup — best for listed companies)
-          2) Google News RSS (free, unlimited fallback)
-          3) IR page scrape (last resort)
-Extractor: Groq llama-3.3-70b-versatile with auto-retry on rate limit
+News Brain Agent v3
+Sources (in order):
+  1) Company IR RSS feeds (PR Newswire, GlobeNewswire, company-specific)
+  2) Direct IR page scrape
+  3) yfinance for US/major tickers
+Extractor: Groq with auto-retry
 """
 
 import requests, json, os, time, re
@@ -18,15 +19,14 @@ try:
     HAS_YF = True
 except ImportError:
     HAS_YF = False
-    print("⚠️  yfinance not installed — run: pip install yfinance")
 
 # ── Config ───────────────────────────────────────────────────────
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
 DATA_JSON    = 'data.json'
 TODAY        = datetime.now().strftime('%Y-%m-%d')
 CURRENT_YEAR = datetime.now().year
-CURRENT_Q    = f"Q{((datetime.now().month - 1) // 3) + 1} {CURRENT_YEAR}"
-MAX_AGE_DAYS = 548  # reject lastAnnouncement older than 18 months
+CURRENT_Q    = f"Q{((datetime.now().month-1)//3)+1} {CURRENT_YEAR}"
+MAX_AGE_DAYS = 548  # reject dates older than 18 months
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -35,197 +35,232 @@ HEADERS = {
 }
 
 BROKEN_HOSTS = [
-    'ir.paramount.com', 'investors.amcnetworks.com', 'www.cmcsa.com',
-    'investors.tegna.com', 'ir.netease.com', 'ir.lionsgate.com',
-    'ir.wmg.com', 'ir.tkogrp.com', 'ir.sphereentertainmentco.com',
+    'ir.paramount.com','investors.amcnetworks.com','www.cmcsa.com',
+    'investors.tegna.com','ir.netease.com','ir.lionsgate.com',
+    'ir.wmg.com','ir.tkogrp.com','ir.sphereentertainmentco.com',
     'www.balajitelefilms.com',
 ]
 
-# ── Complete ticker map ──────────────────────────────────────────
-TICKERS = {
-    'Netflix':'NFLX','Disney':'DIS','Viaplay Group':'VPLAY-B.ST',
-    'RTL Group':'RRTL.F','Amazon':'AMZN','Paramount':'PARA',
-    'Warner Bros Discovery':'WBD','AMC Networks':'AMCX','Lionsgate':'LION',
-    'BCE':'BCE.TO','Cineplex':'CGX.TO','Sony':'SONY','Comcast':'CMCSA',
-    'Curiosity Stream':'CURI','Fox Corporation':'FOXA','Gaia':'GAIA',
-    'Universal Music Group':'UMG.AS','TV Asahi':'9409.T','Canal+':'CAN.L',
-    'Banijay':'BNJ.AS','MBC Group':'4072.SR','Gray Television':'GTN',
-    'Grupo Clarin':'GCLA.BA','IMAX':'IMAX','Kartoon Studios':'TOON',
-    'Megacable':'MEGACPO.MX','Nexstar':'NXST','Quebecor':'QBR-B.TO',
-    'Rogers':'RCI-B.TO','Roku':'ROKU','Sinclair':'SBGI',
-    'Sphere Entertainment':'SPHR','TEGNA':'TGNA','Telecom Argentina':'TEO',
-    'Televisa':'TV','Warner Music Group':'WMG','WildBrain':'WILD.TO',
-    'Damai Holdings':'1060.HK','Avex':'7860.T','Bilibili':'BILI',
-    'CJ ENM':'035760.KQ','DK Karaoke':'7458.T','Dentsu':'4324.T',
-    'Digital Domain':'0547.HK','Fuji Media':'4676.T','Grammy':'GRAMMY.BK',
-    'Maoyan':'1896.HK','NetEase':'NTES','NTV':'9404.T',
-    'Saregama':'SAREGAMA.BO','Seven West Media':'SWM.AX',
-    'SM Entertainment':'041510.KQ','Studio Dragon':'253450.KQ',
-    'Toei Animation':'4816.T','Toho':'9602.T','ITV':'ITV.L',
-    'Groupe M6':'MMT.PA','MFE MediaForEurope':'MFEB.MI','MultiChoice':'MCG.JO',
-    'PRISA':'PRS.MC','ProSiebenSat.1':'PSM.DE','Vantiva':'VANTI.PA',
-    'TF1':'TFI.PA','Vivendi':'VIV.PA','Xilam':'XIL.PA',
-    'Fubo TV':'FUBO','TKO Group':'TKO','Scripps':'SSP',
-    'Amagi':'AMAGI.NS','Balaji Telefilms':'BALAJITELE.NS',
-    'Baweja Studios':'BAWEJA-SM.NS','Digikore':'DIGIKORE-SM.NS',
-    'NW18':'NETWORK18.NS','Zee Entertainment':'ZEEL.NS',
-    'Tips Industries':'TIPSINDLTD.NS','Emtek':'MNCN.JK',
-    'Mahaka':'ABBA.JK','MD Entertainment':'FILM.JK',
-    'Eros Media':'EMWP.F',
+# ── RSS feeds from your IR_DATA research ────────────────────────
+# Priority order: company RSS → PR Newswire → GlobeNewswire
+RSS_FEEDS = {
+    'Netflix':   ['https://www.prnewswire.com/rss/news-releases-list.rss?company=netflix'],
+    'Disney':    ['https://www.prnewswire.com/rss/news-releases-list.rss?company=the-walt-disney-company'],
+    'Amazon':    ['https://www.prnewswire.com/rss/news-releases-list.rss?company=amazon-com-inc',
+                  'https://www.businesswire.com/rss/home/?rss=G22&company=amazon'],
+    'Paramount': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=paramount-global',
+                  'https://www.globenewswire.com/RssFeed/company/paramount-global'],
+    'Warner Bros Discovery': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=warner-bros-discovery'],
+    'AMC Networks':  ['https://www.prnewswire.com/rss/news-releases-list.rss?company=amc-networks'],
+    'Lionsgate':     ['https://www.prnewswire.com/rss/news-releases-list.rss?company=lionsgate'],
+    'Comcast':       ['https://www.prnewswire.com/rss/news-releases-list.rss?company=comcast'],
+    'Curiosity Stream': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=curiositystream'],
+    'Fox Corporation': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=fox-corporation'],
+    'Gray Television': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=gray-television'],
+    'IMAX':          ['https://www.prnewswire.com/rss/news-releases-list.rss?company=imax'],
+    'Kartoon Studios':['https://www.prnewswire.com/rss/news-releases-list.rss?company=kartoon-studios'],
+    'Nexstar':       ['https://www.prnewswire.com/rss/news-releases-list.rss?company=nexstar-media-group'],
+    'Roku':          ['https://www.prnewswire.com/rss/news-releases-list.rss?company=roku'],
+    'TEGNA':         ['https://www.prnewswire.com/rss/news-releases-list.rss?company=tegna'],
+    'Warner Music Group': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=warner-music-group'],
+    'Fubo TV':       ['https://www.prnewswire.com/rss/news-releases-list.rss?company=fubotv'],
+    'TKO Group':     ['https://www.prnewswire.com/rss/news-releases-list.rss?company=tko-group-holdings'],
+    'Scripps':       ['https://www.prnewswire.com/rss/news-releases-list.rss?company=the-e-w-scripps-company'],
+    'BCE':           ['https://www.bce.ca/news-and-media/newsroom/rss'],
+    'Cineplex':      ['https://www.prnewswire.com/rss/news-releases-list.rss?company=cineplex'],
+    'Quebecor':      ['https://www.prnewswire.com/rss/news-releases-list.rss?company=quebecor'],
+    'Rogers':        ['https://investors.rogers.com/news-releases/rss/'],
+    'WildBrain':     ['https://www.prnewswire.com/rss/news-releases-list.rss?company=wildbrain'],
+    'Universal Music Group': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=universal-music-group',
+                              'https://www.globenewswire.com/RssFeed/company/universal-music-group'],
+    'Viaplay Group': ['https://www.viaplaygroup.com/rss'],
+    'RTL Group':     ['https://www.prnewswire.com/rss/news-releases-list.rss?company=rtl-group'],
+    'Banijay':       ['https://www.globenewswire.com/RssFeed/company/banijay-group'],
+    'ITV':           ['https://www.prnewswire.com/rss/news-releases-list.rss?company=itv-plc'],
+    'Groupe M6':     ['https://www.globenewswire.com/RssFeed/company/groupe-m6'],
+    'MFE MediaForEurope': ['https://www.globenewswire.com/RssFeed/company/mfe-mediaforeurope'],
+    'ProSiebenSat.1': ['https://www.globenewswire.com/RssFeed/company/prosiebensat1-media-se'],
+    'TF1':           ['https://www.globenewswire.com/RssFeed/company/tf1'],
+    'Vivendi':       ['https://www.vivendi.com/en/press/press-releases/feed/'],
+    'Xilam':         ['https://www.globenewswire.com/RssFeed/company/xilam-animation'],
+    'Vantiva':       ['https://www.globenewswire.com/RssFeed/company/vantiva'],
+    'MultiChoice':   ['https://www.prnewswire.com/rss/news-releases-list.rss?company=multichoice-group'],
+    'Grupo Clarin':  ['https://www.prnewswire.com/rss/news-releases-list.rss?company=grupo-clarin'],
+    'Televisa':      ['https://www.prnewswire.com/rss/news-releases-list.rss?company=televisa'],
+    'Sony':          ['https://www.sony.com/en/SonyInfo/IR/rss/rss.xml'],
+    'Bilibili':      ['https://ir.bilibili.com/rss/news-releases.xml'],
+    'Avex':          ['https://avex.com/jp/en/ir/news/rss.xml'],
+    'Damai Holdings':['https://www.hkexnews.hk/listedco/listconews/SEHK/rss/rss1060.xml'],
+    'Maoyan':        ['https://www.hkexnews.hk/listedco/listconews/SEHK/rss/rss1896.xml'],
+    'Digital Domain':['https://www.hkexnews.hk/listedco/listconews/SEHK/rss/rss0547.xml'],
+    'Grammy':        ['https://investor.gmmgrammy.com/en/newsroom/set-announcements'],
+    'Seven West Media':['https://sevenwestmedia.com.au/investors/asx-announcements/'],
 }
 
-# ── Date validation ──────────────────────────────────────────────
-def fmt_date(d):
-    try: return d.strftime('%Y-%m-%d')
-    except: return str(d)[:10]
+# ── US tickers for yfinance (reliable earningsTimestamp) ────────
+YF_US = {
+    'Netflix':'NFLX','Disney':'DIS','Amazon':'AMZN',
+    'Comcast':'CMCSA','Fox Corporation':'FOXA','Gaia':'GAIA',
+    'Gray Television':'GTN','IMAX':'IMAX','Kartoon Studios':'TOON',
+    'Nexstar':'NXST','Roku':'ROKU','Sinclair':'SBGI',
+    'Sphere Entertainment':'SPHR','TEGNA':'TGNA',
+    'Telecom Argentina':'TEO','Televisa':'TV',
+    'Warner Music Group':'WMG','Bilibili':'BILI','NetEase':'NTES',
+    'Fubo TV':'FUBO','TKO Group':'TKO','Scripps':'SSP',
+    'Curiosity Stream':'CURI','Lionsgate':'LION',
+    'AMC Networks':'AMCX','Warner Bros Discovery':'WBD',
+}
 
+# ── HTML text extractor ──────────────────────────────────────────
+class _P(HTMLParser):
+    def __init__(self): super().__init__(); self.t=[]; self._s=False
+    def handle_starttag(self,tag,_):
+        if tag in ('script','style','nav','footer','head'): self._s=True
+    def handle_endtag(self,tag):
+        if tag in ('script','style','nav','footer','head'): self._s=False
+    def handle_data(self,d):
+        if not self._s and d.strip(): self.t.append(d.strip())
+
+def strip_html(html):
+    p=_P()
+    try: p.feed(html)
+    except: pass
+    return ' '.join(p.t)
+
+# ── Date validation ──────────────────────────────────────────────
 def valid_past(s):
-    if not s or s == 'null': return None
+    if not s or s=='null': return None
     try:
-        ds = str(s)[:10]
-        if not re.match(r'^\d{4}-\d{2}-\d{2}$', ds): return None
-        dt = datetime.strptime(ds, '%Y-%m-%d')
-        today = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
-        if dt >= today: return None          # must be past
-        if (today - dt).days > MAX_AGE_DAYS: return None  # too old
+        ds=str(s)[:10]
+        if not re.match(r'^\d{4}-\d{2}-\d{2}$',ds): return None
+        dt=datetime.strptime(ds,'%Y-%m-%d')
+        today=datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+        if dt>=today or (today-dt).days>MAX_AGE_DAYS: return None
         return ds
     except: return None
 
 def valid_future(s):
-    if not s or s == 'null': return None
+    if not s or s=='null': return None
     try:
-        ds = str(s)[:10]
-        if not re.match(r'^\d{4}-\d{2}-\d{2}$', ds): return None
-        dt = datetime.strptime(ds, '%Y-%m-%d')
-        today = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
-        if dt <= today: return None           # must be future
-        if (dt - today).days > 365: return None  # too far ahead
+        ds=str(s)[:10]
+        if not re.match(r'^\d{4}-\d{2}-\d{2}$',ds): return None
+        dt=datetime.strptime(ds,'%Y-%m-%d')
+        today=datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+        if dt<=today or (dt-today).days>365: return None
         return ds
     except: return None
 
-# ── Source 1: yfinance ───────────────────────────────────────────
-def yf_lookup(name):
-    if not HAS_YF: return None
-    sym = TICKERS.get(name)
-    if not sym: return None
-    try:
-        tk  = yf.Ticker(sym)
-        last, upcoming = None, None
-
-        # Upcoming date from calendar
+# ── Source 1: Company RSS feeds ──────────────────────────────────
+def fetch_rss(name):
+    feeds = RSS_FEEDS.get(name, [])
+    for feed_url in feeds:
         try:
-            cal = tk.calendar
-            if cal is not None and not (hasattr(cal,'empty') and cal.empty):
-                if isinstance(cal, dict):
-                    for key in ['Earnings Date','Earnings High','Earnings Low']:
-                        if key in cal:
-                            d = valid_future(fmt_date(cal[key]))
-                            if d: upcoming = d; break
-                else:
-                    for col in ['Earnings Date','Earnings High','Earnings Low']:
-                        if col in cal.columns:
-                            for val in cal[col]:
-                                d = valid_future(fmt_date(val))
-                                if d: upcoming = d; break
-                            if upcoming: break
-        except: pass
-
-        # Last date from earnings_dates history
-        try:
-            ed = tk.earnings_dates
-            if ed is not None and not ed.empty:
-                today = datetime.now()
-                past  = ed[ed.index.tz_localize(None) < today] if ed.index.tz else ed[ed.index < today]
-                if not past.empty:
-                    d = valid_past(fmt_date(past.index[0]))
-                    if d: last = d
-        except: pass
-
-        if last or upcoming:
-            print(f"  📈 [yfinance] {name} ({sym}): last={last} | upcoming={upcoming}")
-            return {'lastAnnouncement':last,'upcomingDate':upcoming,
-                    'confidence':'high','source':'yfinance'}
-    except Exception as e:
-        print(f"  [yfinance] {name} ({sym}): {str(e)[:60]}")
+            r    = requests.get(feed_url, headers=HEADERS, timeout=12)
+            if r.status_code != 200: continue
+            root = ET.fromstring(r.content)
+            bits = []
+            for it in root.findall('.//item')[:6]:
+                title   = it.findtext('title','')
+                pubdate = it.findtext('pubDate','') or it.findtext('dc:date','')
+                desc    = strip_html(it.findtext('description','') or
+                                     it.findtext('summary',''))[:300]
+                bits.append(f"TITLE: {title}\nDATE: {pubdate}\nSNIPPET: {desc}")
+            if bits:
+                print(f"  📰 [RSS] {name}: {len(bits)} items from {feed_url.split('/')[2]}")
+                return '\n\n'.join(bits)
+        except Exception as e:
+            pass
     return None
 
-# ── Source 2: Google News RSS ────────────────────────────────────
-class _Puller(HTMLParser):
-    def __init__(self): super().__init__(); self.parts=[]; self._skip=False
-    def handle_starttag(self,t,_):
-        if t in ('script','style','nav','footer','head'): self._skip=True
-    def handle_endtag(self,t):
-        if t in ('script','style','nav','footer','head'): self._skip=False
-    def handle_data(self,d):
-        if not self._skip and d.strip(): self.parts.append(d.strip())
-
-def strip_html(html):
-    p=_Puller(); 
-    try: p.feed(html)
-    except: pass
-    return ' '.join(p.parts)
-
-def google_news(name, extra=''):
-    q   = f'"{name}" earnings results {extra}'.strip()
-    url = f'https://news.google.com/rss/search?q={requests.utils.quote(q)}&hl=en-US&gl=US&ceid=US:en'
-    try:
-        r    = requests.get(url, headers=HEADERS, timeout=12)
-        root = ET.fromstring(r.content)
-        bits = []
-        for it in root.findall('.//item')[:5]:
-            bits.append(f"TITLE: {it.findtext('title','')}\n"
-                        f"DATE: {it.findtext('pubDate','')}\n"
-                        f"SNIPPET: {strip_html(it.findtext('description',''))[:250]}")
-        return '\n\n'.join(bits) or None
-    except: return None
-
-# ── Source 3: IR page ────────────────────────────────────────────
+# ── Source 2: IR page scrape ─────────────────────────────────────
 def scrape_ir(url):
     if not url or url in ('#','','N/A'): return None
     if any(b in url for b in BROKEN_HOSTS): return None
     try:
         r = requests.get(url, headers=HEADERS, timeout=12, verify=False)
-        if r.status_code == 200: return strip_html(r.text)[:2000]
+        if r.status_code==200: return strip_html(r.text)[:2000]
     except: pass
     return None
 
-# ── Groq with auto-retry ─────────────────────────────────────────
+# ── Source 3: yfinance for US tickers ───────────────────────────
+def yf_lookup(name):
+    if not HAS_YF: return None
+    sym = YF_US.get(name)
+    if not sym: return None
+    try:
+        tk   = yf.Ticker(sym)
+        info = tk.info or {}
+        last, upcoming = None, None
+
+        # earningsTimestamp = last reported earnings (Unix timestamp)
+        et = info.get('earningsTimestamp') or info.get('earningsTimestampStart')
+        if et:
+            dt = datetime.fromtimestamp(et)
+            last = valid_past(dt.strftime('%Y-%m-%d'))
+
+        # earningsTimestampEnd / nextEarningsDate = upcoming
+        ne = info.get('earningsTimestampEnd') or info.get('nextEarningsDate')
+        if ne:
+            if isinstance(ne, (int, float)):
+                dt = datetime.fromtimestamp(ne)
+                upcoming = valid_future(dt.strftime('%Y-%m-%d'))
+            else:
+                upcoming = valid_future(str(ne)[:10])
+
+        if last or upcoming:
+            print(f"  📈 [yfinance] {name} ({sym}): last={last} upcoming={upcoming}")
+            return {'lastAnnouncement':last,'upcomingDate':upcoming,
+                    'confidence':'high','source':'yfinance'}
+    except Exception as e:
+        pass
+    return None
+
+# ── Groq extraction with auto-retry ─────────────────────────────
 def groq_extract(name, text, retries=2):
     if not GROQ_API_KEY or not text: return None
-    prompt = (f"Today: {TODAY}. Find earnings dates for {name}.\n"
-              f"- lastAnnouncement: date they RELEASED results (past, before {TODAY})\n"
-              f"- upcomingDate: date they WILL report next (future, after {TODAY})\n"
-              f"Only use explicitly mentioned dates. YYYY-MM-DD or null.\n"
-              f"Content: {text[:1400]}\n"
-              f'Reply ONLY with JSON: {{"lastAnnouncement":"...","upcomingDate":"...","confidence":"high/medium/low"}}')
+    prompt = (f"Today: {TODAY}. Find earnings/financial results dates for {name}.\n"
+              f"lastAnnouncement = date they RELEASED results (past date, before {TODAY})\n"
+              f"upcomingDate = date they WILL report next (future date, after {TODAY})\n"
+              f"Only use dates explicitly mentioned. null if not found.\n"
+              f"Content:\n{text[:1500]}\n\n"
+              f'JSON only: {{"lastAnnouncement":"YYYY-MM-DD or null","upcomingDate":"YYYY-MM-DD or null","confidence":"high/medium/low"}}')
 
-    for attempt in range(retries + 1):
+    for attempt in range(retries+1):
         try:
-            r    = requests.post('https://api.groq.com/openai/v1/chat/completions',
-                                 headers={'Authorization':f'Bearer {GROQ_API_KEY}',
-                                          'Content-Type':'application/json'},
-                                 json={'model':'llama-3.3-70b-versatile',
-                                       'messages':[{'role':'user','content':prompt}],
-                                       'max_tokens':100,'temperature':0},
-                                 timeout=20)
+            r    = requests.post(
+                'https://api.groq.com/openai/v1/chat/completions',
+                headers={'Authorization':f'Bearer {GROQ_API_KEY}',
+                         'Content-Type':'application/json'},
+                json={'model':'llama-3.3-70b-versatile',
+                      'messages':[{'role':'user','content':prompt}],
+                      'max_tokens':100,'temperature':0},
+                timeout=25)
             resp = r.json()
             if 'error' in resp:
                 msg = resp['error'].get('message','')
                 m   = re.search(r'try again in ([\d.]+)s', msg)
                 if m and attempt < retries:
-                    wait = float(m.group(1)) + 1.5
-                    print(f"  [Groq] Rate limit — waiting {wait:.0f}s...")
+                    wait = float(m.group(1))+2
+                    print(f"  [Groq] rate limit — waiting {wait:.0f}s...")
                     time.sleep(wait); continue
                 print(f"  [Groq] {msg[:80]}")
                 return None
             raw    = resp['choices'][0]['message']['content'].strip()
             raw    = raw.replace('```json','').replace('```','').strip()
+            # Clean up truncated JSON
+            if raw.count('{') > raw.count('}'):
+                raw += '}'
             result = json.loads(raw)
             result['lastAnnouncement'] = valid_past(result.get('lastAnnouncement'))
             result['upcomingDate']     = valid_future(result.get('upcomingDate'))
             return result
+        except json.JSONDecodeError as e:
+            if attempt < retries:
+                time.sleep(2); continue
+            print(f"  [Groq] JSON error: {e}")
+            return None
         except Exception as e:
-            print(f"  [Groq] parse error: {e}")
+            print(f"  [Groq] error: {e}")
             return None
     return None
 
@@ -234,107 +269,94 @@ def process_company(co):
     name   = co.get('name','')
     ir_url = co.get('irWebsite','')
 
-    # 1) yfinance — direct ticker lookup
-    r = yf_lookup(name)
-    if r and (r.get('lastAnnouncement') or r.get('upcomingDate')): return r
-
-    # 2) Google News RSS → Groq
-    prev_q = f"Q{max(1,((datetime.now().month-1)//3))} {CURRENT_YEAR}"
-    news = (google_news(name, CURRENT_Q) or
-            google_news(name, prev_q)     or
-            google_news(name, str(CURRENT_YEAR)))
-    if news:
-        r = groq_extract(name, news)
+    # 1) Company RSS feeds → Groq
+    rss_text = fetch_rss(name)
+    if rss_text:
+        r = groq_extract(name, rss_text)
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-            r['source'] = 'Google News'; return r
+            r['source'] = 'RSS Feed'; return r
 
-    # 3) IR page → Groq
+    # 2) IR page scrape → Groq
     ir_text = scrape_ir(ir_url)
     if ir_text:
         r = groq_extract(name, ir_text)
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
             r['source'] = 'IR Page'; return r
 
+    # 3) yfinance (US tickers only — as backup)
+    r = yf_lookup(name)
+    if r and (r.get('lastAnnouncement') or r.get('upcomingDate')): return r
+
     return None
 
 # ── Save results ─────────────────────────────────────────────────
 def update_data_json(results):
-    with open(DATA_JSON,'r',encoding='utf-8') as f: data = json.load(f)
-    is_dict   = isinstance(data, dict)
+    with open(DATA_JSON,'r',encoding='utf-8') as f: data=json.load(f)
+    is_dict   = isinstance(data,dict)
     companies = data.get('companies',[]) if is_dict else data
     announced = (data.get('announcedDates') or {}) if is_dict else {}
 
-    updated = 0
+    updated=0
     for co in companies:
-        name = co.get('name','')
-        r    = results.get(name)
+        name=co.get('name',''); r=results.get(name)
         if not r: continue
-        changed = False
-
-        new_last = r.get('lastAnnouncement')
-        if new_last and (not co.get('lastAnnouncement') or new_last > co.get('lastAnnouncement','')):
-            co['lastAnnouncement'] = new_last
+        changed=False
+        nl=r.get('lastAnnouncement')
+        if nl and (not co.get('lastAnnouncement') or nl>co.get('lastAnnouncement','')):
+            co['lastAnnouncement']=nl
             try:
-                co['expectedNext'] = (datetime.strptime(new_last,'%Y-%m-%d')
-                                      + timedelta(days=90)).strftime('%Y-%m-%d')
+                co['expectedNext']=(datetime.strptime(nl,'%Y-%m-%d')
+                                    +timedelta(days=90)).strftime('%Y-%m-%d')
             except: pass
-            changed = True
+            changed=True
+        nu=r.get('upcomingDate')
+        if nu:
+            announced[name]={'date':nu,'url':None,
+                             'timestamp':datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
+                             'source':r.get('source','agent')}
+            changed=True
+        if changed: updated+=1
 
-        new_up = r.get('upcomingDate')
-        if new_up:
-            announced[name] = {'date':new_up,'url':None,
-                               'timestamp':datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
-                               'source':r.get('source','agent')}
-            changed = True
-        if changed: updated += 1
-
-    # Clear past announced dates
-    today = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
-    cleared = [n for n,e in list(announced.items())
-               if datetime.strptime(e['date'],'%Y-%m-%d') < today - timedelta(days=1)]
+    today=datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+    cleared=[n for n,e in list(announced.items())
+             if datetime.strptime(e['date'],'%Y-%m-%d')<today-timedelta(days=1)]
     for n in cleared: del announced[n]
     if cleared: print(f"  🗑️  Cleared stale: {', '.join(cleared)}")
 
-    out = {'companies':companies,'announcedDates':announced,'lastAgentRun':TODAY} if is_dict else \
-          {'companies':companies,'announcedDates':announced,'lastAgentRun':TODAY}
     if is_dict:
-        data['companies']      = companies
-        data['announcedDates'] = announced
-        data['lastAgentRun']   = TODAY
-        out = data
-
-    with open(DATA_JSON,'w',encoding='utf-8') as f: json.dump(out,f,indent=2,ensure_ascii=False)
-    skipped = len(results) - updated
-    print(f"\n  ✅ Updated:{updated} | No data:{skipped} | Cleared stale:{len(cleared)}")
-
-# ── GitHub Actions workflow also needs yfinance installed ─────────
-# Add to daily-agent.yml:  pip install requests yfinance
+        data['companies']=companies; data['announcedDates']=announced
+        data['lastAgentRun']=TODAY
+    with open(DATA_JSON,'w',encoding='utf-8') as f:
+        json.dump(data if is_dict else
+                  {'companies':companies,'announcedDates':announced,'lastAgentRun':TODAY},
+                  f,indent=2,ensure_ascii=False)
+    print(f"\n  ✅ Updated:{updated} | No data:{len(results)-updated} | Cleared:{len(cleared)}")
 
 # ── Main ─────────────────────────────────────────────────────────
 def main():
-    print(f"🚀 News Brain Agent v2 — {TODAY}  ({CURRENT_Q})")
-    if not os.path.exists(DATA_JSON): print(f"❌ {DATA_JSON} not found"); return
+    print(f"🚀 News Brain Agent v3 — {TODAY} ({CURRENT_Q})")
+    if not os.path.exists(DATA_JSON): print("❌ data.json not found"); return
 
-    with open(DATA_JSON,'r',encoding='utf-8') as f: data = json.load(f)
-    companies = data.get('companies', data) if isinstance(data, dict) else data
-    print(f"📋 {len(companies)} companies | yfinance:{'✅' if HAS_YF else '❌'} | Groq:{'✅' if GROQ_API_KEY else '❌'}")
+    with open(DATA_JSON,'r',encoding='utf-8') as f: data=json.load(f)
+    companies=data.get('companies',data) if isinstance(data,dict) else data
+    print(f"📋 {len(companies)} companies | RSS feeds:{len(RSS_FEEDS)} | yfinance:{'✅' if HAS_YF else '❌'}")
 
-    results = {}
-    for i, co in enumerate(companies):
-        name = co.get('name','')
+    results={}
+    for i,co in enumerate(companies):
+        name=co.get('name','')
         if not name: continue
-        r = process_company(co)
-        results[name] = r
+        r=process_company(co)
+        results[name]=r
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
             print(f"  ✅ {name}: last={r.get('lastAnnouncement')} upcoming={r.get('upcomingDate')} [{r.get('source','')}]")
         else:
             print(f"  ❌ {name}: no dates found")
 
-        if (i+1) % 25 == 0:
+        if (i+1)%25==0:
             print(f"\n💾 Checkpoint {i+1}..."); update_data_json(results)
         time.sleep(2)
 
     print("\n💾 Final save..."); update_data_json(results)
-    print("🎉 Done!")
+    print("🎉 Agent v3 complete!")
 
-if __name__ == '__main__': main()
+if __name__=='__main__': main()
