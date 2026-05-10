@@ -26,8 +26,8 @@
       "irWebsite": "https://www.viaplaygroup.com/en/newsroom",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-09",
-      "expectedNext": "2026-07-08",
+      "lastAnnouncement": "2026-04-23",
+      "expectedNext": "2026-07-22",
       "articleUrl": "https://www.viaplaygroup.com/en/newsroom/newsroom-0"
     },
     {
@@ -259,8 +259,8 @@
       "irWebsite": "https://www.nexstar.tv/investor-relations/#reports",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-09",
-      "expectedNext": "2026-05-07",
+      "lastAnnouncement": "2026-05-07",
+      "expectedNext": "2026-08-05",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/nexstar-media-group-report-2026-110000423.html"
     },
     {
@@ -500,8 +500,8 @@
       "irWebsite": "https://ir-en.maoyan.com/Financial-Reports",
       "bestSource": "GNews",
       "sourceReliability": 2,
-      "lastAnnouncement": "2026-03-31",
-      "expectedNext": "2026-06-29",
+      "lastAnnouncement": "2026-04-28",
+      "expectedNext": "2026-07-27",
       "articleUrl": "https://ir-en.maoyan.com/Financial-Reports"
     },
     {
@@ -569,8 +569,8 @@
       "irWebsite": "https://www.smentertainment.com/en/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-02-10",
-      "expectedNext": "2026-05-10"
+      "lastAnnouncement": "2026-05-06",
+      "expectedNext": "2026-08-04"
     },
     {
       "name": "Studio Dragon",
@@ -646,8 +646,8 @@
       "irWebsite": "https://www.itvplc.com/investors/results-centre/reports-and-results-archive/2025",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2025-12-31",
-      "expectedNext": "2026-03-31",
+      "lastAnnouncement": "2026-03-05",
+      "expectedNext": "2026-06-03",
       "articleUrl": "https://www.itvplc.com/investors/results-centre"
     },
     {
@@ -686,8 +686,8 @@
       "irWebsite": "https://www.prisa.com/en/datos/resultados-trimestrales",
       "bestSource": "IR Website",
       "sourceReliability": 2,
-      "lastAnnouncement": "2025-11-20",
-      "expectedNext": "2026-02-20"
+      "lastAnnouncement": "2026-02-25",
+      "expectedNext": "2026-05-26"
     },
     {
       "name": "ProSiebenSat.1",
@@ -705,8 +705,8 @@
       "irWebsite": "https://www.vantiva.com/investor-center/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2025-12-08",
-      "expectedNext": "2026-03-08"
+      "lastAnnouncement": "2026-04-23",
+      "expectedNext": "2026-07-22"
     },
     {
       "name": "TF1",
@@ -714,8 +714,8 @@
       "irWebsite": "https://groupe-tf1.fr/en/investors/results-and-publications",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-03-19",
-      "expectedNext": "2026-06-17",
+      "lastAnnouncement": "2026-04-30",
+      "expectedNext": "2026-07-29",
       "articleUrl": "https://groupe-tf1.fr/en/investors/results-and-publications"
     },
     {
@@ -744,8 +744,8 @@
       "irWebsite": "https://xilam.com/en/reports/",
       "bestSource": "IR Website",
       "sourceReliability": 2,
-      "lastAnnouncement": "2026-04-02",
-      "expectedNext": "2026-07-01",
+      "lastAnnouncement": "2026-04-03",
+      "expectedNext": "2026-07-02",
       "articleUrl": "https://xilam.com/en/financial-press-releases/"
     },
     {
@@ -783,8 +783,8 @@
     "Curiosity Stream": {
       "date": "2026-05-14",
       "url": null,
-      "timestamp": "10/05/2026 05:38:34",
-      "source": "Google News RSS"
+      "timestamp": "10/05/2026 07:14:08",
+      "source": "IR Page"
     },
     "Fox Corporation": {
       "date": "2026-05-11",
@@ -831,7 +831,7 @@
     "Fuji Media": {
       "date": "2026-05-12",
       "url": null,
-      "timestamp": "10/05/2026 05:38:34",
+      "timestamp": "10/05/2026 07:14:08",
       "source": "IR Page"
     },
     "NetEase": {
