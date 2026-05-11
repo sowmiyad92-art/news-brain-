@@ -181,8 +181,8 @@
       "irWebsite": "https://www.canalplusgroup.com/en/results-and-publications",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-17",
-      "expectedNext": "2026-07-16",
+      "lastAnnouncement": "2026-04-28",
+      "expectedNext": "2026-07-27",
       "articleUrl": "https://www.canalplusgroup.com/en/press/press-240"
     },
     {
@@ -191,8 +191,8 @@
       "irWebsite": "https://group.banijay.com/press-releases/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-02-09",
-      "expectedNext": "2026-05-10",
+      "lastAnnouncement": "2026-03-05",
+      "expectedNext": "2026-06-03",
       "articleUrl": "https://group.banijay.com/results-center/"
     },
     {
@@ -211,8 +211,8 @@
       "irWebsite": "https://graymedia.com/investor-relations/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-13",
-      "expectedNext": "2026-05-07",
+      "lastAnnouncement": "2026-05-07",
+      "expectedNext": "2026-08-05",
       "articleUrl": "https://gray.tv/news"
     },
     {
@@ -298,8 +298,8 @@
       "irWebsite": "https://sbgi.net/investor-relations/financial-reports/",
       "bestSource": "IR Website",
       "sourceReliability": 2,
-      "lastAnnouncement": "2026-02-25",
-      "expectedNext": "2026-05-26",
+      "lastAnnouncement": "2026-04-30",
+      "expectedNext": "2026-07-29",
       "articleUrl": "https://sbgi.net/investor-relations/press-releases/"
     },
     {
@@ -308,8 +308,8 @@
       "irWebsite": "https://investor.sphereentertainmentco.com/financials/quarterly-results/default.aspx",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-01",
-      "expectedNext": "2026-06-30",
+      "lastAnnouncement": "2026-05-05",
+      "expectedNext": "2026-08-03",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/sphere-entertainment-sphr-buy-sell-215126317.html"
     },
     {
@@ -337,8 +337,8 @@
       "irWebsite": "https://www.televisair.com/en/reports-and-filings/prospectus-and-supplements/2024",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-01",
-      "expectedNext": "2026-06-30",
+      "lastAnnouncement": "2026-04-28",
+      "expectedNext": "2026-07-27",
       "articleUrl": "https://www.televisair.com/en/news-and-events/press-releases"
     },
     {
@@ -347,8 +347,8 @@
       "irWebsite": "https://investors.wmg.com/financial-information/quarterly-results",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-09",
-      "expectedNext": "2026-05-07",
+      "lastAnnouncement": "2026-05-07",
+      "expectedNext": "2026-08-05",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/warner-music-group-corp-conduct-140000700.html"
     },
     {
@@ -646,8 +646,8 @@
       "irWebsite": "https://www.itvplc.com/investors/results-centre/reports-and-results-archive/2025",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-03-05",
-      "expectedNext": "2026-06-03",
+      "lastAnnouncement": "2026-03-23",
+      "expectedNext": "2026-06-21",
       "articleUrl": "https://www.itvplc.com/investors/results-centre"
     },
     {
@@ -744,8 +744,8 @@
       "irWebsite": "https://xilam.com/en/reports/",
       "bestSource": "IR Website",
       "sourceReliability": 2,
-      "lastAnnouncement": "2026-04-03",
-      "expectedNext": "2026-07-02",
+      "lastAnnouncement": "2026-04-30",
+      "expectedNext": "2026-07-29",
       "articleUrl": "https://xilam.com/en/financial-press-releases/"
     },
     {
@@ -764,8 +764,8 @@
       "irWebsite": "https://investor.tkogrp.com/financials/quarterly-results/default.aspx",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-08",
-      "expectedNext": "2026-07-07",
+      "lastAnnouncement": "2026-05-06",
+      "expectedNext": "2026-08-04",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/tko-announce-first-quarter-2026-123000665.html"
     },
     {
@@ -783,7 +783,7 @@
     "Curiosity Stream": {
       "date": "2026-05-14",
       "url": null,
-      "timestamp": "10/05/2026 07:14:08",
+      "timestamp": "11/05/2026 04:57:00",
       "source": "IR Page"
     },
     "Fox Corporation": {
@@ -823,22 +823,22 @@
       "source": "Google News RSS"
     },
     "Warner Music Group": {
-      "date": "2026-08-05",
+      "date": "2026-08-06",
       "url": null,
-      "timestamp": "09/05/2026 13:22:49",
-      "source": "Google News RSS"
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
     },
     "Fuji Media": {
       "date": "2026-05-12",
       "url": null,
-      "timestamp": "10/05/2026 07:14:08",
+      "timestamp": "11/05/2026 04:57:00",
       "source": "IR Page"
     },
     "NetEase": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "10/05/2026 05:38:34",
-      "source": "Google News RSS"
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
     },
     "ITV": {
       "date": "2026-08-10",
@@ -863,7 +863,91 @@
       "url": null,
       "timestamp": "10/05/2026 05:38:34",
       "source": "Google News RSS"
+    },
+    "Netflix": {
+      "date": "2026-07-16",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Disney": {
+      "date": "2026-08-05",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Amazon": {
+      "date": "2026-07-30",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Warner Bros Discovery": {
+      "date": "2026-08-06",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "AMC Networks": {
+      "date": "2026-08-07",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Lionsgate": {
+      "date": "2026-05-21",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Comcast": {
+      "date": "2026-07-30",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Gray Television": {
+      "date": "2026-08-07",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "IMAX": {
+      "date": "2026-07-30",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Roku": {
+      "date": "2026-07-30",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Sphere Entertainment": {
+      "date": "2026-08-06",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Televisa": {
+      "date": "2026-07-28",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "Bilibili": {
+      "date": "2026-05-19",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
+    },
+    "TKO Group": {
+      "date": "2026-08-05",
+      "url": null,
+      "timestamp": "11/05/2026 04:57:00",
+      "source": "yfinance"
     }
   },
-  "lastAgentRun": "2026-05-10"
+  "lastAgentRun": "2026-05-11"
 }
