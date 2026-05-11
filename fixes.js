@@ -271,12 +271,21 @@
                     </div>
                     <div style="font-size:11px;color:#555;margin-top:4px;">✅ = confirmed date &nbsp; ~ = estimated</div>
                 </div>
-                <div style="display:flex;gap:8px;flex-shrink:0;">
-                    <a href="mailto:?subject=${subject}&body=${body}" style="
-                        background:${colors.border};color:#fff;text-decoration:none;
-                        padding:7px 14px;border-radius:6px;font-weight:bold;white-space:nowrap;font-size:13px;">
-                        ✉️ Email Alert
-                    </a>
+                <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;">
+                    ${list.map(c => {
+                        const calDate = (store[c.name]?.date || dateStr).replace(/-/g,'');
+                        const calEnd  = calDate; 
+                        const calUrl  = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+                            `&text=${encodeURIComponent(c.name + ' Earnings')}` +
+                            `&dates=${calDate}/${calDate}` +
+                            `&details=${encodeURIComponent('Earnings report. IR: ' + (c.irWebsite||''))}`;
+                        return `<a href="${calUrl}" target="_blank" style="
+                            background:${colors.border};color:#fff;text-decoration:none;
+                            padding:5px 10px;border-radius:6px;font-weight:bold;
+                            white-space:nowrap;font-size:12px;">
+                            📅 ${c.name}
+                        </a>`;
+                    }).join('')}
                     <button onclick="this.closest('[id]').remove()" style="
                         background:none;border:1px solid ${colors.border};color:#555;
                         padding:6px 10px;border-radius:6px;cursor:pointer;font-size:13px;">
