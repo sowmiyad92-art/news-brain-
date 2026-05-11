@@ -378,7 +378,10 @@ function renderTable(companies) {
         }
 
         // Expected Next: always shows auto-calculated date — announced date does NOT change this
-        const expectedDisplay = `${company.expectedNext} <span class="badge-estimated">~ Est.</span>`;
+        const hasUpcoming = !!getAnnouncedDate(company.name);
+const expectedDisplay = hasUpcoming 
+    ? `<span style="color:#cbd5e0;font-size:11px;">— see Upcoming →</span>`
+    : `${company.expectedNext} <span class="badge-estimated">~ Est.</span>`;
 
         const rowClass = [
             dateInfo.isOverdue ? 'overdue' : '',
