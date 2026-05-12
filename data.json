@@ -103,8 +103,8 @@
       "irWebsite": "https://corp.cineplex.com/news",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-10",
-      "expectedNext": "2026-05-11",
+      "lastAnnouncement": "2026-05-11",
+      "expectedNext": "2026-08-09",
       "articleUrl": "https://corp.cineplex.com/news"
     },
     {
@@ -142,8 +142,8 @@
       "irWebsite": "https://www.foxcorporation.com/news/press-releases/",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-20",
-      "expectedNext": "2026-07-19",
+      "lastAnnouncement": "2026-05-11",
+      "expectedNext": "2026-08-09",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/fox-corporation-executives-discuss-third-160000410.html"
     },
     {
@@ -627,8 +627,8 @@
       "irWebsite": "https://emtek.co.id/id/hubungan-investor/informasi-keuangan/laporan-keuangan",
       "bestSource": "IR Website",
       "sourceReliability": 1,
-      "lastAnnouncement": "2025-11-25",
-      "expectedNext": "2026-02-25"
+      "lastAnnouncement": "2026-03-31",
+      "expectedNext": "2026-06-29"
     },
     {
       "name": "Mahaka",
@@ -783,7 +783,7 @@
     "Curiosity Stream": {
       "date": "2026-05-14",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "IR Page"
     },
     "Fox Corporation": {
@@ -825,7 +825,7 @@
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Fuji Media": {
@@ -837,7 +837,7 @@
     "NetEase": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "ITV": {
@@ -867,87 +867,93 @@
     "Netflix": {
       "date": "2026-07-16",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Disney": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Lionsgate": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "Bilibili": {
       "date": "2026-05-19",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "11/05/2026 05:57:50",
+      "timestamp": "12/05/2026 05:38:17",
+      "source": "yfinance"
+    },
+    "Nexstar": {
+      "date": "2026-08-06",
+      "url": null,
+      "timestamp": "12/05/2026 05:38:17",
       "source": "yfinance"
     }
   },
-  "lastAgentRun": "2026-05-11"
+  "lastAgentRun": "2026-05-12"
 }
