@@ -1,344 +1,427 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📊 News Brain — Analytics</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-         background: #f7fafc; color: #2d3748; min-height: 100vh; }
+// ═══════════════════════════════════════════════════════════════
+// analytics-tab.js — News Brain
+// Adds tab switcher to main page:
+//   Tab 1: Dashboard (existing table, no banners)
+//   Tab 2: Analytics (alerts + charts + upcoming + overdue)
+// ═══════════════════════════════════════════════════════════════
 
-  .header {
-    background: linear-gradient(135deg, #2b6cb0, #3182ce);
-    color: #fff; padding: 20px 32px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .header h1 { font-size: 20px; font-weight: 700; }
-  .header a {
-    color: #bee3f8; text-decoration: none; font-size: 13px;
-    padding: 6px 14px; border: 1px solid #bee3f8; border-radius: 6px;
-  }
-  .header a:hover { background: rgba(255,255,255,0.15); }
+(function () {
+    'use strict';
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
+    const BLUE   = '#3182ce';
+    const NAVY   = '#1a365d';
+    const TEAL   = '#0d8a7a';
 
-  /* ── Stat cards ── */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
-           gap: 16px; margin-bottom: 28px; }
-  .card {
-    background: #fff; border-radius: 12px; padding: 20px 22px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    border-left: 4px solid #3182ce;
-  }
-  .card.green  { border-color: #38a169; }
-  .card.orange { border-color: #dd6b20; }
-  .card.red    { border-color: #e53e3e; }
-  .card.purple { border-color: #805ad5; }
-  .card-val  { font-size: 32px; font-weight: 800; margin-bottom: 4px; }
-  .card-label{ font-size: 12px; color: #718096; font-weight: 500; }
+    // ─── Inject tab buttons into page ───────────────────────────
+    function injectTabs() {
+        if (document.getElementById('nbTabBar')) return;
 
-  /* ── Section ── */
-  .section {
-    background: #fff; border-radius: 12px; padding: 22px 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 22px;
-  }
-  .section h2 { font-size: 15px; font-weight: 700; margin-bottom: 18px;
-                color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+        const tabBar = document.createElement('div');
+        tabBar.id = 'nbTabBar';
+        tabBar.style.cssText = `
+            display:flex;gap:0;border-bottom:2px solid #e2e8f0;
+            background:#fff;padding:0 20px;
+            position:sticky;top:0;z-index:100;
+            box-shadow:0 2px 4px rgba(0,0,0,0.06);
+        `;
+        tabBar.innerHTML = `
+            <button id="nbTabDashboard" onclick="window.nbSwitchTab('dashboard')" style="
+                padding:12px 24px;border:none;background:none;cursor:pointer;
+                font-size:14px;font-weight:700;color:${BLUE};
+                border-bottom:3px solid ${BLUE};margin-bottom:-2px;
+                font-family:inherit;transition:all .2s;
+            ">📋 Dashboard</button>
+            <button id="nbTabAnalytics" onclick="window.nbSwitchTab('analytics')" style="
+                padding:12px 24px;border:none;background:none;cursor:pointer;
+                font-size:14px;font-weight:600;color:#718096;
+                border-bottom:3px solid transparent;margin-bottom:-2px;
+                font-family:inherit;transition:all .2s;
+            ">📊 Analytics & Alerts</button>
+        `;
 
-  /* ── Bar chart ── */
-  .bar-row { display: flex; align-items: center; gap: 10px;
-             margin-bottom: 10px; font-size: 13px; }
-  .bar-label { width: 100px; text-align: right; color: #4a5568; flex-shrink: 0; }
-  .bar-track { flex: 1; background: #edf2f7; border-radius: 6px; height: 24px;
-               overflow: hidden; position: relative; }
-  .bar-fill  { height: 100%; border-radius: 6px; display: flex; align-items: center;
-               padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff;
-               transition: width 0.6s ease; min-width: 32px; }
-  .bar-count { font-size: 12px; color: #718096; width: 28px; flex-shrink: 0; }
+        // Insert after header/controls, before table
+        const target = document.querySelector('.controls') ||
+                       document.querySelector('.filter-buttons')?.closest('div') ||
+                       document.querySelector('.container');
+        if (target) target.insertAdjacentElement('beforebegin', tabBar);
 
-  /* ── Region bars ── */
-  .region-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        // Wrap existing table content in a tab div
+        const tableSection = document.querySelector('.table-section') ||
+                             document.querySelector('#tableContainer') ||
+                             document.querySelector('table')?.closest('div');
 
-  /* ── Upcoming table ── */
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 8px 12px; background: #f7fafc;
-       color: #718096; font-size: 11px; font-weight: 600;
-       text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid #e2e8f0; }
-  td { padding: 10px 12px; border-bottom: 1px solid #f0f4f8; color: #2d3748; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f7fafc; }
-  .badge {
-    display: inline-block; padding: 2px 8px; border-radius: 10px;
-    font-size: 11px; font-weight: 600;
-  }
-  .badge-soon   { background: #fef3c7; color: #92400e; }
-  .badge-near   { background: #e6fffa; color: #234e52; }
-  .badge-today  { background: #fed7d7; color: #c53030; }
-  .badge-overdue{ background: #fff5f5; color: #c53030; }
-  .badge-region { background: #ebf8ff; color: #2c5282; }
-
-  .cal-link {
-    display: inline-block; padding: 3px 9px; background: #3182ce;
-    color: #fff; border-radius: 5px; text-decoration: none; font-size: 11px;
-    font-weight: 600;
-  }
-  .cal-link:hover { background: #2b6cb0; }
-
-  .loading { text-align: center; padding: 60px; color: #a0aec0; font-size: 14px; }
-  .error   { text-align: center; padding: 40px; color: #e53e3e; }
-</style>
-</head>
-<body>
-
-<div class="header">
-  <h1>📊 News Brain — Analytics</h1>
-  <a href="./index.html">← Back to Dashboard</a>
-</div>
-
-<div class="container">
-  <div id="root"><div class="loading">⏳ Loading analytics…</div></div>
-</div>
-
-<script>
-// ── Colour palette for months ──────────────────────────────────
-const MONTH_COLORS = [
-  '#3182ce','#38a169','#dd6b20','#805ad5',
-  '#d53f8c','#2c7a7b','#b7791f','#c53030',
-  '#2b6cb0','#276749','#744210','#553c9a'
-];
-
-const REGION_COLORS = {
-  'North America': '#3182ce',
-  'Europe':        '#38a169',
-  'Asia':          '#dd6b20',
-  'Latin America': '#805ad5',
-  'Africa':        '#d53f8c',
-  'Middle East':   '#2c7a7b',
-};
-
-// ── Main ──────────────────────────────────────────────────────
-async function init() {
-  try {
-    const [dataRes] = await Promise.all([fetch('./data.json')]);
-    const data = await dataRes.json();
-
-    const companies  = data.companies || (Array.isArray(data) ? data : []);
-    const announced  = data.announcedDates || {};
-    const lsAnn      = safeJSON(localStorage.getItem('announcedDates'), {});
-    const allAnn     = { ...announced, ...lsAnn };
-    const lsComp     = safeJSON(localStorage.getItem('companiesData'), []);
-    const compMap    = {};
-    for (const c of lsComp) compMap[c.name] = c;
-    // merge localStorage dates
-    for (const c of companies) {
-      if (compMap[c.name]?.lastAnnouncement > (c.lastAnnouncement||''))
-        c.lastAnnouncement = compMap[c.name].lastAnnouncement;
+        // Create analytics tab container
+        const analyticsDiv = document.createElement('div');
+        analyticsDiv.id = 'nbAnalyticsPane';
+        analyticsDiv.style.cssText = 'display:none;padding:20px;';
+        if (tableSection) {
+            tableSection.parentNode.insertBefore(analyticsDiv, tableSection.nextSibling);
+        } else {
+            document.querySelector('.container')?.appendChild(analyticsDiv);
+        }
     }
 
-    render(companies, allAnn);
-  } catch(e) {
-    document.getElementById('root').innerHTML =
-      `<div class="error">❌ Could not load data.json<br><small>${e.message}</small></div>`;
-  }
-}
+    // ─── Switch tabs ─────────────────────────────────────────────
+    window.nbSwitchTab = function(tab) {
+        const dashBtn  = document.getElementById('nbTabDashboard');
+        const analyBtn = document.getElementById('nbTabAnalytics');
+        const tableSection = document.querySelector('.table-section') ||
+                             document.querySelector('#tableContainer') ||
+                             document.querySelector('table')?.closest('div');
+        const analyticsPane = document.getElementById('nbAnalyticsPane');
 
-function safeJSON(str, fallback) {
-  try { return JSON.parse(str||'null') || fallback; } catch(_) { return fallback; }
-}
+        // Also toggle controls/filters
+        const controls = document.querySelector('.controls');
+        const addBtn   = document.getElementById('nbAddCompanyBtn');
+        const dragZone = document.getElementById('dragDropZone');
+        const quickUp  = document.getElementById('quickUpdatePanel');
 
-function render(companies, allAnn) {
-  const today     = new Date(); today.setHours(0,0,0,0);
-  const todayStr  = fmt(today);
-  const in30      = new Date(today); in30.setDate(in30.getDate()+30);
+        if (tab === 'dashboard') {
+            // Show dashboard
+            if (tableSection)   tableSection.style.display   = '';
+            if (analyticsPane)  analyticsPane.style.display  = 'none';
+            if (controls)       controls.style.display       = '';
+            if (addBtn)         addBtn.style.display         = '';
+            if (dragZone)       dragZone.style.display       = '';
+            if (quickUp)        quickUp.style.display        = '';
 
-  // ── Monthly announcement buckets ──
-  const monthly = {};
-  for (const c of companies) {
-    if (!c.lastAnnouncement) continue;
-    const d = new Date(c.lastAnnouncement);
-    if (isNaN(d)) continue;
-    const key = d.toLocaleString('en-US',{month:'long',year:'numeric'});
-    monthly[key] = (monthly[key]||0) + 1;
-  }
-  // sort by date
-  const monthKeys = Object.keys(monthly).sort((a,b)=>new Date(a)-new Date(b));
-  const maxM = Math.max(...Object.values(monthly), 1);
+            // Tab button styles
+            dashBtn.style.color        = BLUE;
+            dashBtn.style.borderBottom = `3px solid ${BLUE}`;
+            dashBtn.style.fontWeight   = '700';
+            analyBtn.style.color       = '#718096';
+            analyBtn.style.borderBottom= '3px solid transparent';
+            analyBtn.style.fontWeight  = '600';
 
-  // ── Region breakdown ──
-  const regions = {};
-  for (const c of companies) {
-    const r = c.region || 'Unknown';
-    regions[r] = (regions[r]||0) + 1;
-  }
+        } else {
+            // Show analytics
+            if (tableSection)  tableSection.style.display   = 'none';
+            if (analyticsPane) analyticsPane.style.display  = '';
+            if (controls)      controls.style.display       = 'none';
+            if (addBtn)        addBtn.style.display         = 'none';
+            if (dragZone)      dragZone.style.display       = 'none';
+            if (quickUp)       quickUp.style.display        = 'none';
 
-  // ── Upcoming earnings ──
-  const upcoming = [];
-  for (const c of companies) {
-    const annDate = allAnn[c.name]?.date;
-    if (!annDate) continue;
-    const dt = new Date(annDate); dt.setHours(0,0,0,0);
-    const diff = Math.round((dt-today)/86400000);
-    if (diff >= -1 && dt <= in30) {
-      upcoming.push({ name:c.name, region:c.region||'', date:annDate,
-                      diff, irWebsite: c.irWebsite||'#' });
-    }
-  }
-  upcoming.sort((a,b)=>a.diff-b.diff);
+            // Tab button styles
+            analyBtn.style.color        = BLUE;
+            analyBtn.style.borderBottom = `3px solid ${BLUE}`;
+            analyBtn.style.fontWeight   = '700';
+            dashBtn.style.color         = '#718096';
+            dashBtn.style.borderBottom  = '3px solid transparent';
+            dashBtn.style.fontWeight    = '600';
 
-  // ── Overdue ──
-  const overdue = companies
-    .filter(c => {
-      if (!c.lastAnnouncement) return false;
-      const d = new Date(c.lastAnnouncement);
-      return !isNaN(d) && Math.round((today-d)/86400000) > 180;
-    })
-    .sort((a,b) => new Date(a.lastAnnouncement)-new Date(b.lastAnnouncement));
+            // Render analytics content fresh each time
+            renderAnalytics();
+        }
+    };
 
-  // ── Summary counts ──
-  const totalUpcoming30 = upcoming.filter(u=>u.diff>=0).length;
-  const reportedThisMonth = (() => {
-    const now = new Date();
-    return companies.filter(c => {
-      if (!c.lastAnnouncement) return false;
-      const d = new Date(c.lastAnnouncement);
-      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
-    }).length;
-  })();
+    // ─── Render analytics pane ───────────────────────────────────
+    function renderAnalytics() {
+        const pane = document.getElementById('nbAnalyticsPane');
+        if (!pane) return;
 
-  document.getElementById('root').innerHTML = `
+        const companies = window.allData?.companies || [];
+        const stored    = safeJSON(localStorage.getItem('announcedDates'), {});
+        const dataAnn   = window.allData?.announcedDates || {};
+        const allAnn    = { ...dataAnn, ...stored };
+        const lastRun   = window.allData?.lastAgentRun || null;
 
-    <!-- ── Cards ── -->
-    <div class="cards">
-      <div class="card">
-        <div class="card-val">${companies.length}</div>
-        <div class="card-label">Total Companies</div>
-      </div>
-      <div class="card green">
-        <div class="card-val">${reportedThisMonth}</div>
-        <div class="card-label">Reported This Month</div>
-      </div>
-      <div class="card orange">
-        <div class="card-val">${totalUpcoming30}</div>
-        <div class="card-label">Upcoming (30 days)</div>
-      </div>
-      <div class="card red">
-        <div class="card-val">${overdue.length}</div>
-        <div class="card-label">Overdue 180d+</div>
-      </div>
-      <div class="card purple">
-        <div class="card-val">${Object.keys(allAnn).length}</div>
-        <div class="card-label">Confirmed Dates</div>
-      </div>
-    </div>
+        const today = new Date(); today.setHours(0,0,0,0);
+        const fmt   = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+        const todayStr    = fmt(today);
+        const tomorrowDt  = new Date(today); tomorrowDt.setDate(tomorrowDt.getDate()+1);
+        const tomorrowStr = fmt(tomorrowDt);
 
-    <!-- ── Monthly breakdown ── -->
-    <div class="section">
-      <h2>📅 Announcements by Month</h2>
-      ${monthKeys.map((key,i) => {
-        const count = monthly[key];
-        const pct   = Math.round((count/maxM)*100);
-        const color = MONTH_COLORS[i % MONTH_COLORS.length];
-        return `
-          <div class="bar-row">
-            <div class="bar-label">${key}</div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width:${pct}%;background:${color};">
-                ${count >= 3 ? count+' co.' : ''}
-              </div>
-            </div>
-            <div class="bar-count">${count}</div>
-          </div>`;
-      }).join('')}
-    </div>
+        // ── Today / Tomorrow lists ──
+        const todayList    = companies.filter(c => allAnn[c.name]?.date === todayStr);
+        const tomorrowList = companies.filter(c => {
+            const d = allAnn[c.name]?.date;
+            return d === tomorrowStr || (!d && c.expectedNext === tomorrowStr);
+        });
 
-    <!-- ── Region breakdown ── -->
-    <div class="section">
-      <h2>🌍 Companies by Region</h2>
-      <div class="region-grid">
-        ${Object.entries(regions).sort((a,b)=>b[1]-a[1]).map(([r,n])=>{
-          const pct = Math.round((n/companies.length)*100);
-          const col = REGION_COLORS[r]||'#718096';
-          return `
-            <div class="bar-row">
-              <div class="bar-label" style="width:120px">${r}</div>
-              <div class="bar-track">
-                <div class="bar-fill" style="width:${Math.max(pct,8)}%;background:${col};">
-                  ${n >= 3 ? n : ''}
-                </div>
-              </div>
-              <div class="bar-count">${n}</div>
-            </div>`;
-        }).join('')}
-      </div>
-    </div>
+        // ── Monthly buckets ──
+        const monthly = {};
+        for (const c of companies) {
+            if (!c.lastAnnouncement) continue;
+            const d = new Date(c.lastAnnouncement);
+            if (isNaN(d)) continue;
+            const key = d.toLocaleString('en-US',{month:'short',year:'numeric'});
+            const sortKey = d.getFullYear()*100 + d.getMonth();
+            monthly[key] = { count:(monthly[key]?.count||0)+1, sort:sortKey };
+        }
+        const monthKeys = Object.keys(monthly).sort((a,b)=>monthly[a].sort-monthly[b].sort);
+        const maxM = Math.max(...monthKeys.map(k=>monthly[k].count), 1);
 
-    <!-- ── Upcoming earnings ── -->
-    <div class="section">
-      <h2>📌 Confirmed Upcoming Earnings (next 30 days)</h2>
-      ${upcoming.length === 0
-        ? '<p style="color:#a0aec0;font-size:13px;">No confirmed upcoming dates in next 30 days.</p>'
-        : `<table>
-            <thead><tr>
-              <th>Company</th><th>Region</th><th>Date</th><th>Status</th><th>Calendar</th>
-            </tr></thead>
-            <tbody>
-            ${upcoming.map(u => {
-              const calDate = u.date.replace(/-/g,'');
-              const calUrl  = `https://calendar.google.com/calendar/render?action=TEMPLATE`
-                            + `&text=${encodeURIComponent(u.name+' Earnings')}`
-                            + `&dates=${calDate}/${calDate}`
-                            + `&details=${encodeURIComponent('Earnings. IR: '+u.irWebsite)}`;
-              let badge = '';
-              if (u.diff === 0)        badge = `<span class="badge badge-today">TODAY</span>`;
-              else if (u.diff === 1)   badge = `<span class="badge badge-soon">Tomorrow</span>`;
-              else if (u.diff <= 7)    badge = `<span class="badge badge-soon">${u.diff}d</span>`;
-              else                     badge = `<span class="badge badge-near">${u.diff}d</span>`;
-              return `<tr>
-                <td><strong>${u.name}</strong></td>
-                <td><span class="badge badge-region">${u.region}</span></td>
-                <td>${u.date}</td>
-                <td>${badge}</td>
-                <td><a href="${calUrl}" target="_blank" class="cal-link">📅 Add</a></td>
-              </tr>`;
+        // ── Region breakdown ──
+        const regions = {};
+        for (const c of companies) {
+            const r = c.region||'Unknown';
+            regions[r] = (regions[r]||0)+1;
+        }
+
+        // ── Upcoming 30 days ──
+        const in30 = new Date(today); in30.setDate(in30.getDate()+30);
+        const upcoming = companies
+            .filter(c => allAnn[c.name]?.date && new Date(allAnn[c.name].date) >= today && new Date(allAnn[c.name].date) <= in30)
+            .map(c => ({ ...c, annDate: allAnn[c.name].date, diff: Math.round((new Date(allAnn[c.name].date)-today)/86400000) }))
+            .sort((a,b)=>a.diff-b.diff);
+
+        // ── Overdue ──
+        const overdue = companies
+            .filter(c => c.lastAnnouncement && Math.round((today-new Date(c.lastAnnouncement))/86400000) > 180)
+            .sort((a,b)=>new Date(a.lastAnnouncement)-new Date(b.lastAnnouncement));
+
+        // ── Reported this month ──
+        const now = new Date();
+        const reportedThisMonth = companies.filter(c => {
+            if (!c.lastAnnouncement) return false;
+            const d = new Date(c.lastAnnouncement);
+            return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+        }).length;
+
+        const calLink = (name, date, ir) => {
+            const d = date.replace(/-/g,'');
+            return `https://calendar.google.com/calendar/render?action=TEMPLATE`
+                 + `&text=${encodeURIComponent(name+' Earnings')}`
+                 + `&dates=${d}/${d}`
+                 + `&details=${encodeURIComponent('Earnings. IR: '+(ir||''))}`;
+        };
+
+        pane.innerHTML = `
+
+        <!-- Agent last run -->
+        ${lastRun ? `
+        <div style="background:#f0fff4;border:1px solid #9ae6b4;border-radius:8px;
+            padding:8px 16px;margin-bottom:16px;font-size:12px;color:#276749;display:flex;
+            align-items:center;gap:8px;">
+            🤖 <strong>Agent last ran:</strong> ${lastRun}
+            &nbsp;·&nbsp; Runs daily at 7:30 AM IST automatically
+        </div>` : ''}
+
+        <!-- Stat cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;">
+            ${[
+                { val:companies.length,              label:'Total Companies',    color:'#3182ce' },
+                { val:reportedThisMonth,             label:'Reported This Month',color:'#38a169' },
+                { val:upcoming.length,               label:'Upcoming (30 days)', color:'#dd6b20' },
+                { val:overdue.length,                label:'Overdue 180d+',      color:'#e53e3e' },
+                { val:Object.keys(allAnn).length,    label:'Confirmed Dates',    color:'#805ad5' },
+            ].map(c=>`
+                <div style="background:#fff;border-radius:10px;padding:16px;
+                    border-left:4px solid ${c.color};
+                    box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+                    <div style="font-size:28px;font-weight:800;color:${c.color};">${c.val}</div>
+                    <div style="font-size:11px;color:#718096;margin-top:2px;">${c.label}</div>
+                </div>`).join('')}
+        </div>
+
+        <!-- TODAY banner -->
+        ${todayList.length > 0 ? `
+        <div style="background:linear-gradient(135deg,#fed7d7,#fc8181);border:2px solid #e53e3e;
+            border-radius:10px;padding:14px 20px;margin-bottom:12px;
+            box-shadow:0 2px 8px rgba(229,62,62,0.2);">
+            <strong>🔔 Earnings / Results TODAY!</strong>
+            <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+            ${todayList.map(c=>{
+                const isConf = allAnn[c.name]?.date === todayStr;
+                return `<span style="background:#fff;padding:3px 10px;border-radius:12px;font-size:13px;">
+                    ${c.name}${isConf?' ✅':' ~'}
+                </span>
+                <a href="${calLink(c.name,todayStr,c.irWebsite)}" target="_blank"
+                    style="background:#e53e3e;color:#fff;text-decoration:none;padding:3px 10px;
+                    border-radius:6px;font-size:12px;font-weight:700;">📅 Add</a>`;
             }).join('')}
-            </tbody>
-          </table>`
-      }
-    </div>
+            </div>
+            <div style="font-size:11px;color:#555;margin-top:6px;">✅ = confirmed &nbsp; ~ = estimated</div>
+        </div>` : ''}
 
-    <!-- ── Overdue ── -->
-    ${overdue.length > 0 ? `
-    <div class="section">
-      <h2>⚠️ Overdue Companies (180+ days since last announcement)</h2>
-      <table>
-        <thead><tr><th>Company</th><th>Region</th><th>Last Announcement</th><th>Days Overdue</th></tr></thead>
-        <tbody>
-        ${overdue.map(c => {
-          const days = Math.round((today - new Date(c.lastAnnouncement))/86400000);
-          return `<tr>
-            <td><strong>${c.name}</strong></td>
-            <td><span class="badge badge-region">${c.region||''}</span></td>
-            <td>${c.lastAnnouncement}</td>
-            <td><span class="badge badge-overdue">${days}d</span></td>
-          </tr>`;
-        }).join('')}
-        </tbody>
-      </table>
-    </div>` : ''}
+        <!-- TOMORROW banner -->
+        ${tomorrowList.length > 0 ? `
+        <div style="background:linear-gradient(135deg,#fefcbf,#f6e05e);border:2px solid #d69e2e;
+            border-radius:10px;padding:14px 20px;margin-bottom:20px;
+            box-shadow:0 2px 8px rgba(214,158,46,0.2);">
+            <strong>📅 Earnings tomorrow (${tomorrowDt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})})!</strong>
+            <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+            ${tomorrowList.map(c=>{
+                const isConf = allAnn[c.name]?.date === tomorrowStr;
+                return `<span style="background:#fff;padding:3px 10px;border-radius:12px;font-size:13px;">
+                    ${c.name}${isConf?' ✅':' ~'}
+                </span>
+                <a href="${calLink(c.name,tomorrowStr,c.irWebsite)}" target="_blank"
+                    style="background:#d69e2e;color:#fff;text-decoration:none;padding:3px 10px;
+                    border-radius:6px;font-size:12px;font-weight:700;">📅 Add</a>`;
+            }).join('')}
+            </div>
+            <div style="font-size:11px;color:#555;margin-top:6px;">✅ = confirmed &nbsp; ~ = estimated</div>
+        </div>` : ''}
 
-    <div style="text-align:center;color:#a0aec0;font-size:12px;padding:16px 0;">
-      Last updated: ${new Date().toLocaleString()} · 
-      <a href="./index.html" style="color:#3182ce;">← Back to Dashboard</a>
-    </div>
-  `;
-}
+        <!-- No alerts message -->
+        ${todayList.length === 0 && tomorrowList.length === 0 ? `
+        <div style="background:#f7fafc;border:1px solid #e2e8f0;border-radius:10px;
+            padding:16px;margin-bottom:20px;text-align:center;color:#a0aec0;font-size:13px;">
+            ✅ No earnings today or tomorrow
+        </div>` : ''}
 
-function fmt(d) {
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
+        <!-- Two column layout -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
 
-init();
-</script>
-</body>
-</html>
+            <!-- Monthly chart -->
+            <div style="background:#fff;border-radius:12px;padding:18px;
+                box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+                <h3 style="font-size:14px;font-weight:700;margin:0 0 14px;color:#2d3748;">
+                    📅 Announcements by Month
+                </h3>
+                ${monthKeys.slice(-8).map((key,i)=>{
+                    const cnt = monthly[key].count;
+                    const pct = Math.round((cnt/maxM)*100);
+                    const colors = ['#3182ce','#38a169','#dd6b20','#805ad5','#d53f8c','#2c7a7b','#b7791f','#0D8A7A'];
+                    const col = colors[i % colors.length];
+                    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px;">
+                        <div style="width:80px;text-align:right;color:#4a5568;flex-shrink:0;">${key}</div>
+                        <div style="flex:1;background:#edf2f7;border-radius:4px;height:20px;overflow:hidden;">
+                            <div style="width:${Math.max(pct,6)}%;height:100%;background:${col};
+                                display:flex;align-items:center;padding-left:6px;
+                                font-size:10px;font-weight:700;color:#fff;">
+                                ${cnt>=3?cnt:''}
+                            </div>
+                        </div>
+                        <div style="width:22px;color:#718096;">${cnt}</div>
+                    </div>`;
+                }).join('')}
+            </div>
+
+            <!-- Region breakdown -->
+            <div style="background:#fff;border-radius:12px;padding:18px;
+                box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+                <h3 style="font-size:14px;font-weight:700;margin:0 0 14px;color:#2d3748;">
+                    🌍 Companies by Region
+                </h3>
+                ${Object.entries(regions).sort((a,b)=>b[1]-a[1]).map(([r,n])=>{
+                    const pct = Math.round((n/companies.length)*100);
+                    const cols = {'North America':'#3182ce','Europe':'#38a169','Asia':'#dd6b20',
+                                  'Latin America':'#805ad5','Africa':'#d53f8c','Middle East':'#2c7a7b'};
+                    const col = cols[r]||'#718096';
+                    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px;">
+                        <div style="width:110px;text-align:right;color:#4a5568;flex-shrink:0;">${r}</div>
+                        <div style="flex:1;background:#edf2f7;border-radius:4px;height:20px;overflow:hidden;">
+                            <div style="width:${Math.max(pct,6)}%;height:100%;background:${col};
+                                display:flex;align-items:center;padding-left:6px;
+                                font-size:10px;font-weight:700;color:#fff;">
+                                ${n>=3?n:''}
+                            </div>
+                        </div>
+                        <div style="width:22px;color:#718096;">${n}</div>
+                    </div>`;
+                }).join('')}
+            </div>
+
+        </div>
+
+        <!-- Upcoming earnings table -->
+        ${upcoming.length > 0 ? `
+        <div style="background:#fff;border-radius:12px;padding:18px;
+            box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:16px;">
+            <h3 style="font-size:14px;font-weight:700;margin:0 0 14px;color:#2d3748;">
+                📌 Confirmed Upcoming Earnings (next 30 days)
+            </h3>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead>
+                    <tr style="background:#f7fafc;">
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Company</th>
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Region</th>
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Date</th>
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Status</th>
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Calendar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                ${upcoming.map(u=>{
+                    let badge = '';
+                    if (u.diff===0)      badge=`<span style="background:#fed7d7;color:#c53030;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">TODAY</span>`;
+                    else if (u.diff===1) badge=`<span style="background:#fefcbf;color:#744210;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">Tomorrow</span>`;
+                    else if (u.diff<=7)  badge=`<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">${u.diff}d</span>`;
+                    else                 badge=`<span style="background:#e6fffa;color:#234e52;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">${u.diff}d</span>`;
+                    return `<tr style="border-bottom:1px solid #f0f4f8;">
+                        <td style="padding:10px 12px;font-weight:600;color:#2d3748;">${u.name}</td>
+                        <td style="padding:10px 12px;"><span style="background:#ebf8ff;color:#2c5282;
+                            padding:2px 8px;border-radius:10px;font-size:11px;">${u.region}</span></td>
+                        <td style="padding:10px 12px;color:#4a5568;">${u.annDate}</td>
+                        <td style="padding:10px 12px;">${badge}</td>
+                        <td style="padding:10px 12px;">
+                            <a href="${calLink(u.name,u.annDate,u.irWebsite)}" target="_blank"
+                                style="background:#3182ce;color:#fff;text-decoration:none;
+                                padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600;">
+                                📅 Add
+                            </a>
+                        </td>
+                    </tr>`;
+                }).join('')}
+                </tbody>
+            </table>
+        </div>` : ''}
+
+        <!-- Overdue -->
+        ${overdue.length > 0 ? `
+        <div style="background:#fff;border-radius:12px;padding:18px;
+            box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+            <h3 style="font-size:14px;font-weight:700;margin:0 0 14px;color:#2d3748;">
+                ⚠️ Overdue Companies (180+ days)
+            </h3>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead>
+                    <tr style="background:#f7fafc;">
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Company</th>
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Region</th>
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Last Announcement</th>
+                        <th style="text-align:left;padding:8px 12px;color:#718096;font-size:11px;
+                            font-weight:600;text-transform:uppercase;border-bottom:1px solid #e2e8f0;">Days Overdue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                ${overdue.map(c=>{
+                    const days = Math.round((today-new Date(c.lastAnnouncement))/86400000);
+                    return `<tr style="border-bottom:1px solid #f0f4f8;">
+                        <td style="padding:10px 12px;font-weight:600;color:#2d3748;">${c.name}</td>
+                        <td style="padding:10px 12px;"><span style="background:#ebf8ff;color:#2c5282;
+                            padding:2px 8px;border-radius:10px;font-size:11px;">${c.region||''}</span></td>
+                        <td style="padding:10px 12px;color:#4a5568;">${c.lastAnnouncement}</td>
+                        <td style="padding:10px 12px;">
+                            <span style="background:#fff5f5;color:#c53030;padding:2px 8px;
+                                border-radius:10px;font-size:11px;font-weight:700;">${days}d</span>
+                        </td>
+                    </tr>`;
+                }).join('')}
+                </tbody>
+            </table>
+        </div>` : ''}
+        `;
+    }
+
+    function safeJSON(str, fallback) {
+        try { return JSON.parse(str||'null')||fallback; } catch(_) { return fallback; }
+    }
+
+    // ─── Boot ────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+        let attempts = 0;
+        const wait = setInterval(() => {
+            attempts++;
+            if (window.allData?.companies?.length > 0) {
+                clearInterval(wait);
+                injectTabs();
+                console.log('[analytics-tab] Tabs injected ✅');
+            } else if (attempts > 60) {
+                clearInterval(wait);
+            }
+        }, 100);
+    });
+
+})();
