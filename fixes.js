@@ -49,7 +49,7 @@
                 renderTable(window.allData.companies);
             }
             // Re-fire upcoming alerts
-            injectUpcomingAlerts();
+            //injectUpcomingAlerts();
         };
 
         window.clearAnnouncedDate = function(companyName) {
