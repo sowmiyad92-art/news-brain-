@@ -172,6 +172,7 @@
     //  UPCOMING ALERTS — today + tomorrow banners
     // ─────────────────────────────────────────────────────────────
     function injectUpcomingAlerts() {
+        return; // <--- ADD THIS LINE HERE
         // Remove old banners
         document.getElementById('nbUpcomingTodayBanner')?.remove();
         document.getElementById('nbUpcomingTomorrowBanner')?.remove();
