@@ -276,6 +276,7 @@ header p {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .filter-btn {
@@ -288,6 +289,7 @@ header p {
     font-size: 14px;
     transition: all 0.3s;
     color: var(--dark);
+    white-space: nowrap;
 }
 
 .filter-btn:hover {
@@ -299,6 +301,27 @@ header p {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
+}
+
+/* ── Analytics Link Button ── */
+.filter-buttons a {
+    padding: 10px 20px !important;
+    background: #3182ce !important;
+    color: white !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    border: 1px solid #3182ce !important;
+    transition: all 0.3s !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+.filter-buttons a:hover {
+    background: #2b6cb0 !important;
+    border-color: #2b6cb0 !important;
 }
 
 .table-section {
@@ -435,6 +458,10 @@ footer {
     .filter-btn {
         width: 100%;
     }
+
+    .filter-buttons a {
+        width: 100% !important;
+    }
     
     .text-upload-zone {
         margin: 20px 15px 0;
@@ -444,9 +471,6 @@ footer {
         height: 100px;
     }
 }
-/* ═══════════════════════════════════════════
-   PASTE THESE AT THE BOTTOM OF YOUR style.css
-   ═══════════════════════════════════════════ */
 
 /* Tomorrow highlight — pulsing yellow row */
 tr.due-tomorrow {
@@ -490,10 +514,6 @@ tr.due-tomorrow td {
     font-size: 18px;
     line-height: 1;
 }
-/* ═══════════════════════════════════════════════════
-   ADD THESE TO THE BOTTOM OF YOUR style.css
-   (for features.js — daily reminder + search upgrade)
-   ═══════════════════════════════════════════════════ */
 
 /* Date filter dropdown row */
 #advancedFilterRow select {
@@ -518,82 +538,76 @@ tr.due-tomorrow td {
     padding: 3px 10px;
     border-radius: 10px;
     display: inline-block;
+    margin-left: 8px;
+    transition: all 0.2s ease;
+    animation: fadeIn 0.3s ease;
 }
+
 #searchResultCount:empty {
     display: none;
 }
 
-/* Reminder modal rows hover */
-#reminderOverlay table tbody tr:hover {
-    background: #f7fafc !important;
-}
-/* ═══════════════════════════════════════════════════
-   ADD THESE TO THE BOTTOM OF YOUR style.css
-   (for features.js — daily reminder + search upgrade)
-   ═══════════════════════════════════════════════════ */
-
-/* Date filter dropdown row */
-#advancedFilterRow select {
-    transition: border-color 0.2s;
-}
-#advancedFilterRow select:focus {
-    outline: none;
-    border-color: #3182ce;
-    box-shadow: 0 0 0 3px rgba(49,130,206,0.15);
-}
-#clearFiltersBtn:hover {
-    background: #edf2f7 !important;
-    border-color: #aaa !important;
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
 }
 
-/* Search result count badge */
-#searchResultCount {
-    font-size: 12px;
-    color: #3182ce;
-    font-weight: 600;
-    background: #ebf8ff;
-    padding: 3px 10px;
-    border-radius: 10px;
-    display: inline-block;
-}
-#searchResultCount:empty {
-    display: none;
-}
-
-/* Reminder modal rows hover */
-#reminderOverlay table tbody tr:hover {
-    background: #f7fafc !important;
-}
-
-/* ── Enhanced Search Dropdown ── */
-#searchWrapper { position: relative; }
-
-#searchDropdown { scrollbar-width: thin; }
-#searchDropdown::-webkit-scrollbar { width: 5px; }
-#searchDropdown::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
-
-.sd-item:hover, .sd-active {
-    background: #f0f7ff !important;
-}
-.sd-item .sd-del:hover { color: #e53e3e !important; }
-
-/* Search result count badge */
-#searchResultCount {
-    font-size: 12px; color: #3182ce; font-weight: 600;
-    background: #ebf8ff; padding: 3px 10px;
-    border-radius: 10px; display: inline-block;
-}
-#searchResultCount:empty { display: none; }
-
-/* Highlighted match in table */
+/* Highlighted Search Terms in Table */
 #tableBody mark {
-    background: #fef08a;
-    border-radius: 2px;
-    padding: 0 1px;
+    background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    color: #854d0e;
+    box-shadow: 0 1px 2px rgba(133, 77, 14, 0.1);
     font-style: normal;
 }
 
-/* ── Announced Date column ── */
+/* Table Header Tooltips */
+.companies-table thead th[title] {
+    cursor: help;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+.companies-table thead th[title]:hover {
+    background: #e2e8f0;
+}
+
+.companies-table thead th[title]:hover::after {
+    content: '💡';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* Search Input Enhancement */
+#searchInput:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+}
+
+/* No Results Message */
+#tableBody tr td[colspan] {
+    color: #718096;
+    font-style: italic;
+}
+
+/* Row Highlighting on Search Match */
+.companies-table tbody tr.search-match {
+    background: #f0f9ff;
+    border-left: 3px solid #3182ce;
+}
+
+.companies-table tbody tr.search-match:hover {
+    background: #e0f2fe;
+}
+
+/* Announced Date column */
 .announced-date-confirmed {
     display: inline-flex; align-items: center; gap: 5px;
     background: #f0fff4; border: 1px solid #68d391;
@@ -636,95 +650,4 @@ tr.due-tomorrow td {
     color: #718096; font-size: 10px;
     padding: 1px 6px; border-radius: 8px;
     margin-left: 4px; vertical-align: middle;
-}
-/* ═══════════════════════════════════════════════════════
-   PASTE THIS AT THE BOTTOM OF YOUR style.css FILE
-   (Enhanced Search & Column Tooltips)
-   ═══════════════════════════════════════════════════════ */
-
-/* ── Search Result Count Badge ── */
-#searchResultCount {
-    font-size: 12px;
-    color: #3182ce;
-    font-weight: 600;
-    background: #ebf8ff;
-    padding: 3px 10px;
-    border-radius: 10px;
-    display: inline-block;
-    margin-left: 8px;
-    transition: all 0.2s ease;
-    animation: fadeIn 0.3s ease;
-}
-
-#searchResultCount:empty {
-    display: none;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* ── Highlighted Search Terms in Table ── */
-#tableBody mark {
-    background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
-    border-radius: 3px;
-    padding: 1px 3px;
-    font-weight: 600;
-    color: #854d0e;
-    box-shadow: 0 1px 2px rgba(133, 77, 14, 0.1);
-    font-style: normal;
-}
-
-/* ── Table Header Tooltips (Enhanced) ── */
-.companies-table thead th[title] {
-    cursor: help;
-    position: relative;
-    transition: background 0.2s ease;
-}
-
-.companies-table thead th[title]:hover {
-    background: #e2e8f0;
-}
-
-/* Optional: Add tooltip arrow on hover (advanced) */
-.companies-table thead th[title]:hover::after {
-    content: '💡';
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    opacity: 0.6;
-}
-
-/* ── Search Input Enhancement ── */
-#searchInput:focus {
-    outline: none;
-    border-color: #3182ce;
-    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
-}
-
-/* ── No Results Message ── */
-#tableBody tr td[colspan] {
-    color: #718096;
-    font-style: italic;
-}
-
-/* ── Row Highlighting on Search Match ── */
-.companies-table tbody tr.search-match {
-    background: #f0f9ff;
-    border-left: 3px solid #3182ce;
-}
-
-.companies-table tbody tr.search-match:hover {
-    background: #e0f2fe;
-}
-
-/* ── Search Loading State (Optional) ── */
-#searchInput.searching {
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="%233182ce" stroke-width="2"><animate attributeName="stroke-dasharray" from="0 63" to="63 0" dur="1s" repeatCount="indefinite"/></circle></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 16px;
 }
