@@ -40,6 +40,13 @@
         if (pastDate) {
             companyObj.lastAnnouncement = pastDate;
             
+            // --- AGENT FIX: Clear confirmed upcoming date when a new announcement is made ---
+            if (announcedDates[company]) {
+                delete announcedDates[company];
+                console.log(`🧹 Cleared old upcoming date for ${company}`);
+            }
+            // -----------------------------------------------------------------------------
+
             // Auto-calculate Expected Next = Last + 90 days
             const lastDate = new Date(pastDate);
             const nextDate = new Date(lastDate);
