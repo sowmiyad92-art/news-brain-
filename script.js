@@ -23,19 +23,50 @@ async function loadData() {
 
         loadAnnouncedDates();
 
-        // Merge agent announcedDates from data.json into localStorage
+        
+       // Merge agent announcedDates from data.json into localStorage
         if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
             let stored = {};
             try { stored = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
-            let merged = 0;
+
+            // Build lastAnnouncement map from base data + localStorage overrides
+            const lastAnnMap = {};
+            for (const co of (baseData.companies || [])) {
+                lastAnnMap[co.name] = co.lastAnnouncement || '';
+            }
+            try {
+                const savedCompanies = JSON.parse(localStorage.getItem('companiesData') || '[]');
+                for (const co of savedCompanies) {
+                    if (co.lastAnnouncement && co.lastAnnouncement > (lastAnnMap[co.name] || '')) {
+                        lastAnnMap[co.name] = co.lastAnnouncement;
+                    }
+                }
+            } catch(_) {}
+
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            let merged = 0, skipped = 0;
+
             for (const [company, entry] of Object.entries(baseData.announcedDates)) {
                 const existing = stored[company]?.date;
-                if (!existing || entry.date > existing) { stored[company] = entry; merged++; }
+                const lastAnn  = lastAnnMap[company] || '';
+                const entryDate = new Date(entry.date); entryDate.setHours(0, 0, 0, 0);
+
+                // SKIP if: date is already past, OR lastAnnouncement has caught up to/passed it
+                if (entryDate <= today || (lastAnn && lastAnn >= entry.date)) {
+                    skipped++;
+                    // Also remove from stored if it somehow got in there
+                    if (stored[company]) { delete stored[company]; }
+                    continue;
+                }
+
+                if (!existing || entry.date > existing) {
+                    stored[company] = entry;
+                    merged++;
+                }
             }
-            if (merged > 0) {
-                localStorage.setItem('announcedDates', JSON.stringify(stored));
-                console.log(`🤖 [agent] Merged ${merged} upcoming dates from data.json`);
-            }
+
+            localStorage.setItem('announcedDates', JSON.stringify(stored));
+            console.log(`🤖 [agent] Merged ${merged} upcoming dates, skipped ${skipped} consumed/past dates`);
         }
 
         const savedData = localStorage.getItem('companiesData');
