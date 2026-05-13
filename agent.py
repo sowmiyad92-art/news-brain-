@@ -301,35 +301,35 @@ def update_data_json(results):
         name=co.get('name',''); r=results.get(name)
         if not r: continue
         changed=False
-       nl=r.get('lastAnnouncement')
-        if nl and (not co.get('lastAnnouncement') or nl>co.get('lastAnnouncement','')):
-            co['lastAnnouncement']=nl
+        
+        # --- FIXED SECTION START ---
+        nl = r.get('lastAnnouncement')
+        if nl and (not co.get('lastAnnouncement') or nl > co.get('lastAnnouncement', '')):
+            co['lastAnnouncement'] = nl
             try:
-                co['expectedNext']=(datetime.strptime(nl,'%Y-%m-%d')
-                                    +timedelta(days=90)).strftime('%Y-%m-%d')
-            except: pass
-            changed=True
-            # Clear announcedDate if it's now consumed by the updated lastAnnouncement
+                co['expectedNext'] = (datetime.strptime(nl, '%Y-%m-%d') + timedelta(days=90)).strftime('%Y-%m-%d')
+            except: 
+                pass
+            changed = True
             if name in announced and announced[name]['date'] <= nl:
                 print(f"  🗑️  {name}: clearing announcedDate {announced[name]['date']} — consumed by lastAnnouncement {nl}")
                 del announced[name]
 
-        nu=r.get('upcomingDate')
+        nu = r.get('upcomingDate')
         if nu:
             last_ann = co.get('lastAnnouncement', '')
-            if nu > last_ann:  # Only store if genuinely AFTER last known announcement
-                announced[name]={'date':nu,'url':None,
-                                 'timestamp':datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
-                                 'source':r.get('source','agent')}
-                changed=True
+            if nu > last_ann:  
+                announced[name] = {
+                    'date': nu, 
+                    'url': None,
+                    'timestamp': datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
+                    'source': r.get('source', 'agent')
+                }
+                changed = True
             else:
                 print(f"  ⚠️  {name}: skipping upcomingDate {nu} — not after lastAnnouncement {last_ann}")
-        nu=r.get('upcomingDate')
-        if nu:
-            announced[name]={'date':nu,'url':None,
-                             'timestamp':datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
-                             'source':r.get('source','agent')}
-            changed=True
+        # --- FIXED SECTION END ---
+
         if changed: updated+=1
 
     today=datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
