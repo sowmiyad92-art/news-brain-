@@ -783,7 +783,7 @@
     "Curiosity Stream": {
       "date": "2026-05-14",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "IR Page"
     },
     "Viaplay Group": {
@@ -813,13 +813,13 @@
     "Telecom Argentina": {
       "date": "2026-08-10",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Fuji Media": {
@@ -831,7 +831,7 @@
     "NetEase": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "ITV": {
@@ -861,91 +861,97 @@
     "Netflix": {
       "date": "2026-07-16",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Disney": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Lionsgate": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Bilibili": {
       "date": "2026-05-19",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     },
     "Nexstar": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "13/05/2026 13:24:40",
+      "timestamp": "13/05/2026 15:08:39",
+      "source": "yfinance"
+    },
+    "Scripps": {
+      "date": "2026-08-06",
+      "url": null,
+      "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
     }
   },
