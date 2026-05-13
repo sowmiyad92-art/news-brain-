@@ -1,6 +1,6 @@
 let allData = {};
 let currentFilter = 'all';
-let newsHistory = [];  // NEW: Track news URLs
+let newsHistory = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadData();
@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupDataExport();
     loadNewsHistory();
     updateDashboard();
+    // checkTomorrowAlerts() REMOVED — banner lives in Analytics tab only
     setupNewsHistoryPanel();
     document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
 });
@@ -22,8 +23,7 @@ async function loadData() {
 
         loadAnnouncedDates();
 
-        
-       // Merge agent announcedDates from data.json into localStorage
+        // Merge agent announcedDates from data.json into localStorage
         if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
             let stored = {};
             try { stored = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
@@ -46,15 +46,35 @@ async function loadData() {
             let merged = 0, skipped = 0;
 
             for (const [company, entry] of Object.entries(baseData.announcedDates)) {
-                const existing = stored[company]?.date;
-                const lastAnn  = lastAnnMap[company] || '';
+                const existing  = stored[company]?.date;
+                const lastAnn   = lastAnnMap[company] || '';
                 const entryDate = new Date(entry.date); entryDate.setHours(0, 0, 0, 0);
 
-                // SKIP if: date is already past, OR lastAnnouncement has caught up to/passed it
-                if (entryDate <= today || (lastAnn && lastAnn >= entry.date)) {
+                // ── TODAY: auto-promote announced date → lastAnnouncement ──
+                // If the confirmed earnings date is TODAY and agent hasn't already updated it,
+                // move it into lastAnnouncement + recalculate expectedNext, then clear upcoming pin.
+                if (entryDate.getTime() === today.getTime()) {
+                    const coEntry = (baseData.companies || []).find(c => c.name === company);
+                    if (coEntry && (!coEntry.lastAnnouncement || coEntry.lastAnnouncement < entry.date)) {
+                        coEntry.lastAnnouncement = entry.date;
+                        try {
+                            const next = new Date(entry.date);
+                            next.setDate(next.getDate() + 90);
+                            coEntry.expectedNext = next.getFullYear() + '-' +
+                                String(next.getMonth() + 1).padStart(2, '0') + '-' +
+                                String(next.getDate()).padStart(2, '0');
+                        } catch(_) {}
+                        console.log(`📅 [auto-promote] ${company}: announcedDate ${entry.date} → lastAnnouncement`);
+                    }
+                    if (stored[company]) delete stored[company];
                     skipped++;
-                    // Also remove from stored if it somehow got in there
-                    if (stored[company]) { delete stored[company]; }
+                    continue;
+                }
+
+                // SKIP if: date is already past, OR lastAnnouncement has caught up to/passed it
+                if (entryDate < today || (lastAnn && lastAnn >= entry.date)) {
+                    skipped++;
+                    if (stored[company]) delete stored[company];
                     continue;
                 }
 
@@ -123,7 +143,7 @@ async function loadData() {
 }
 
 // ═══════════════════════════════════════════════════════
-// NEW: NEWS HISTORY TRACKING
+// NEWS HISTORY TRACKING
 // ═══════════════════════════════════════════════════════
 
 function loadNewsHistory() {
@@ -145,22 +165,14 @@ function addNewsToHistory(company, date, url, source = 'manual') {
         timestamp: new Date().toLocaleString(),
         id: Date.now()
     };
-    
-    newsHistory.unshift(entry);  // Add to beginning
-    
-    // Keep only last 100 entries
-    if (newsHistory.length > 100) {
-        newsHistory = newsHistory.slice(0, 100);
-    }
-    
+    newsHistory.unshift(entry);
+    if (newsHistory.length > 100) newsHistory = newsHistory.slice(0, 100);
     saveNewsHistory();
     console.log('📰 Added to history:', company, date);
 }
 
 function getNewsHistory(company = null) {
-    if (company) {
-        return newsHistory.filter(n => n.company === company);
-    }
+    if (company) return newsHistory.filter(n => n.company === company);
     return newsHistory;
 }
 
@@ -172,19 +184,14 @@ function exportNewsHistory() {
     link.href = url;
     link.download = `news-history-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
-    
     showNotification('✅ News history exported!', 'success');
 }
 
 // ═══════════════════════════════════════════════════════
-// UPCOMING EARNINGS DATE — confirmed future earnings dates
-// Stored separately — never overwrites lastAnnouncement/expectedNext
-// upcomingEarningsDate: the date a company WILL report earnings (future)
-// lastAnnouncement:     the date they DID report (past, already happened)
-// expectedNext:         auto-estimate = lastAnnouncement + 90 days
+// UPCOMING EARNINGS DATE
 // ═══════════════════════════════════════════════════════
 
-let announcedDates = {};  // key kept as 'announcedDates' for localStorage backward compat
+let announcedDates = {};
 
 function loadAnnouncedDates() {
     try {
@@ -219,13 +226,12 @@ function setupEventListeners() {
 }
 
 // ═══════════════════════════════════════════════════════
-// ⚡ QUICK UPDATE PANEL
+// QUICK UPDATE PANEL
 // ═══════════════════════════════════════════════════════
 
-let quTab = 'past'; // 'past' or 'upcoming'
+let quTab = 'past';
 
 function setupQuickUpdate() {
-    // Populate company dropdown
     const sel = document.getElementById('quCompany');
     if (!sel) return;
     sel.innerHTML = '<option value="">— Select company —</option>' +
@@ -234,7 +240,6 @@ function setupQuickUpdate() {
             .map(c => `<option value="${c.name}">${c.name}</option>`)
             .join('');
 
-    // Set today as default date
     const dateInput = document.getElementById('quDate');
     if (dateInput) dateInput.valueAsDate = new Date();
 }
@@ -271,23 +276,16 @@ window.quSave = function() {
         showNotification(`📅 Upcoming Earnings saved: ${company} → ${date}`, 'success');
     }
 
-    // Clear URL field, keep company selected for quick consecutive updates
     document.getElementById('quUrl').value = '';
 };
 
 function handleSearch(e) {
     const query = e.target.value.toLowerCase();
-    
-    // Safety check: ensure allData is loaded
-    if (!allData || !allData.companies) {
-        console.warn('⚠️ allData not ready yet, skipping search');
-        return;
-    }
-    
+    if (!allData || !allData.companies) return;
     if (query === '') {
         filterByRegion(currentFilter);
     } else {
-        const filtered = allData.companies.filter(c => 
+        const filtered = allData.companies.filter(c =>
             c.name.toLowerCase().includes(query)
         );
         renderTable(filtered);
@@ -296,36 +294,22 @@ function handleSearch(e) {
 
 function filterByRegion(region) {
     currentFilter = region;
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     if (event && event.target) event.target.classList.add('active');
-
-    // Safety check: ensure allData is loaded
-    if (!allData || !allData.companies) {
-        console.warn('⚠️ allData not ready yet, skipping filter');
-        return;
-    }
-
-    let filtered;
-    if (region === 'all') {
-        filtered = allData.companies;
-    } else {
-        filtered = allData.companies.filter(c => c.region === region);
-    }
+    if (!allData || !allData.companies) return;
+    const filtered = region === 'all'
+        ? allData.companies
+        : allData.companies.filter(c => c.region === region);
     renderTable(filtered);
 }
 
 function calculateDaysInfo(dateString) {
-    const date = new Date(dateString);
+    const date  = new Date(dateString);
     const today = new Date();
-    
     date.setHours(0, 0, 0, 0);
     today.setHours(0, 0, 0, 0);
-    
     const timeDiff = today - date;
     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    
     return {
         days: Math.abs(days),
         isPast: days >= 0,
@@ -337,7 +321,7 @@ function calculateDaysInfo(dateString) {
 
 function renderTable(companies) {
     const tbody = document.getElementById('tableBody');
-    
+
     if (companies.length === 0) {
         tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:#666;">No companies found</td></tr>';
         return;
@@ -351,23 +335,22 @@ function renderTable(companies) {
 
     tbody.innerHTML = companies.map(company => {
         const dateInfo = calculateDaysInfo(company.lastAnnouncement);
-        
+
         let daysDisplay = '';
-        let daysClass = '';
-        
+        let daysClass   = '';
         if (dateInfo.isFuture) {
             daysDisplay = `In ${dateInfo.days} days`;
-            daysClass = 'days-future';
+            daysClass   = 'days-future';
         } else if (dateInfo.isOverdue) {
             daysDisplay = `${dateInfo.days} days ago`;
-            daysClass = 'days-overdue';
+            daysClass   = 'days-overdue';
         } else {
             daysDisplay = `${dateInfo.days} days ago`;
-            daysClass = 'days-ok';
+            daysClass   = 'days-ok';
         }
-        
-        const hasNews = company.articleUrl && company.articleUrl.length > 0;
-        const safeName = company.name.replace(/'/g, "\\'");
+
+        const hasNews    = company.articleUrl && company.articleUrl.length > 0;
+        const safeName   = company.name.replace(/'/g, "\\'");
         const newsIndicator = hasNews
             ? `<span class="news-badge clickable" onclick="openNewsHistory('${safeName}')" title="View news history">✅</span>`
             : `<span class="news-badge-empty clickable" onclick="openNewsHistory('${safeName}')" title="No news yet">＋</span>`;
@@ -375,23 +358,19 @@ function renderTable(companies) {
         const isTomorrow = company.expectedNext === tomorrowStr;
 
         // ── Upcoming Earnings Date column ──
-        // This is the CONFIRMED future date the company will report earnings.
-        // Separate from expectedNext (which is just an auto-estimate).
-        // Set manually via "+ Add" or auto-detected from pre-announcement articles.
-        // Banner fires the day before this date.
         const announced = getAnnouncedDate(company.name);
         const today = new Date(); today.setHours(0,0,0,0);
 
         let announcedCell = '';
         if (announced) {
-            const annDate = new Date(announced.date); annDate.setHours(0,0,0,0);
+            const annDate   = new Date(announced.date); annDate.setHours(0,0,0,0);
             const daysUntil = Math.round((annDate - today) / 86400000);
             let badge = '';
-            if (daysUntil === 0)       badge = '<span class="nb-ann-badge nb-ann-today">📅 TODAY</span>';
-            else if (daysUntil === 1)  badge = '<span class="nb-ann-badge nb-ann-tomorrow">⏰ Tomorrow</span>';
+            if (daysUntil === 0)                   badge = '<span class="nb-ann-badge nb-ann-today">📅 TODAY</span>';
+            else if (daysUntil === 1)               badge = '<span class="nb-ann-badge nb-ann-tomorrow">⏰ Tomorrow</span>';
             else if (daysUntil > 1 && daysUntil <= 7) badge = `<span class="nb-ann-badge nb-ann-soon">⏳ ${daysUntil}d</span>`;
-            else if (daysUntil > 7)   badge = `<span class="nb-ann-badge nb-ann-future">📆 ${daysUntil}d</span>`;
-            else                       badge = `<span class="nb-ann-badge nb-ann-past">✅ ${Math.abs(daysUntil)}d ago</span>`;
+            else if (daysUntil > 7)                badge = `<span class="nb-ann-badge nb-ann-future">📆 ${daysUntil}d</span>`;
+            else                                   badge = `<span class="nb-ann-badge nb-ann-past">✅ ${Math.abs(daysUntil)}d ago</span>`;
 
             announcedCell = `
                 <span class="announced-date-confirmed" title="Confirmed upcoming earnings date. Source saved: ${announced.timestamp || ''}">
@@ -407,19 +386,19 @@ function renderTable(companies) {
             announcedCell = `<span class="announced-date-empty" onclick="handleAddAnnounced('${safeName}')" title="Add confirmed upcoming earnings date">＋ Add</span>`;
         }
 
-        // Expected Next: always shows auto-calculated date — announced date does NOT change this
+        // Expected Next: hidden when upcoming confirmed date exists
         const hasUpcoming = !!getAnnouncedDate(company.name);
-const expectedDisplay = hasUpcoming 
-    ? `<span style="color:#cbd5e0;font-size:11px;">— see Upcoming →</span>`
-    : `${company.expectedNext} <span class="badge-estimated">~ Est.</span>`;
+        const expectedDisplay = hasUpcoming
+            ? `<span style="color:#cbd5e0;font-size:11px;">— see Upcoming →</span>`
+            : `${company.expectedNext} <span class="badge-estimated">~ Est.</span>`;
 
         const rowClass = [
-            dateInfo.isOverdue ? 'overdue' : '',
-            dateInfo.isFuture ? 'future-event' : '',
-            company.isNewlyUpdated ? 'newly-updated' : '',
-            isTomorrow ? 'due-tomorrow' : ''
+            dateInfo.isOverdue    ? 'overdue'        : '',
+            dateInfo.isFuture     ? 'future-event'   : '',
+            company.isNewlyUpdated ? 'newly-updated'  : '',
+            isTomorrow            ? 'due-tomorrow'   : ''
         ].filter(Boolean).join(' ');
-        
+
         return `
             <tr class="${rowClass}">
                 <td><span class="company-name">${company.name}</span>${isTomorrow ? ' <span class="tomorrow-badge">📅 Tomorrow!</span>' : ''}</td>
@@ -441,33 +420,32 @@ const expectedDisplay = hasUpcoming
 function updateDashboard() {
     const today = new Date();
     const thirtyDaysLater = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-    
+
     document.getElementById('totalCompanies').textContent = allData.companies.length;
-    document.getElementById('footerCount').textContent = allData.companies.length;
-    
+    document.getElementById('footerCount').textContent    = allData.companies.length;
+
     const expectedThisMonth = allData.companies.filter(c => {
         const expectedDate = new Date(c.expectedNext);
         return expectedDate >= today && expectedDate <= thirtyDaysLater;
     });
     document.getElementById('expectedThisMonth').textContent = expectedThisMonth.length;
-    
+
     const overdue = allData.companies.filter(c => {
         const dateInfo = calculateDaysInfo(c.lastAnnouncement);
         return dateInfo.isOverdue;
     });
     document.getElementById('overdueCount').textContent = overdue.length;
-    
+
     if (overdue.length > 0) {
         const alertsHtml = overdue.map(c => {
             const dateInfo = calculateDaysInfo(c.lastAnnouncement);
             return `
                 <div class="alert">
-                    ⚠️ <strong>${c.name}</strong> is ${dateInfo.days} days overdue 
+                    ⚠️ <strong>${c.name}</strong> is ${dateInfo.days} days overdue
                     (last: ${c.lastAnnouncement})
                 </div>
             `;
         }).join('');
-        
         const alertsSection = document.getElementById('alertsSection');
         alertsSection.innerHTML = alertsHtml;
         alertsSection.style.display = 'block';
@@ -475,39 +453,19 @@ function updateDashboard() {
 }
 
 // =====================================================
-// DATA EXPORT/IMPORT (Persistence)
+// DATA EXPORT/IMPORT
 // =====================================================
 
 function setupDataExport() {
-    const exportBtn = document.getElementById('exportDataBtn');
-    const importBtn = document.getElementById('importDataBtn');
-    const importFile = document.getElementById('importFile');
+    const exportBtn      = document.getElementById('exportDataBtn');
+    const importBtn      = document.getElementById('importDataBtn');
+    const importFile     = document.getElementById('importFile');
     const exportHistoryBtn = document.getElementById('exportHistoryBtn');
-    
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            exportDataToJSON();
-        });
-    }
-    
-    if (importBtn) {
-        importBtn.addEventListener('click', () => {
-            importFile.click();
-        });
-    }
-    
-    if (importFile) {
-        importFile.addEventListener('change', (e) => {
-            importDataFromJSON(e);
-        });
-    }
-    
-    // NEW: Export history button
-    if (exportHistoryBtn) {
-        exportHistoryBtn.addEventListener('click', () => {
-            exportNewsHistory();
-        });
-    }
+
+    if (exportBtn)        exportBtn.addEventListener('click', exportDataToJSON);
+    if (importBtn)        importBtn.addEventListener('click', () => importFile.click());
+    if (importFile)       importFile.addEventListener('change', importDataFromJSON);
+    if (exportHistoryBtn) exportHistoryBtn.addEventListener('click', exportNewsHistory);
 }
 
 function exportDataToJSON() {
@@ -520,47 +478,39 @@ function exportDataToJSON() {
             articleUrl: c.articleUrl || null
         }))
     };
-    
-    const dataStr = JSON.stringify(dataToExport, null, 2);
+    const dataStr  = JSON.stringify(dataToExport, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
+    const url  = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
     link.download = `news-brain-backup-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
-    
     showNotification('✅ Data exported! File downloaded', 'success');
-    console.log('📥 Exported data:', dataToExport);
 }
 
 function importDataFromJSON(event) {
     const file = event.target.files[0];
     if (!file) return;
-    
     const reader = new FileReader();
     reader.onload = (e) => {
         try {
-            const imported = JSON.parse(e.target.result);
+            const imported  = JSON.parse(e.target.result);
             const companies = imported.companies;
-            
             let updated = 0;
             for (const company of companies) {
                 const existing = allData.companies.find(c => c.name === company.name);
                 if (existing) {
                     existing.lastAnnouncement = company.lastAnnouncement;
-                    existing.expectedNext = company.expectedNext;
-                    existing.articleUrl = company.articleUrl || null;
-                    existing.isNewlyUpdated = true;
+                    existing.expectedNext     = company.expectedNext;
+                    existing.articleUrl       = company.articleUrl || null;
+                    existing.isNewlyUpdated   = true;
                     updated++;
                 }
             }
-            
             localStorage.setItem('companiesData', JSON.stringify(allData.companies));
             renderTable(allData.companies);
             updateDashboard();
-            
             showNotification(`✅ Imported ${updated} companies!`, 'success');
-            console.log('📤 Imported data:', updated, 'companies updated');
         } catch (error) {
             console.error('Import error:', error);
             showNotification('❌ Error importing file', 'error');
@@ -578,40 +528,27 @@ function setupDragDrop() {
     if (!dragZone) return;
 
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dragZone.addEventListener(eventName, (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-        });
+        dragZone.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); });
     });
-
     ['dragenter', 'dragover'].forEach(eventName => {
-        dragZone.addEventListener(eventName, () => {
-            dragZone.classList.add('drag-over');
-        });
+        dragZone.addEventListener(eventName, () => dragZone.classList.add('drag-over'));
     });
-
     ['dragleave', 'drop'].forEach(eventName => {
-        dragZone.addEventListener(eventName, () => {
-            dragZone.classList.remove('drag-over');
-        });
+        dragZone.addEventListener(eventName, () => dragZone.classList.remove('drag-over'));
     });
-
     dragZone.addEventListener('drop', handleDrop);
+
     const urlInput = document.getElementById('newsUrlInput');
     if (urlInput) {
         urlInput.addEventListener('paste', handleUrlPaste);
         urlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                processNewsUrl(urlInput.value);
-                urlInput.value = '';
-            }
+            if (e.key === 'Enter') { processNewsUrl(urlInput.value); urlInput.value = ''; }
         });
     }
 }
 
 function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const items = dt.items;
+    const items = e.dataTransfer.items;
     if (items) {
         for (let i = 0; i < items.length; i++) {
             if (items[i].kind === 'string' && items[i].type === 'text/plain') {
@@ -623,9 +560,7 @@ function handleDrop(e) {
 
 function handleUrlPaste(e) {
     const url = e.clipboardData.getData('text');
-    if (url.startsWith('http')) {
-        processNewsUrl(url);
-    }
+    if (url.startsWith('http')) processNewsUrl(url);
 }
 
 function processNewsUrl(url) {
@@ -634,15 +569,8 @@ function processNewsUrl(url) {
 
     try {
         const result = extractNewsInfo(url);
-        if (!result.company) {
-            showNotification('❌ Could not identify company', 'error');
-            return;
-        }
+        if (!result.company) { showNotification('❌ Could not identify company', 'error'); return; }
 
-        // Ask user: past result OR future announcement?
-        // IMPORTANT: We use a custom choice so it's unambiguous.
-        // OK     = PAST results (most common — you just read earnings)
-        // Cancel = FUTURE date (they announced when they'll report next)
         const isPastResults = confirm(
             `🏢 Company: ${result.company}\n\n` +
             `Is this article about PAST earnings results?\n\n` +
@@ -651,13 +579,10 @@ function processNewsUrl(url) {
         );
 
         if (isPastResults) {
-            // ── PAST RESULTS PATH — updates lastAnnouncement ──
             if (!result.date) result.date = extractDateFromQuarter(url);
             if (!result.date) {
                 const manualDate = prompt(
-                    `📅 Enter the earnings RESULTS date:\n\nCompany: ${result.company}\nExamples: 2026-04-07 | April 7 2026`,
-                    ''
-                );
+                    `📅 Enter the earnings RESULTS date:\n\nCompany: ${result.company}\nExamples: 2026-04-07 | April 7 2026`, '');
                 if (!manualDate) { showNotification('⏸️ Cancelled', 'warning'); return; }
                 result.date = extractDateFromText(manualDate) || (isValidDate(manualDate) ? manualDate : null);
                 if (!result.date) { showNotification('❌ Could not parse that date', 'error'); return; }
@@ -665,16 +590,11 @@ function processNewsUrl(url) {
             updateCompanyNews(result.company, result.date, url);
             addNewsToHistory(result.company, result.date, url, 'url-paste');
             showNotification(`✅ Last Announcement updated: ${result.company} → ${result.date}`, 'success');
-
         } else {
-            // ── FUTURE ANNOUNCEMENT PATH — saves to Upcoming Earnings ──
-            let announcedDate = extractAnnouncedDateFromUrl(url);
-            if (!announcedDate) announcedDate = extractDateFromQuarter(url);
+            let announcedDate = extractAnnouncedDateFromUrl(url) || extractDateFromQuarter(url);
             if (!announcedDate) {
                 const manualDate = prompt(
-                    `📅 Enter the UPCOMING earnings date from this article:\n\nCompany: ${result.company}\nExamples: 2026-05-06 | May 6 2026`,
-                    ''
-                );
+                    `📅 Enter the UPCOMING earnings date:\n\nCompany: ${result.company}\nExamples: 2026-05-06 | May 6 2026`, '');
                 if (!manualDate) { showNotification('⏸️ Cancelled', 'warning'); return; }
                 announcedDate = extractDateFromText(manualDate) || (isValidDate(manualDate) ? manualDate : null);
                 if (!announcedDate) { showNotification('❌ Could not parse that date', 'error'); return; }
@@ -690,12 +610,8 @@ function processNewsUrl(url) {
     }
 }
 
-// Handlers called from table cells
 function handleAddAnnounced(companyName) {
-    const date = prompt(
-        `📅 Enter confirmed earnings date for ${companyName}:\n\nFormat: YYYY-MM-DD\nExample: 2026-07-15`,
-        ''
-    );
+    const date = prompt(`📅 Enter confirmed earnings date for ${companyName}:\n\nFormat: YYYY-MM-DD\nExample: 2026-07-15`, '');
     if (!date || !isValidDate(date)) {
         if (date) showNotification('❌ Invalid date. Use YYYY-MM-DD', 'error');
         return;
@@ -714,11 +630,9 @@ function handleClearAnnounced(companyName) {
 }
 
 // ═══════════════════════════════════════════════════════
-// SMART EXTRACTION ENGINE — company + date from URL/text
+// SMART EXTRACTION ENGINE
 // ═══════════════════════════════════════════════════════
 
-// Company keyword aliases — maps keywords found in URLs to company names
-// Add more aliases here as you encounter them
 const COMPANY_ALIASES = {
     'gray':            'Gray Television',
     'graymedia':       'Gray Television',
@@ -742,7 +656,6 @@ const COMPANY_ALIASES = {
     'universalmusic':  'Universal Music Group',
     'wmg':             'Warner Music Group',
     'imax':            'IMAX',
-    'roku':            'Roku',
     'fubo':            'Fubo TV',
     'tko':             'TKO Group',
     'tegna':           'TEGNA',
@@ -784,98 +697,59 @@ const MONTH_MAP = {
 };
 
 function extractNewsInfo(url) {
-    const result = { company: null, date: null };
+    const result   = { company: null, date: null };
     const urlLower = url.toLowerCase();
     const companies = allData.companies || [];
 
-    // ── 1. Try exact company name match (strip spaces) ──
     for (const company of companies) {
         const key = company.name.toLowerCase().replace(/\s+/g, '');
-        if (urlLower.includes(key)) {
-            result.company = company.name;
-            break;
-        }
+        if (urlLower.includes(key)) { result.company = company.name; break; }
     }
 
-    // ── 2. Try alias map if no match yet ──
     if (!result.company) {
         for (const [keyword, companyName] of Object.entries(COMPANY_ALIASES)) {
-            if (urlLower.includes(keyword.toLowerCase())) {
-                result.company = companyName;
-                break;
-            }
+            if (urlLower.includes(keyword.toLowerCase())) { result.company = companyName; break; }
         }
     }
 
-    // ── 3. Try individual words from company names ──
     if (!result.company) {
         for (const company of companies) {
-            const words = company.name.toLowerCase().split(/\s+/);
+            const words     = company.name.toLowerCase().split(/\s+/);
             const meaningful = words.filter(w => w.length > 3 &&
                 !['media','group','studio','studios','entertainment','holdings',
                   'network','networks','corp','inc','ltd','the'].includes(w));
-            if (meaningful.some(w => urlLower.includes(w))) {
-                result.company = company.name;
-                break;
-            }
+            if (meaningful.some(w => urlLower.includes(w))) { result.company = company.name; break; }
         }
     }
 
-    // ── 4. Extract date from URL path (article publish date — SKIP for announced path) ──
-    // We return this as a fallback; processNewsUrl decides whether it's past/future
     result.date = extractDateFromText(url);
-
     return result;
 }
 
-// Extracts the most likely FUTURE earnings date from a URL slug or text body
-// Skips dates that look like article publish dates (in the URL path like /2026/04/07/)
 function extractAnnouncedDateFromUrl(url) {
-    // Strip the publish-date portion of GlobeNewswire / PRNewswire style URLs
-    // Pattern: /news-release/YYYY/MM/DD/  — this is the article date, NOT the earnings date
     const cleanUrl = url.replace(/\/news[-_]release\/\d{4}\/\d{2}\/\d{2}\/[^/]+\//i, ' ')
-                        .replace(/\/\d{4}\/\d{2}\/\d{2}\//g, ' ');  // also strip /2026/04/07/
-
+                        .replace(/\/\d{4}\/\d{2}\/\d{2}\//g, ' ');
     return extractDateFromText(cleanUrl) || extractDateFromText(url);
 }
 
-// Universal date extractor — works on any string (URL slug, article title, body text)
 function extractDateFromText(text) {
     if (!text) return null;
-
     const patterns = [
-        // ISO: 2026-05-07
         { re: /\b(\d{4})-(\d{2})-(\d{2})\b/, y:1, m:2, d:3 },
-        // Slug: 20260507
         { re: /\b(20\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\b/, y:1, m:2, d:3 },
-        // "May 7, 2026" or "May 7 2026"
         { re: /\b(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|oct|nov|dec)[,.\s-]+(\d{1,2})[,.\s-]+(\d{4})\b/i, y:3, m:'name', d:2 },
-        // "7 May 2026"
         { re: /\b(\d{1,2})[,.\s-]+(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|oct|nov|dec)[,.\s-]+(\d{4})\b/i, y:3, m:'name2', d:1 },
-        // DD-MM-YYYY or DD/MM/YYYY
         { re: /\b(\d{2})[/-](\d{2})[/-](\d{4})\b/, y:3, m:2, d:1 },
-        // MM-DD-YYYY or MM/DD/YYYY (US format — only if month ≤ 12)
         { re: /\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b/, y:3, m:1, d:2 },
     ];
-
     for (const p of patterns) {
         const match = text.match(p.re);
         if (!match) continue;
         try {
-            let year  = match[p.y];
-            let month, day;
-
-            if (p.m === 'name') {
-                month = MONTH_MAP[match[1].toLowerCase()];
-                day   = match[p.d];
-            } else if (p.m === 'name2') {
-                month = MONTH_MAP[match[2].toLowerCase()];
-                day   = match[p.d];
-            } else {
-                month = match[p.m];
-                day   = match[p.d];
-            }
-
+            let year = match[p.y], month, day;
+            if (p.m === 'name')  { month = MONTH_MAP[match[1].toLowerCase()]; day = match[p.d]; }
+            else if (p.m === 'name2') { month = MONTH_MAP[match[2].toLowerCase()]; day = match[p.d]; }
+            else { month = match[p.m]; day = match[p.d]; }
             const dateStr = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
             if (isValidDate(dateStr)) return dateStr;
         } catch(e) { continue; }
@@ -883,14 +757,12 @@ function extractDateFromText(text) {
     return null;
 }
 
-// Quarter fallback — only used if no real date found
 function extractDateFromQuarter(text) {
     const quarters = [
         { re: /\b(?:first[- ]quarter|q1)\b.*?\b(20\d{2})\b/i,  month: 4  },
         { re: /\b(?:second[- ]quarter|q2)\b.*?\b(20\d{2})\b/i, month: 7  },
         { re: /\b(?:third[- ]quarter|q3)\b.*?\b(20\d{2})\b/i,  month: 10 },
         { re: /\b(?:fourth[- ]quarter|q4)\b.*?\b(20\d{2})\b/i, month: 1  },
-        // also try year-first: q1-2026
         { re: /\bq1[- ](20\d{2})\b/i, month: 4  },
         { re: /\bq2[- ](20\d{2})\b/i, month: 7  },
         { re: /\bq3[- ](20\d{2})\b/i, month: 10 },
@@ -900,7 +772,7 @@ function extractDateFromQuarter(text) {
         const m = text.match(q.re);
         if (m) {
             let year = parseInt(m[1]);
-            if (q.month === 1) year += 1; // Q4 → next Jan
+            if (q.month === 1) year += 1;
             const dateStr = `${year}-${String(q.month).padStart(2,'0')}-15`;
             if (isValidDate(dateStr)) return dateStr;
         }
@@ -918,39 +790,34 @@ function updateCompanyNews(companyName, newsDate, articleUrl) {
     if (!company) throw new Error(`${companyName} not found`);
 
     company.lastAnnouncement = newsDate;
-    company.articleUrl = (articleUrl && articleUrl.trim()) ? articleUrl : null;
-    company.isNewlyUpdated = true;
+    company.articleUrl       = (articleUrl && articleUrl.trim()) ? articleUrl : null;
+    company.isNewlyUpdated   = true;
 
     const nextDate = new Date(newsDate);
     nextDate.setDate(nextDate.getDate() + 90);
-    // Use local time to avoid UTC timezone shift (critical for Chennai UTC+5:30)
     company.expectedNext = nextDate.getFullYear() + '-' +
         String(nextDate.getMonth()+1).padStart(2,'0') + '-' +
         String(nextDate.getDate()).padStart(2,'0');
 
-    // If we're logging actual results, the announced date is now consumed — clear it
     clearAnnouncedDate(companyName);
 
     const dataToSave = allData.companies.map(c => ({
-        name: c.name,
+        name:             c.name,
         lastAnnouncement: c.lastAnnouncement,
-        expectedNext: c.expectedNext,
-        articleUrl: c.articleUrl || null,
-        region: c.region,
-        bestSource: c.bestSource,
-        irWebsite: c.irWebsite
+        expectedNext:     c.expectedNext,
+        articleUrl:       c.articleUrl || null,
+        region:           c.region,
+        bestSource:       c.bestSource,
+        irWebsite:        c.irWebsite
     }));
-    
     localStorage.setItem('companiesData', JSON.stringify(dataToSave));
     renderTable(allData.companies);
     updateDashboard();
-
     setTimeout(() => highlightCompanyRow(companyName), 100);
 }
 
 function highlightCompanyRow(companyName) {
-    const tbody = document.getElementById('tableBody');
-    const rows = tbody.querySelectorAll('tr');
+    const rows = document.getElementById('tableBody').querySelectorAll('tr');
     rows.forEach(row => {
         const nameCell = row.querySelector('.company-name');
         if (nameCell && nameCell.textContent === companyName) {
@@ -971,91 +838,12 @@ function showNotification(message, type = 'info') {
         setTimeout(() => notif.remove(), 300);
     }, 3000);
 }
-// ═══════════════════════════════════════════════════════
-// 🔔 TOMORROW ALERT — email trigger for next-day earners
-// ═══════════════════════════════════════════════════════
-
-function checkTomorrowAlerts() {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowStr = tomorrow.getFullYear() + '-' +
-        String(tomorrow.getMonth()+1).padStart(2,'0') + '-' +
-        String(tomorrow.getDate()).padStart(2,'0');
-
-    // Check CONFIRMED upcoming dates first, then fall back to estimated expectedNext
-    const tomorrowEarners = (allData.companies || []).filter(c => {
-        const confirmedDate = announcedDates[c.name]?.date;
-        return confirmedDate === tomorrowStr || c.expectedNext === tomorrowStr;
-    });
-
-    const existing = document.getElementById('tomorrowAlertBanner');
-    if (existing) existing.remove();
-    if (tomorrowEarners.length === 0) return;
-
-    const tomorrowFormatted = tomorrow.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-    const subject = encodeURIComponent(`📅 Earnings Tomorrow (${tomorrowFormatted}): ${tomorrowEarners.map(c=>c.name).join(', ')}`);
-    const body = encodeURIComponent(
-        `Earnings expected tomorrow — ${tomorrowFormatted}\n\n` +
-        tomorrowEarners.map(c => {
-            const confirmed = announcedDates[c.name];
-            const isConfirmed = confirmed?.date === tomorrowStr;
-            const label = isConfirmed ? `${tomorrowStr} ✅ Confirmed` : `${c.expectedNext} ~Est.`;
-            return `• ${c.name} — ${label}${confirmed?.url ? '\n  Source: ' + confirmed.url : ''}\n  IR: ${c.irWebsite || ''}`;
-        }).join('\n') +
-        `\n\nSent from News Brain tracker.`
-    );
-    const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
-
-    const alertBanner = document.createElement('div');
-    alertBanner.id = 'tomorrowAlertBanner';
-    alertBanner.innerHTML = `
-        <div style="
-            background: linear-gradient(135deg, #fff3cd, #ffe08a);
-            border: 2px solid #f0ad00;
-            border-radius: 10px;
-            padding: 14px 20px;
-            margin: 16px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-size: 14px;
-            box-shadow: 0 2px 8px rgba(240,173,0,0.2);
-        ">
-            <div>
-                <strong>📅 Earnings tomorrow (${tomorrowFormatted})!</strong>
-                <div style="margin-top:6px;">
-                ${tomorrowEarners.map(c => {
-                    const isConfirmed = announcedDates[c.name]?.date === tomorrowStr;
-                    return `<span style="background:#fff;padding:2px 8px;border-radius:12px;margin:2px;display:inline-block;">
-                        ${c.name}${isConfirmed ? ' ✅' : ' ~'}
-                    </span>`;
-                }).join('')}
-                </div>
-                <div style="font-size:11px;color:#856404;margin-top:4px;">✅ = confirmed date &nbsp; ~ = estimated</div>
-            </div>
-            <a href="${mailtoLink}" style="
-                background: #f0ad00; color: #000; text-decoration: none;
-                padding: 7px 16px; border-radius: 6px; font-weight: bold; white-space: nowrap;
-            ">✉️ Send Email Alert</a>
-        </div>
-    `;
-
-    const dragDropZone = document.getElementById('dragDropZone');
-    if (dragDropZone) {
-        dragDropZone.parentNode.insertBefore(alertBanner, dragDropZone);
-    } else {
-        document.querySelector('.container').appendChild(alertBanner);
-    }
-}
 
 // ═══════════════════════════════════════════════════════
-// 📰 NEWS HISTORY PANEL — slide-in drawer per company
+// NEWS HISTORY PANEL — slide-in drawer per company
 // ═══════════════════════════════════════════════════════
 
 function setupNewsHistoryPanel() {
-    // Create drawer once
     const drawer = document.createElement('div');
     drawer.id = 'newsHistoryDrawer';
     drawer.innerHTML = `
@@ -1065,14 +853,11 @@ function setupNewsHistoryPanel() {
         <div id="newsHistoryPanel" style="
             display:none; position:fixed; right:0; top:0; height:100vh; width:360px;
             background:#fff; box-shadow:-4px 0 20px rgba(0,0,0,0.15);
-            z-index:1000; overflow-y:auto; padding:24px 20px;
-            font-family: inherit;
+            z-index:1000; overflow-y:auto; padding:24px 20px; font-family: inherit;
         ">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
                 <h3 id="newsHistoryTitle" style="margin:0;font-size:16px;">📰 News History</h3>
-                <button onclick="closeNewsHistory()" style="
-                    border:none;background:none;font-size:22px;cursor:pointer;color:#666;
-                ">&times;</button>
+                <button onclick="closeNewsHistory()" style="border:none;background:none;font-size:22px;cursor:pointer;color:#666;">&times;</button>
             </div>
             <div id="newsHistoryContent"></div>
         </div>
@@ -1081,49 +866,39 @@ function setupNewsHistoryPanel() {
 }
 
 function openNewsHistory(companyName) {
-    const panel = document.getElementById('newsHistoryPanel');
+    const panel   = document.getElementById('newsHistoryPanel');
     const backdrop = document.getElementById('newsHistoryBackdrop');
-    const title = document.getElementById('newsHistoryTitle');
+    const title   = document.getElementById('newsHistoryTitle');
     const content = document.getElementById('newsHistoryContent');
 
     title.textContent = `📰 ${companyName}`;
-
-    // Get this company's full data
     const company = (allData.companies || []).find(c => c.name === companyName);
     const history = getNewsHistory(companyName);
 
     let html = '';
-
-    // Current article link
     if (company && company.articleUrl) {
         html += `
             <div style="background:#f0fff4;border:1px solid #38a169;border-radius:8px;padding:12px;margin-bottom:16px;">
                 <div style="font-size:11px;color:#38a169;font-weight:bold;margin-bottom:4px;">LATEST ARTICLE</div>
                 <a href="${company.articleUrl}" target="_blank" style="font-size:13px;color:#2b6cb0;word-break:break-all;">
-                    🔗 ${company.articleUrl.length > 60 ? company.articleUrl.substring(0, 60) + '…' : company.articleUrl}
+                    🔗 ${company.articleUrl.length > 60 ? company.articleUrl.substring(0,60) + '…' : company.articleUrl}
                 </a>
                 <div style="font-size:11px;color:#666;margin-top:4px;">Date: ${company.lastAnnouncement}</div>
             </div>
         `;
     }
-
-    // Add new URL input
     html += `
         <div style="margin-bottom:16px;">
             <div style="font-size:12px;color:#666;margin-bottom:6px;">Add article URL for ${companyName}:</div>
             <input id="quickUrlInput" type="text" placeholder="https://..." style="
                 width:100%;box-sizing:border-box;padding:8px;border:1px solid #ddd;
-                border-radius:6px;font-size:13px;margin-bottom:6px;
-            ">
+                border-radius:6px;font-size:13px;margin-bottom:6px;">
             <button onclick="quickAddUrl('${companyName.replace(/'/g,"\\'")}', document.getElementById('quickUrlInput').value)" style="
                 background:#3182ce;color:#fff;border:none;padding:7px 14px;
-                border-radius:6px;cursor:pointer;font-size:13px;width:100%;
-            ">📎 Attach URL</button>
+                border-radius:6px;cursor:pointer;font-size:13px;width:100%;">📎 Attach URL</button>
         </div>
         <hr style="border:none;border-top:1px solid #eee;margin:12px 0;">
     `;
-
-    // History entries
     if (history.length === 0) {
         html += `<div style="color:#999;font-size:13px;text-align:center;padding:20px 0;">No history yet for this company.</div>`;
     } else {
@@ -1132,7 +907,7 @@ function openNewsHistory(companyName) {
             <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;">
                 <div style="color:#2d3748;font-weight:600;">${entry.date}</div>
                 <a href="${entry.url}" target="_blank" style="color:#3182ce;word-break:break-all;font-size:12px;">
-                    🔗 ${entry.url.length > 55 ? entry.url.substring(0, 55) + '…' : entry.url}
+                    🔗 ${entry.url.length > 55 ? entry.url.substring(0,55) + '…' : entry.url}
                 </a>
                 <div style="color:#999;font-size:11px;margin-top:3px;">${entry.timestamp} · ${entry.source}</div>
             </div>
@@ -1140,12 +915,12 @@ function openNewsHistory(companyName) {
     }
 
     content.innerHTML = html;
-    panel.style.display = 'block';
+    panel.style.display   = 'block';
     backdrop.style.display = 'block';
 }
 
 function closeNewsHistory() {
-    document.getElementById('newsHistoryPanel').style.display = 'none';
+    document.getElementById('newsHistoryPanel').style.display   = 'none';
     document.getElementById('newsHistoryBackdrop').style.display = 'none';
 }
 
@@ -1154,13 +929,10 @@ function quickAddUrl(companyName, url) {
         showNotification('❌ Please enter a valid URL starting with http', 'error');
         return;
     }
-    // Try to extract date, fall back to today
     let date = extractDateFromQuarter(url) || extractNewsInfo(url).date;
-    if (!date) {
-        date = new Date().toISOString().split('T')[0];
-    }
+    if (!date) date = new Date().toISOString().split('T')[0];
     updateCompanyNews(companyName, date, url);
     addNewsToHistory(companyName, date, url, 'panel-add');
     showNotification(`✅ URL attached to ${companyName}`, 'success');
-    openNewsHistory(companyName); // refresh panel
+    openNewsHistory(companyName);
 }
