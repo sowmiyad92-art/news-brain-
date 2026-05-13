@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupDataExport();
     loadNewsHistory();
     updateDashboard();
-    checkTomorrowAlerts();
     setupNewsHistoryPanel();
     document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
 });
