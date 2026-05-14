@@ -323,7 +323,7 @@ function renderTable(companies) {
     const tbody = document.getElementById('tableBody');
 
     if (companies.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:#666;">No companies found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#666;">No companies found</td></tr>';
         return;
     }
 
@@ -386,12 +386,6 @@ function renderTable(companies) {
             announcedCell = `<span class="announced-date-empty" onclick="handleAddAnnounced('${safeName}')" title="Add confirmed upcoming earnings date">＋ Add</span>`;
         }
 
-        // Expected Next: hidden when upcoming confirmed date exists
-        const hasUpcoming = !!getAnnouncedDate(company.name);
-        const expectedDisplay = hasUpcoming
-            ? `<span style="color:#cbd5e0;font-size:11px;">— see Upcoming →</span>`
-            : `${company.expectedNext} <span class="badge-estimated">~ Est.</span>`;
-
         const rowClass = [
             dateInfo.isOverdue    ? 'overdue'        : '',
             dateInfo.isFuture     ? 'future-event'   : '',
@@ -405,7 +399,6 @@ function renderTable(companies) {
                 <td>${company.region}</td>
                 <td>${company.lastAnnouncement}</td>
                 <td><span class="${daysClass}">${daysDisplay}</span></td>
-                <td>${expectedDisplay}</td>
                 <td>${announcedCell}</td>
                 <td><span class="source-badge">${company.bestSource}</span></td>
                 <td style="text-align:center;">${newsIndicator}</td>
