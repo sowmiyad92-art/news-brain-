@@ -290,6 +290,31 @@ def process_company(co):
     return None
 
 # ── Save results ─────────────────────────────────────────────────
+# ── Write agent log ──────────────────────────────────────────────
+def write_agent_log(updated, no_data_list, cleared, source_breakdown):
+    LOG_FILE = 'agent_log.json'
+    try:
+        with open(LOG_FILE, 'r', encoding='utf-8') as f:
+            log = json.load(f)
+    except:
+        log = {'runs': []}
+
+    log['runs'].append({
+        'date':            TODAY,
+        'updated':         updated,
+        'noData':          no_data_list,
+        'cleared':         cleared,
+        'sourceBreakdown': source_breakdown,
+    })
+
+    # Keep last 60 runs
+    log['runs'] = log['runs'][-60:]
+
+    with open(LOG_FILE, 'w', encoding='utf-8') as f:
+        json.dump(log, f, indent=2, ensure_ascii=False)
+    print(f"  📝 agent_log.json updated ({len(log['runs'])} runs stored)")
+
+# ── Save results ─────────────────────────────────────────────────
 def update_data_json(results):
     with open(DATA_JSON,'r',encoding='utf-8') as f: data=json.load(f)
     is_dict   = isinstance(data,dict)
@@ -345,7 +370,15 @@ def update_data_json(results):
         json.dump(data if is_dict else
                   {'companies':companies,'announcedDates':announced,'lastAgentRun':TODAY},
                   f,indent=2,ensure_ascii=False)
-    print(f"\n  ✅ Updated:{updated} | No data:{len(results)-updated} | Cleared:{len(cleared)}")
+    no_data_list = [n for n, r in results.items() if not r or (not r.get('lastAnnouncement') and not r.get('upcomingDate'))]
+    source_counts = {}
+    for r in results.values():
+        if r and r.get('source'):
+            src = r['source'].lower().replace(' ', '_').replace('rss_feed','rss').replace('ir_page','ir')
+            source_counts[src] = source_counts.get(src, 0) + 1
+
+    print(f"\n  ✅ Updated:{updated} | No data:{len(no_data_list)} | Cleared:{len(cleared)}")
+    write_agent_log(updated, no_data_list, len(cleared), source_counts)
 
 # ── Main ─────────────────────────────────────────────────────────
 def main():
