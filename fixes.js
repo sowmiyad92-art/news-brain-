@@ -603,8 +603,7 @@
         const tips = {
             2: ['Last Announcement', 'Date earnings results were RELEASED (past).'],
             3: ['Days Since',        'Days elapsed since last quarterly results.'],
-            4: ['Expected Next (~Est.)', 'Auto-calculated: Last Announcement + 90 days.'],
-            5: ['Upcoming Earnings 📌', 'CONFIRMED future date the company will report.\nSet via Quick Update → Upcoming Date tab or "+ Add" button.\nSaved permanently — survives page refresh.'],
+            4: ['Upcoming Earnings 📌', 'CONFIRMED future date the company will report.\nSet via Quick Update or the + Add button.\nSaved permanently — survives page refresh.'],
         };
         ths.forEach((th, i) => {
             if (!tips[i]) return;
