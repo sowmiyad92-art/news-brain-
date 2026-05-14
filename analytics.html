@@ -147,7 +147,7 @@ function safeJSON(str, fallback) {
   try { return JSON.parse(str||'null') || fallback; } catch(_) { return fallback; }
 }
 
-function render(companies, allAnn) {
+async function render(companies, allAnn) {
   const today     = new Date(); today.setHours(0,0,0,0);
   const todayStr  = fmt(today);
   const in30      = new Date(today); in30.setDate(in30.getDate()+30);
@@ -327,9 +327,73 @@ function render(companies, allAnn) {
       </table>
     </div>` : ''}
 
-    <div style="text-align:center;color:#a0aec0;font-size:12px;padding:16px 0;">
+   <div style="text-align:center;color:#a0aec0;font-size:12px;padding:16px 0;">
       Last updated: ${new Date().toLocaleString()} · 
       <a href="./index.html" style="color:#3182ce;">← Back to Dashboard</a>
+    </div>
+  `;
+
+  // Append agent log
+  const log = await loadAgentLog();
+  document.getElementById('root').insertAdjacentHTML('beforeend', renderAgentLog(log));
+}
+
+async function loadAgentLog() {
+  try {
+    const res = await fetch('./agent_log.json');
+    if (!res.ok) return null;
+    return await res.json();
+  } catch(_) { return null; }
+}
+
+function renderAgentLog(log) {
+  if (!log || !log.runs || log.runs.length === 0) {
+    return `<div class="section">
+      <h2>🤖 Agent Run Log</h2>
+      <p style="color:#a0aec0;font-size:13px;">No agent runs recorded yet. agent_log.json not found.</p>
+    </div>`;
+  }
+
+  const runs = [...log.runs].reverse().slice(0, 14); // latest 14 runs
+  const sources = runs[0]?.sourceBreakdown || {};
+
+  // Coverage gap: companies with no data in last run
+  const gaps = log.runs[log.runs.length - 1]?.noData || [];
+
+  return `
+    <div class="section">
+      <h2>🤖 Agent Run Log (last ${runs.length} runs)</h2>
+
+      <table>
+        <thead><tr>
+          <th>Date</th><th>Updated</th><th>No Data</th><th>Cleared Stale</th><th>Sources</th>
+        </tr></thead>
+        <tbody>
+        ${runs.map(r => `<tr>
+          <td>${r.date}</td>
+          <td><span style="color:#38a169;font-weight:700;">${r.updated}</span></td>
+          <td><span style="color:#e53e3e;">${r.noData?.length ?? 0}</span></td>
+          <td>${r.cleared ?? 0}</td>
+          <td style="font-size:11px;color:#718096;">
+            RSS:${r.sourceBreakdown?.rss??0} 
+            IR:${r.sourceBreakdown?.ir??0} 
+            yf:${r.sourceBreakdown?.yfinance??0} 
+            Groq:${r.sourceBreakdown?.groq??0}
+          </td>
+        </tr>`).join('')}
+        </tbody>
+      </table>
+
+      ${gaps.length > 0 ? `
+        <div style="margin-top:18px;">
+          <div style="font-size:12px;font-weight:600;color:#718096;margin-bottom:8px;">
+            ⚠️ Coverage gaps in last run (${gaps.length} companies with no data):
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            ${gaps.map(n => `<span style="background:#fff5f5;border:1px solid #fed7d7;
+              color:#c53030;padding:2px 10px;border-radius:12px;font-size:12px;">${n}</span>`).join('')}
+          </div>
+        </div>` : ''}
     </div>
   `;
 }
