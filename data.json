@@ -132,8 +132,8 @@
       "irWebsite": "https://investors.curiositystream.com/press-releases/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-03-12",
-      "expectedNext": "2026-06-10",
+      "lastAnnouncement": "2026-05-14",
+      "expectedNext": "2026-08-12",
       "articleUrl": "https://finance.yahoo.com/news/curiositystream-inc-curi-q4-2025-030050500.html"
     },
     {
@@ -780,12 +780,6 @@
     }
   ],
   "announcedDates": {
-    "Curiosity Stream": {
-      "date": "2026-05-14",
-      "url": null,
-      "timestamp": "13/05/2026 15:08:39",
-      "source": "IR Page"
-    },
     "Viaplay Group": {
       "date": "2026-05-18",
       "url": null,
@@ -813,19 +807,19 @@
     "Telecom Argentina": {
       "date": "2026-08-10",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "NetEase": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "ITV": {
@@ -849,97 +843,97 @@
     "ProSiebenSat.1": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "IR Page"
     },
     "Netflix": {
       "date": "2026-07-16",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Disney": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Lionsgate": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Bilibili": {
       "date": "2026-05-19",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Nexstar": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "14/05/2026 05:47:19",
+      "timestamp": "15/05/2026 05:53:53",
       "source": "yfinance"
     },
     "Scripps": {
@@ -949,5 +943,5 @@
       "source": "yfinance"
     }
   },
-  "lastAgentRun": "2026-05-14"
+  "lastAgentRun": "2026-05-15"
 }
