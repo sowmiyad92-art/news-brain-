@@ -241,8 +241,8 @@
       "irWebsite": "https://ir.kartoonstudios.com/press-releases",
       "bestSource": "IR Website",
       "sourceReliability": 2,
-      "lastAnnouncement": "2025-12-05",
-      "expectedNext": "2026-03-05"
+      "lastAnnouncement": "2026-05-15",
+      "expectedNext": "2026-08-13"
     },
     {
       "name": "Megacable",
@@ -807,19 +807,19 @@
     "Telecom Argentina": {
       "date": "2026-08-10",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "NetEase": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "ITV": {
@@ -843,97 +843,97 @@
     "ProSiebenSat.1": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "IR Page"
     },
     "Netflix": {
       "date": "2026-07-16",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Disney": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Lionsgate": {
       "date": "2026-05-21",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Bilibili": {
       "date": "2026-05-19",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Nexstar": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "15/05/2026 05:53:53",
+      "timestamp": "16/05/2026 05:26:51",
       "source": "yfinance"
     },
     "Scripps": {
@@ -943,5 +943,5 @@
       "source": "yfinance"
     }
   },
-  "lastAgentRun": "2026-05-15"
+  "lastAgentRun": "2026-05-16"
 }
