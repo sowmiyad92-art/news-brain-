@@ -380,6 +380,47 @@ def update_data_json(results):
     print(f"\n  ✅ Updated:{updated} | No data:{len(no_data_list)} | Cleared:{len(cleared)}")
     write_agent_log(updated, no_data_list, len(cleared), source_counts)
 
+# ── Write agent_log.json ─────────────────────────────────────────
+def write_agent_log(results):
+    LOG_FILE = 'agent_log.json'
+    
+    # Load existing log
+    try:
+        with open(LOG_FILE, 'r', encoding='utf-8') as f:
+            log = json.load(f)
+    except:
+        log = []
+    
+    # Build this run's summary
+    found     = {k: v for k, v in results.items() if v and (v.get('lastAnnouncement') or v.get('upcomingDate'))}
+    not_found = [k for k, v in results.items() if not v or (not v.get('lastAnnouncement') and not v.get('upcomingDate'))]
+    
+    entry = {
+        "runDate":      TODAY,
+        "runTime":      datetime.now().strftime('%H:%M:%S'),
+        "totalCompanies": len(results),
+        "updated":      len(found),
+        "notFound":     len(not_found),
+        "companies": {
+            name: {
+                "lastAnnouncement": r.get('lastAnnouncement'),
+                "upcomingDate":     r.get('upcomingDate'),
+                "source":           r.get('source', 'unknown'),
+                "confidence":       r.get('confidence', 'unknown')
+            }
+            for name, r in found.items()
+        },
+        "failed": not_found
+    }
+    
+    log.insert(0, entry)       # newest first
+    log = log[:30]             # keep last 30 runs only
+    
+    with open(LOG_FILE, 'w', encoding='utf-8') as f:
+        json.dump(log, f, indent=2, ensure_ascii=False)
+    
+    print(f"📝 agent_log.json written — {len(found)} updated, {len(not_found)} failed")
+
 # ── Main ─────────────────────────────────────────────────────────
 def main():
     print(f"🚀 News Brain Agent v3 — {TODAY} ({CURRENT_Q})")
@@ -405,6 +446,7 @@ def main():
         time.sleep(2)
 
     print("\n💾 Final save..."); update_data_json(results)
+     write_agent_log(results)
     print("🎉 Agent v3 complete!")
 
 if __name__=='__main__': main()
