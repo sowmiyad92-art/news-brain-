@@ -295,7 +295,7 @@ function handleSearch(e) {
 function filterByRegion(region) {
     currentFilter = region;
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    if (event && event.target) event.target.classList.add('active');
+    if (clickedBtn) clickedBtn.classList.add('active');
     if (!allData || !allData.companies) return;
     const filtered = region === 'all'
         ? allData.companies
