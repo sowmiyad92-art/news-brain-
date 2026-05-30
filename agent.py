@@ -108,7 +108,7 @@ YF_US = {
     'Warner Music Group':'WMG','Bilibili':'BILI','NetEase':'NTES',
     'Fubo TV':'FUBO','TKO Group':'TKO','Scripps':'SSP',
     'Curiosity Stream':'CURI','Lionsgate':'LION',
-    'AMC Networks':'AMCX','Warner Bros Discovery':'WBD',
+    'AMC Networks':'AMCX','Warner Bros Discovery':'WBD', 'Paramount':'PSKY',
 }
 
 # ── HTML text extractor ──────────────────────────────────────────
