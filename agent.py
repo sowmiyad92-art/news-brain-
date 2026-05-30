@@ -442,6 +442,10 @@ def main():
     companies=data.get('companies',data) if isinstance(data,dict) else data
     print(f"📋 {len(companies)} companies | RSS feeds:{len(RSS_FEEDS)} | yfinance:{'✅' if HAS_YF else '❌'}")
 
+    # Load Google Alerts Sheet once
+    global _alerts_cache
+    _alerts_cache = fetch_alerts_sheet()
+
     results={}
     for i,co in enumerate(companies):
         name=co.get('name','')
