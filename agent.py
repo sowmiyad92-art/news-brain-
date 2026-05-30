@@ -4,6 +4,7 @@ Sources (in order):
   1) Company IR RSS feeds (PR Newswire, GlobeNewswire, company-specific)
   2) Direct IR page scrape
   3) yfinance for US/major tickers
+  4) Google Alerts Sheet (CSV)
 Extractor: Groq with auto-retry
 """
 
@@ -41,15 +42,14 @@ BROKEN_HOSTS = [
     'www.balajitelefilms.com',
 ]
 
-# ── RSS feeds from your IR_DATA research ────────────────────────
-# Priority order: company RSS → PR Newswire → GlobeNewswire
+# ── RSS feeds ────────────────────────────────────────────────────
 RSS_FEEDS = {
     'Netflix':   ['https://www.prnewswire.com/rss/news-releases-list.rss?company=netflix'],
     'Disney':    ['https://www.prnewswire.com/rss/news-releases-list.rss?company=the-walt-disney-company'],
     'Amazon':    ['https://www.prnewswire.com/rss/news-releases-list.rss?company=amazon-com-inc',
                   'https://www.businesswire.com/rss/home/?rss=G22&company=amazon'],
-    'Paramount': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=paramount-global',
-                  'https://www.globenewswire.com/RssFeed/company/paramount-global'],
+    'Paramount': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=paramount-skydance',
+                  'https://www.prnewswire.com/rss/news-releases-list.rss?company=paramount-global'],
     'Warner Bros Discovery': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=warner-bros-discovery'],
     'AMC Networks':  ['https://www.prnewswire.com/rss/news-releases-list.rss?company=amc-networks'],
     'Lionsgate':     ['https://www.prnewswire.com/rss/news-releases-list.rss?company=lionsgate'],
@@ -73,7 +73,8 @@ RSS_FEEDS = {
     'WildBrain':     ['https://www.prnewswire.com/rss/news-releases-list.rss?company=wildbrain'],
     'Universal Music Group': ['https://www.prnewswire.com/rss/news-releases-list.rss?company=universal-music-group',
                               'https://www.globenewswire.com/RssFeed/company/universal-music-group'],
-    'Viaplay Group': ['https://www.viaplaygroup.com/rss'],
+    # ── FIXED: correct Viaplay RSS URL ──
+    'Viaplay Group': ['https://www.viaplaygroup.com/en/newsroom/press-releases/rss'],
     'RTL Group':     ['https://www.prnewswire.com/rss/news-releases-list.rss?company=rtl-group'],
     'Banijay':       ['https://www.globenewswire.com/RssFeed/company/banijay-group'],
     'ITV':           ['https://www.prnewswire.com/rss/news-releases-list.rss?company=itv-plc'],
@@ -84,7 +85,8 @@ RSS_FEEDS = {
     'Vivendi':       ['https://www.vivendi.com/en/press/press-releases/feed/'],
     'Xilam':         ['https://www.globenewswire.com/RssFeed/company/xilam-animation'],
     'Vantiva':       ['https://www.globenewswire.com/RssFeed/company/vantiva'],
-    'MultiChoice':   ['https://www.prnewswire.com/rss/news-releases-list.rss?company=multichoice-group'],
+    'MultiChoice':   ['https://www.prnewswire.com/rss/news-releases-list.rss?company=multichoice-group',
+                      'https://www.globenewswire.com/RssFeed/company/multichoice-group'],
     'Grupo Clarin':  ['https://www.prnewswire.com/rss/news-releases-list.rss?company=grupo-clarin'],
     'Televisa':      ['https://www.prnewswire.com/rss/news-releases-list.rss?company=televisa'],
     'Sony':          ['https://www.sony.com/en/SonyInfo/IR/rss/rss.xml'],
@@ -93,11 +95,19 @@ RSS_FEEDS = {
     'Damai Holdings':['https://www.hkexnews.hk/listedco/listconews/SEHK/rss/rss1060.xml'],
     'Maoyan':        ['https://www.hkexnews.hk/listedco/listconews/SEHK/rss/rss1896.xml'],
     'Digital Domain':['https://www.hkexnews.hk/listedco/listconews/SEHK/rss/rss0547.xml'],
+    # ── NEW: Canal+ on LSE via Investegate ──
+    'Canal+':        ['https://www.investegate.co.uk/rss/announcements/CAN'],
+    # ── NEW: Zee Entertainment via GlobeNewswire ──
+    'Zee Entertainment': ['https://www.globenewswire.com/RssFeed/company/zee-entertainment-enterprises',
+                          'https://www.prnewswire.com/rss/news-releases-list.rss?company=zee-entertainment'],
+    # ── NEW: Saregama via GlobeNewswire ──
+    'Saregama':      ['https://www.globenewswire.com/RssFeed/company/saregama-india'],
+    # ── Grammy Thailand SET listed ──
     'Grammy':        ['https://investor.gmmgrammy.com/en/newsroom/set-announcements'],
     'Seven West Media':['https://sevenwestmedia.com.au/investors/asx-announcements/'],
 }
 
-# ── US tickers for yfinance (reliable earningsTimestamp) ────────
+# ── US tickers for yfinance ──────────────────────────────────────
 YF_US = {
     'Netflix':'NFLX','Disney':'DIS','Amazon':'AMZN',
     'Comcast':'CMCSA','Fox Corporation':'FOXA','Gaia':'GAIA',
@@ -108,7 +118,8 @@ YF_US = {
     'Warner Music Group':'WMG','Bilibili':'BILI','NetEase':'NTES',
     'Fubo TV':'FUBO','TKO Group':'TKO','Scripps':'SSP',
     'Curiosity Stream':'CURI','Lionsgate':'LION',
-    'AMC Networks':'AMCX','Warner Bros Discovery':'WBD', 'Paramount':'PSKY',
+    'AMC Networks':'AMCX','Warner Bros Discovery':'WBD',
+    'Paramount':'PSKY',  # rebranded from PARA to Paramount Skydance
 }
 
 # ── HTML text extractor ──────────────────────────────────────────
@@ -155,7 +166,7 @@ def fetch_rss(name):
     feeds = RSS_FEEDS.get(name, [])
     for feed_url in feeds:
         try:
-            r    = requests.get(feed_url, headers=HEADERS, timeout=12)
+            r = requests.get(feed_url, headers=HEADERS, timeout=12)
             if r.status_code != 200: continue
             root = ET.fromstring(r.content)
             bits = []
@@ -171,7 +182,8 @@ def fetch_rss(name):
         except Exception as e:
             pass
     return None
-  # ── Source 4: Google Alerts Sheet (CSV) ─────────────────────────
+
+# ── Source 4: Google Alerts Sheet (CSV) ─────────────────────────
 ALERTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRm1ifG16mCqJu0u7DeMr4I_np7nPa8aU2BGgPFtyXG2JvaUfJfiBUaXgG2Ol_5kDDuF1L_ghMQmvVG/pub?gid=86938798&single=true&output=csv'
 
 EARNINGS_KEYWORDS = [
@@ -186,30 +198,29 @@ def fetch_alerts_sheet():
         if r.status_code != 200:
             print(f"  ⚠️ Alerts sheet fetch failed: {r.status_code}")
             return {}
-        
+
         lines = r.text.strip().split('\n')
         alerts = {}
-        
+
         for line in lines[1:]:  # skip header
             try:
                 parts = line.split(',')
                 if len(parts) < 6: continue
-                
+
                 company = parts[2].strip().strip('"')
                 title   = parts[3].strip().strip('"')
                 snippet = parts[5].strip().strip('"')
-                
-                # Only keep earnings-related articles
+
                 combined = (title + ' ' + snippet).lower()
                 if not any(kw in combined for kw in EARNINGS_KEYWORDS):
                     continue
-                
+
                 if company not in alerts:
                     alerts[company] = []
                 alerts[company].append(f"TITLE: {title}\nSNIPPET: {snippet}")
-                
+
             except: continue
-        
+
         print(f"  📊 Alerts sheet: {len(alerts)} companies with earnings news")
         return alerts
     except Exception as e:
@@ -236,13 +247,11 @@ def yf_lookup(name):
         info = tk.info or {}
         last, upcoming = None, None
 
-        # earningsTimestamp = last reported earnings (Unix timestamp)
         et = info.get('earningsTimestamp') or info.get('earningsTimestampStart')
         if et:
             dt = datetime.fromtimestamp(et)
             last = valid_past(dt.strftime('%Y-%m-%d'))
 
-        # earningsTimestampEnd / nextEarningsDate = upcoming
         ne = info.get('earningsTimestampEnd') or info.get('nextEarningsDate')
         if ne:
             if isinstance(ne, (int, float)):
@@ -271,11 +280,11 @@ def groq_extract(name, text, retries=2):
 
     for attempt in range(retries+1):
         try:
-            r    = requests.post(
+            r = requests.post(
                 'https://api.groq.com/openai/v1/chat/completions',
                 headers={'Authorization':f'Bearer {GROQ_API_KEY}',
                          'Content-Type':'application/json'},
-                json={'model':'llama-3.3-70b-versatile',
+                json={'model':'llama-3.1-8b-instant',  # lighter model — avoids rate limits
                       'messages':[{'role':'user','content':prompt}],
                       'max_tokens':100,'temperature':0},
                 timeout=25)
@@ -289,9 +298,8 @@ def groq_extract(name, text, retries=2):
                     time.sleep(wait); continue
                 print(f"  [Groq] {msg[:80]}")
                 return None
-            raw    = resp['choices'][0]['message']['content'].strip()
-            raw    = raw.replace('```json','').replace('```','').strip()
-            # Clean up truncated JSON
+            raw = resp['choices'][0]['message']['content'].strip()
+            raw = raw.replace('```json','').replace('```','').strip()
             if raw.count('{') > raw.count('}'):
                 raw += '}'
             result = json.loads(raw)
@@ -308,7 +316,7 @@ def groq_extract(name, text, retries=2):
             return None
     return None
 
-# Load alerts once at module level — populated in main()
+# ── Load alerts once at module level ────────────────────────────
 _alerts_cache = {}
 
 def process_company(co):
@@ -336,13 +344,13 @@ def process_company(co):
     # 4) Google Alerts Sheet
     alert_snippets = _alerts_cache.get(name)
     if alert_snippets:
-        alert_text = '\n\n'.join(alert_snippets[:3])  # max 3 articles
+        alert_text = '\n\n'.join(alert_snippets[:3])
         r = groq_extract(name, alert_text)
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
             r['source'] = 'Google Alerts'; return r
 
     return None
-# ── Save results ─────────────────────────────────────────────────
+
 # ── Write agent log ──────────────────────────────────────────────
 def write_agent_log(updated, no_data_list, cleared, source_breakdown):
     LOG_FILE = 'agent_log.json'
@@ -360,7 +368,6 @@ def write_agent_log(updated, no_data_list, cleared, source_breakdown):
         'sourceBreakdown': source_breakdown,
     })
 
-    # Keep last 60 runs
     log['runs'] = log['runs'][-60:]
 
     with open(LOG_FILE, 'w', encoding='utf-8') as f:
@@ -379,14 +386,13 @@ def update_data_json(results):
         name=co.get('name',''); r=results.get(name)
         if not r: continue
         changed=False
-        
-        # --- FIXED SECTION START ---
+
         nl = r.get('lastAnnouncement')
         if nl and (not co.get('lastAnnouncement') or nl > co.get('lastAnnouncement', '')):
             co['lastAnnouncement'] = nl
             try:
                 co['expectedNext'] = (datetime.strptime(nl, '%Y-%m-%d') + timedelta(days=90)).strftime('%Y-%m-%d')
-            except: 
+            except:
                 pass
             changed = True
             if name in announced and announced[name]['date'] <= nl:
@@ -396,9 +402,9 @@ def update_data_json(results):
         nu = r.get('upcomingDate')
         if nu:
             last_ann = co.get('lastAnnouncement', '')
-            if nu > last_ann:  
+            if nu > last_ann:
                 announced[name] = {
-                    'date': nu, 
+                    'date': nu,
                     'url': None,
                     'timestamp': datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
                     'source': r.get('source', 'agent')
@@ -406,7 +412,6 @@ def update_data_json(results):
                 changed = True
             else:
                 print(f"  ⚠️  {name}: skipping upcomingDate {nu} — not after lastAnnouncement {last_ann}")
-        # --- FIXED SECTION END ---
 
         if changed: updated+=1
 
@@ -423,6 +428,7 @@ def update_data_json(results):
         json.dump(data if is_dict else
                   {'companies':companies,'announcedDates':announced,'lastAgentRun':TODAY},
                   f,indent=2,ensure_ascii=False)
+
     no_data_list = [n for n, r in results.items() if not r or (not r.get('lastAnnouncement') and not r.get('upcomingDate'))]
     source_counts = {}
     for r in results.values():
