@@ -38,7 +38,7 @@ jobs:
           git config --global user.name  "News Brain Agent"
           git config --global user.email "agent@news-brain.ai"
           git fetch origin main
-          git add data.json
+          git add data.json agent_log.json
           git diff --staged --quiet \
             || (git commit -m "🤖 Auto-update: earnings dates $(date +%Y-%m-%d)" \
                 && git push origin HEAD:main --force-with-lease)
