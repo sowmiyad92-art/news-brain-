@@ -83,8 +83,8 @@
       "irWebsite": "https://investors.lionsgate.com/news-events/news/default.aspx",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-02-28",
-      "expectedNext": "2026-05-29",
+      "lastAnnouncement": "2026-05-21",
+      "expectedNext": "2026-08-19",
       "articleUrl": "https://finance.yahoo.com/news/does-street-think-lionsgate-studios-094021333.html"
     },
     {
@@ -191,8 +191,8 @@
       "irWebsite": "https://group.banijay.com/press-releases/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-03-05",
-      "expectedNext": "2026-06-03",
+      "lastAnnouncement": "2026-05-18",
+      "expectedNext": "2026-08-16",
       "articleUrl": "https://group.banijay.com/results-center/"
     },
     {
@@ -415,8 +415,8 @@
       "irWebsite": "https://ir.bilibili.com/",
       "bestSource": "GNews",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-04-16",
-      "expectedNext": "2026-07-15",
+      "lastAnnouncement": "2026-05-19",
+      "expectedNext": "2026-08-17",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/bilibili-inc-files-2025-annual-102500275.html"
     },
     {
@@ -472,8 +472,8 @@
       "irWebsite": "https://erosmediaworld.com/investor-relations-eros/eiml-financial-reports/",
       "bestSource": "IR Website",
       "sourceReliability": 1,
-      "lastAnnouncement": "2026-04-21",
-      "expectedNext": "2026-07-20",
+      "lastAnnouncement": "2026-05-18",
+      "expectedNext": "2026-08-16",
       "articleUrl": "https://erosmediaworld.com/investor-relations-eros/eiml-financial-reports/"
     },
     {
@@ -520,8 +520,8 @@
       "irWebsite": "https://ir.netease.com/financial-information/quarterly-results",
       "bestSource": "GNews",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-02-11",
-      "expectedNext": "2026-05-12",
+      "lastAnnouncement": "2026-05-21",
+      "expectedNext": "2026-08-19",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/netease-inc-announces-filing-annual-110200889.html"
     },
     {
@@ -780,22 +780,10 @@
     }
   ],
   "announcedDates": {
-    "Viaplay Group": {
-      "date": "2026-05-18",
-      "url": null,
-      "timestamp": "10/05/2026 05:38:34",
-      "source": "Google News RSS"
-    },
     "RTL Group": {
       "date": "2026-06-10",
       "url": null,
       "timestamp": "10/05/2026 05:38:34",
-      "source": "Google News RSS"
-    },
-    "Canal+": {
-      "date": "2026-05-28",
-      "url": null,
-      "timestamp": "09/05/2026 13:22:49",
       "source": "Google News RSS"
     },
     "Quebecor": {
@@ -807,19 +795,13 @@
     "Telecom Argentina": {
       "date": "2026-08-10",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
-      "source": "yfinance"
-    },
-    "NetEase": {
-      "date": "2026-05-21",
-      "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "ITV": {
@@ -828,112 +810,88 @@
       "timestamp": "10/05/2026 05:38:34",
       "source": "Google News RSS"
     },
-    "Vivendi": {
-      "date": "2026-05-20",
-      "url": null,
-      "timestamp": "09/05/2026 13:22:49",
-      "source": "Google News RSS"
-    },
-    "Banijay": {
-      "date": "2026-05-17",
-      "url": null,
-      "timestamp": "10/05/2026 05:38:34",
-      "source": "Google News RSS"
-    },
     "ProSiebenSat.1": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "IR Page"
     },
     "Netflix": {
       "date": "2026-07-16",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Disney": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
-      "source": "yfinance"
-    },
-    "Lionsgate": {
-      "date": "2026-05-21",
-      "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
-      "source": "yfinance"
-    },
-    "Bilibili": {
-      "date": "2026-05-19",
-      "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Nexstar": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "18/05/2026 06:11:28",
+      "timestamp": "30/05/2026 14:59:08",
       "source": "yfinance"
     },
     "Scripps": {
@@ -941,7 +899,25 @@
       "url": null,
       "timestamp": "13/05/2026 15:08:39",
       "source": "yfinance"
+    },
+    "Lionsgate": {
+      "date": "2026-08-06",
+      "url": null,
+      "timestamp": "30/05/2026 14:59:08",
+      "source": "yfinance"
+    },
+    "Bilibili": {
+      "date": "2026-08-20",
+      "url": null,
+      "timestamp": "30/05/2026 14:59:08",
+      "source": "yfinance"
+    },
+    "NetEase": {
+      "date": "2026-08-13",
+      "url": null,
+      "timestamp": "30/05/2026 14:59:08",
+      "source": "yfinance"
     }
   },
-  "lastAgentRun": "2026-05-18"
+  "lastAgentRun": "2026-05-30"
 }
