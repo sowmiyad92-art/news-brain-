@@ -162,8 +162,8 @@
       "irWebsite": "https://investors.universalmusic.com/news/",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-29",
-      "expectedNext": "2026-07-28"
+      "lastAnnouncement": "2026-04-30",
+      "expectedNext": "2026-07-29"
     },
     {
       "name": "TV Asahi",
@@ -327,8 +327,8 @@
       "irWebsite": "https://inversores.telecom.com.ar/content/cms-investors/ar/en/sec-presentations.html",
       "bestSource": "IR Website",
       "sourceReliability": 2,
-      "lastAnnouncement": "2026-04-07",
-      "expectedNext": "2026-07-06",
+      "lastAnnouncement": "2026-04-30",
+      "expectedNext": "2026-07-29",
       "articleUrl": "https://inversores.telecom.com.ar/en/sec-presentations.html"
     },
     {
@@ -801,7 +801,7 @@
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "ITV": {
@@ -819,103 +819,103 @@
     "Netflix": {
       "date": "2026-07-16",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Disney": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Nexstar": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Scripps": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "13/05/2026 15:08:39",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Lionsgate": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "Bilibili": {
       "date": "2026-08-20",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     },
     "NetEase": {
       "date": "2026-08-13",
       "url": null,
-      "timestamp": "30/05/2026 14:59:08",
+      "timestamp": "30/05/2026 15:58:26",
       "source": "yfinance"
     }
   },
