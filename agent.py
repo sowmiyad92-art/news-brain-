@@ -446,7 +446,7 @@ def main():
         time.sleep(2)
 
     print("\n💾 Final save..."); update_data_json(results)
-     write_agent_log(results)
+    write_agent_log(results)
     print("🎉 Agent v3 complete!")
 
 if __name__=='__main__': main()
