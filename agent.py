@@ -171,6 +171,50 @@ def fetch_rss(name):
         except Exception as e:
             pass
     return None
+  # ── Source 4: Google Alerts Sheet (CSV) ─────────────────────────
+ALERTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRm1ifG16mCqJu0u7DeMr4I_np7nPa8aU2BGgPFtyXG2JvaUfJfiBUaXgG2Ol_5kDDuF1L_ghMQmvVG/pub?gid=86938798&single=true&output=csv'
+
+EARNINGS_KEYWORDS = [
+    'q1','q2','q3','q4','quarterly','earnings','financial results',
+    'revenue','net profit','operating profit','results','fiscal'
+]
+
+def fetch_alerts_sheet():
+    """Fetch today's Google Alerts and return dict: {company: [snippets]}"""
+    try:
+        r = requests.get(ALERTS_CSV_URL, timeout=15)
+        if r.status_code != 200:
+            print(f"  ⚠️ Alerts sheet fetch failed: {r.status_code}")
+            return {}
+        
+        lines = r.text.strip().split('\n')
+        alerts = {}
+        
+        for line in lines[1:]:  # skip header
+            try:
+                parts = line.split(',')
+                if len(parts) < 6: continue
+                
+                company = parts[2].strip().strip('"')
+                title   = parts[3].strip().strip('"')
+                snippet = parts[5].strip().strip('"')
+                
+                # Only keep earnings-related articles
+                combined = (title + ' ' + snippet).lower()
+                if not any(kw in combined for kw in EARNINGS_KEYWORDS):
+                    continue
+                
+                if company not in alerts:
+                    alerts[company] = []
+                alerts[company].append(f"TITLE: {title}\nSNIPPET: {snippet}")
+                
+            except: continue
+        
+        print(f"  📊 Alerts sheet: {len(alerts)} companies with earnings news")
+        return alerts
+    except Exception as e:
+        print(f"  ⚠️ Alerts sheet error: {e}")
+        return {}
 
 # ── Source 2: IR page scrape ─────────────────────────────────────
 def scrape_ir(url):
@@ -264,7 +308,9 @@ def groq_extract(name, text, retries=2):
             return None
     return None
 
-# ── Per-company pipeline ─────────────────────────────────────────
+# Load alerts once at module level — populated in main()
+_alerts_cache = {}
+
 def process_company(co):
     name   = co.get('name','')
     ir_url = co.get('irWebsite','')
@@ -283,12 +329,19 @@ def process_company(co):
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
             r['source'] = 'IR Page'; return r
 
-    # 3) yfinance (US tickers only — as backup)
+    # 3) yfinance (US tickers only)
     r = yf_lookup(name)
     if r and (r.get('lastAnnouncement') or r.get('upcomingDate')): return r
 
-    return None
+    # 4) Google Alerts Sheet
+    alert_snippets = _alerts_cache.get(name)
+    if alert_snippets:
+        alert_text = '\n\n'.join(alert_snippets[:3])  # max 3 articles
+        r = groq_extract(name, alert_text)
+        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
+            r['source'] = 'Google Alerts'; return r
 
+    return None
 # ── Save results ─────────────────────────────────────────────────
 # ── Write agent log ──────────────────────────────────────────────
 def write_agent_log(updated, no_data_list, cleared, source_breakdown):
