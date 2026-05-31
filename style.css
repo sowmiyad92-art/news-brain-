@@ -651,3 +651,31 @@ tr.due-tomorrow td {
     padding: 1px 6px; border-radius: 8px;
     margin-left: 4px; vertical-align: middle;
 }
+/* ── Pattern badges ── */
+.pattern-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+.pattern-q { background: #c6f6d5; color: #22543d; }
+.pattern-h { background: #fefcbf; color: #744210; }
+.pattern-a { background: #fed7d7; color: #742a2a; }
+
+/* ── Manual check flag ── */
+.manual-check-flag {
+    display: inline-block;
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 8px;
+    margin-left: 4px;
+    vertical-align: middle;
+    cursor: help;
+}
