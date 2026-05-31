@@ -408,7 +408,8 @@ function renderTable(companies) {
 
         return `
             <tr class="${rowClass}">
-                <td><span class="company-name">${company.name}</span>${patBadge}${manualFlag}${isTomorrow ? ' <span class="tomorrow-badge">📅 Tomorrow!</span>' : ''}</td>
+                <td><span class="company-name">${company.name}</span>${isTomorrow ? ' <span class="tomorrow-badge">📅 Tomorrow!</span>' : ''}</td>
+                <td style="text-align:center;">${patBadge}${manualFlag ? '<br>'+manualFlag : ''}</td>
                 <td>${company.region}</td>
                 <td>${company.lastAnnouncement}</td>
                 <td><span class="${daysClass}">${daysDisplay}</span></td>
