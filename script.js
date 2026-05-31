@@ -393,9 +393,22 @@ function renderTable(companies) {
             isTomorrow            ? 'due-tomorrow'   : ''
         ].filter(Boolean).join(' ');
 
+       // Pattern badge
+        const pat = company.pattern || 'Q';
+        const patLabel = { Q:'Q', H:'H', A:'A' }[pat] || 'Q';
+        const patClass = { Q:'pattern-q', H:'pattern-h', A:'pattern-a' }[pat] || 'pattern-q';
+        const patBadge = `<span class="pattern-badge ${patClass}" title="${{Q:'Quarterly',H:'Half-Yearly',A:'Annual'}[pat]}">${patLabel}</span>`;
+
+        // Manual check flag — show if no data from agent AND no upcoming date
+        const overdueThreshold = { Q: 120, H: 240, A: 400 }[pat] || 120;
+        const needsManualCheck = !announced && dateInfo.days > overdueThreshold;
+        const manualFlag = needsManualCheck
+            ? `<span class="manual-check-flag" title="No data from agent — check manually">⚑ Check</span>`
+            : '';
+
         return `
             <tr class="${rowClass}">
-                <td><span class="company-name">${company.name}</span>${isTomorrow ? ' <span class="tomorrow-badge">📅 Tomorrow!</span>' : ''}</td>
+                <td><span class="company-name">${company.name}</span>${patBadge}${manualFlag}${isTomorrow ? ' <span class="tomorrow-badge">📅 Tomorrow!</span>' : ''}</td>
                 <td>${company.region}</td>
                 <td>${company.lastAnnouncement}</td>
                 <td><span class="${daysClass}">${daysDisplay}</span></td>
@@ -795,13 +808,14 @@ function updateCompanyNews(companyName, newsDate, articleUrl) {
     clearAnnouncedDate(companyName);
 
     const dataToSave = allData.companies.map(c => ({
-        name:             c.name,
+        name: c.name,
         lastAnnouncement: c.lastAnnouncement,
-        expectedNext:     c.expectedNext,
-        articleUrl:       c.articleUrl || null,
-        region:           c.region,
-        bestSource:       c.bestSource,
-        irWebsite:        c.irWebsite
+        expectedNext: c.expectedNext,
+        articleUrl: c.articleUrl || null,
+        region: c.region,
+        bestSource: c.bestSource,
+        irWebsite: c.irWebsite,
+        pattern: c.pattern || 'Q'
     }));
     localStorage.setItem('companiesData', JSON.stringify(dataToSave));
     renderTable(allData.companies);
