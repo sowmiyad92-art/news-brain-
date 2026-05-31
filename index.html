@@ -45,8 +45,8 @@
                 </select>
             </div>
 
-            <!-- 3 Date Columns -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <!-- 2 Date Columns + Pattern -->
+<div style="display:grid; grid-template-columns:1fr 1fr 120px; gap:12px; margin-bottom:12px;">
     <div>
         <label style="font-size:12px; color:#666; display:block; margin-bottom:4px;">📊 Last Announcement</label>
         <input type="date" id="quDatePast" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px;">
@@ -54,6 +54,15 @@
     <div>
         <label style="font-size:12px; color:#666; display:block; margin-bottom:4px;">📅 Upcoming Confirmed</label>
         <input type="date" id="quDateUpcoming" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px;">
+    </div>
+    <div>
+        <label style="font-size:12px; color:#666; display:block; margin-bottom:4px;">🔄 Pattern</label>
+        <select id="quPattern" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:13px; background:#fff;">
+            <option value="">— —</option>
+            <option value="Q">Q Quarterly</option>
+            <option value="H">H Half-Yearly</option>
+            <option value="A">A Annual</option>
+        </select>
     </div>
 </div>
 
