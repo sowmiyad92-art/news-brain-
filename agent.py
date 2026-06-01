@@ -164,10 +164,14 @@ def valid_future(s):
 # ── Source 1: Company RSS feeds ──────────────────────────────────
 def fetch_rss(name):
     feeds = RSS_FEEDS.get(name, [])
+    if not feeds:
+        return None
     for feed_url in feeds:
         try:
             r = requests.get(feed_url, headers=HEADERS, timeout=12)
-            if r.status_code != 200: continue
+            if r.status_code != 200:
+                print(f"  ⚠️ [RSS] {name}: HTTP {r.status_code} from {feed_url.split('/')[2]}")
+                continue
             root = ET.fromstring(r.content)
             bits = []
             for it in root.findall('.//item')[:6]:
@@ -360,12 +364,25 @@ def write_agent_log(updated, no_data_list, cleared, source_breakdown):
     except:
         log = {'runs': []}
 
+    # Build per-company detail
+    company_details = {}
+    for name, r in results.items():
+        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
+            company_details[name] = {
+                'lastAnnouncement': r.get('lastAnnouncement'),
+                'upcomingDate':     r.get('upcomingDate'),
+                'source':           r.get('source', 'unknown'),
+                'confidence':       r.get('confidence', 'unknown'),
+            }
+
     log['runs'].append({
         'date':            TODAY,
+        'time':            datetime.now().strftime('%H:%M:%S'),
         'updated':         updated,
         'noData':          no_data_list,
         'cleared':         cleared,
         'sourceBreakdown': source_breakdown,
+        'companies':       company_details,  # ← what actually changed
     })
 
     log['runs'] = log['runs'][-60:]
