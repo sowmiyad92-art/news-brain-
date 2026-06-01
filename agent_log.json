@@ -145,6 +145,148 @@
         "yfinance": 19,
         "ir": 24
       }
+    },
+    {
+      "date": "2026-06-01",
+      "updated": 10,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 9,
+        "ir": 9
+      }
+    },
+    {
+      "date": "2026-06-01",
+      "updated": 16,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Digikore",
+        "Eros Media",
+        "Fuji Media"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 16,
+        "ir": 13
+      }
+    },
+    {
+      "date": "2026-06-01",
+      "updated": 21,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Digikore",
+        "Eros Media",
+        "Fuji Media",
+        "Grammy",
+        "MD Entertainment",
+        "NW18",
+        "NTV",
+        "Seven West Media",
+        "Studio Dragon",
+        "Tips Industries",
+        "Zee Entertainment",
+        "MFE MediaForEurope",
+        "MultiChoice",
+        "PRISA",
+        "Vantiva",
+        "TV2 Denmark"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 17,
+        "ir": 24
+      }
+    },
+    {
+      "date": "2026-06-01",
+      "updated": 22,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Digikore",
+        "Eros Media",
+        "Fuji Media",
+        "Grammy",
+        "MD Entertainment",
+        "NW18",
+        "NTV",
+        "Seven West Media",
+        "Studio Dragon",
+        "Tips Industries",
+        "Zee Entertainment",
+        "MFE MediaForEurope",
+        "MultiChoice",
+        "PRISA",
+        "Vantiva",
+        "TV2 Denmark",
+        "Vivendi",
+        "Xilam"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 19,
+        "ir": 25
+      }
     }
   ]
 }
