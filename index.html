@@ -130,6 +130,21 @@
         </footer>
     </div>
 
+    <script>
+    (function() {
+        const PASS = 'newsbrain2026';
+        const KEY  = 'nb_auth';
+        if (sessionStorage.getItem(KEY) === 'ok') return;
+        const pwd = prompt('🔐 News Brain — Enter password:');
+        if (pwd === PASS) {
+            sessionStorage.setItem(KEY, 'ok');
+        } else {
+            document.body.innerHTML = '<div style="text-align:center;padding:100px;font-family:sans-serif;"><h2>❌ Access denied</h2><p>Refresh to try again.</p></div>';
+            throw new Error('Auth failed');
+        }
+    })();
+    </script>
+
     <script src="script.js"></script>
     <script src="features.js"></script>
     <script src="text-parser.js"></script>
