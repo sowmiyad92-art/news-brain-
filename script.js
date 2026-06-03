@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function loadData() {
+    // Auto-clear stale localStorage if data.json version is newer
+    const DATA_VERSION = '2026-06';
+    if (localStorage.getItem('nb_data_version') !== DATA_VERSION) {
+        localStorage.removeItem('companiesData');
+        localStorage.removeItem('announcedDates');
+        localStorage.setItem('nb_data_version', DATA_VERSION);
+        console.log('🧹 Cleared stale localStorage — version updated');
+    }
+
     try {
         const response = await fetch('./data.json');
         if (!response.ok) throw new Error('Failed to load data.json');
