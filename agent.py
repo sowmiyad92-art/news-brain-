@@ -459,6 +459,7 @@ def update_data_json(results):
 # ── Main ─────────────────────────────────────────────────────────
 def main():
     print(f"🚀 News Brain Agent v3 — {TODAY} ({CURRENT_Q})")
+    print(f"🔑 GROQ_API_KEY: {'SET ✅' if GROQ_API_KEY else 'MISSING ❌'}")
     if not os.path.exists(DATA_JSON): print("❌ data.json not found"); return
 
     with open(DATA_JSON,'r',encoding='utf-8') as f: data=json.load(f)
