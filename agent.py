@@ -356,7 +356,7 @@ def process_company(co):
     return None
 
 # ── Write agent log ──────────────────────────────────────────────
-def write_agent_log(updated, no_data_list, cleared, source_breakdown):
+def write_agent_log(updated, no_data_list, cleared, source_breakdown, results):
     LOG_FILE = 'agent_log.json'
     try:
         with open(LOG_FILE, 'r', encoding='utf-8') as f:
@@ -454,7 +454,7 @@ def update_data_json(results):
             source_counts[src] = source_counts.get(src, 0) + 1
 
     print(f"\n  ✅ Updated:{updated} | No data:{len(no_data_list)} | Cleared:{len(cleared)}")
-    write_agent_log(updated, no_data_list, len(cleared), source_counts)
+    write_agent_log(updated, no_data_list, len(cleared), source_counts, results)
 
 # ── Main ─────────────────────────────────────────────────────────
 def main():
