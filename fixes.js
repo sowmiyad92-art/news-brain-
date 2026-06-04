@@ -601,9 +601,9 @@
     function patchColumnHeaders() {
         const ths = document.querySelectorAll('.companies-table thead th');
         const tips = {
-            2: ['Last Announcement', 'Date earnings results were RELEASED (past).'],
-            3: ['Days Since',        'Days elapsed since last quarterly results.'],
-            4: ['Upcoming Earnings 📌', 'CONFIRMED future date the company will report.\nSet via Quick Update or the + Add button.\nSaved permanently — survives page refresh.'],
+            3: ['Last Announcement', 'Date earnings results were RELEASED (past).'],
+            4: ['Days Since',        'Days elapsed since last quarterly results.'],
+            5: ['Upcoming Earnings 📌', 'CONFIRMED future date the company will report.\nSet via Quick Update or the + Add button.\nSaved permanently — survives page refresh.'],
         };
         ths.forEach((th, i) => {
             if (!tips[i]) return;
