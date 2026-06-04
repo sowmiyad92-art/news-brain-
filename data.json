@@ -6,8 +6,8 @@
       "irWebsite": "https://about.netflix.com/en/newsroom",
       "bestSource": "IR Website",
       "sourceReliability": 5,
-      "lastAnnouncement": "2026-04-23",
-      "expectedNext": "2026-07-22",
+      "lastAnnouncement": "2026-05-31",
+      "expectedNext": "2026-08-29",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/why-netflix-nflx-international-revenue-131501710.html"
     },
     {
@@ -569,8 +569,8 @@
       "irWebsite": "https://www.smentertainment.com/en/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-05-06",
-      "expectedNext": "2026-08-04"
+      "lastAnnouncement": "2026-05-11",
+      "expectedNext": "2026-08-09"
     },
     {
       "name": "Studio Dragon",
@@ -795,13 +795,13 @@
     "Telecom Argentina": {
       "date": "2026-08-10",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "ITV": {
@@ -813,7 +813,7 @@
     "ProSiebenSat.1": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "IR Page"
     },
     "Netflix": {
@@ -831,67 +831,67 @@
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "30/05/2026 15:58:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Nexstar": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Scripps": {
@@ -903,7 +903,7 @@
     "Lionsgate": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Bilibili": {
@@ -915,20 +915,14 @@
     "NetEase": {
       "date": "2026-08-13",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     },
     "Paramount": {
       "date": "2026-08-03",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
-    },
-    "MBC Group": {
-      "date": "2026-06-01",
-      "url": null,
-      "timestamp": "31/05/2026 06:18:44",
-      "source": "IR Page"
     },
     "Rogers": {
       "date": "2026-06-04",
@@ -937,29 +931,29 @@
       "source": "IR Page"
     },
     "Saregama": {
-      "date": "2026-09-30",
+      "date": "2026-08-12",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "IR Page"
     },
     "Emtek": {
-      "date": "2026-06-15",
+      "date": "2026-06-11",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "IR Page"
     },
     "Mahaka": {
       "date": "2026-09-30",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "IR Page"
     },
     "Curiosity Stream": {
       "date": "2026-08-04",
       "url": null,
-      "timestamp": "01/06/2026 06:55:26",
+      "timestamp": "04/06/2026 13:02:06",
       "source": "yfinance"
     }
   },
-  "lastAgentRun": "2026-06-01"
+  "lastAgentRun": "2026-06-04"
 }
