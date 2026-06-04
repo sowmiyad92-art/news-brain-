@@ -1203,6 +1203,917 @@
           "confidence": "high"
         }
       }
+    },
+    {
+      "date": "2026-06-04",
+      "time": "13:17:20",
+      "updated": 10,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 10,
+        "ir": 8
+      },
+      "companies": {
+        "Netflix": {
+          "lastAnnouncement": "2026-04-16",
+          "upcomingDate": "2026-07-16",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Disney": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "RTL Group": {
+          "lastAnnouncement": "2026-05-13",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Amazon": {
+          "lastAnnouncement": "2026-04-29",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Paramount": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": "2026-08-03",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Bros Discovery": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "AMC Networks": {
+          "lastAnnouncement": "2026-05-08",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Lionsgate": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "BCE": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Cineplex": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Comcast": {
+          "lastAnnouncement": "2026-04-23",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Curiosity Stream": {
+          "lastAnnouncement": "2026-05-14",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Fox Corporation": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gaia": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Banijay": {
+          "lastAnnouncement": "2026-05-18",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gray Television": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "IMAX": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Kartoon Studios": {
+          "lastAnnouncement": "2026-05-15",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "date": "2026-06-04",
+      "time": "13:18:52",
+      "updated": 17,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Dentsu",
+        "Digikore",
+        "Digital Domain",
+        "Fuji Media"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 18,
+        "ir": 10
+      },
+      "companies": {
+        "Netflix": {
+          "lastAnnouncement": "2026-04-16",
+          "upcomingDate": "2026-07-16",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Disney": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "RTL Group": {
+          "lastAnnouncement": "2026-05-13",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Amazon": {
+          "lastAnnouncement": "2026-04-29",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Paramount": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": "2026-08-03",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Bros Discovery": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "AMC Networks": {
+          "lastAnnouncement": "2026-05-08",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Lionsgate": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "BCE": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Cineplex": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Comcast": {
+          "lastAnnouncement": "2026-04-23",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Curiosity Stream": {
+          "lastAnnouncement": "2026-05-14",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Fox Corporation": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gaia": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Banijay": {
+          "lastAnnouncement": "2026-05-18",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gray Television": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "IMAX": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Kartoon Studios": {
+          "lastAnnouncement": "2026-05-15",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Nexstar": {
+          "lastAnnouncement": null,
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Rogers": {
+          "lastAnnouncement": "2026-04-22",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Roku": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sinclair": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": null,
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sphere Entertainment": {
+          "lastAnnouncement": "2026-05-05",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Telecom Argentina": {
+          "lastAnnouncement": "2026-03-10",
+          "upcomingDate": "2026-08-10",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Televisa": {
+          "lastAnnouncement": "2026-04-28",
+          "upcomingDate": "2026-07-28",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Music Group": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Bilibili": {
+          "lastAnnouncement": "2026-05-19",
+          "upcomingDate": "2026-08-20",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Eros Media": {
+          "lastAnnouncement": "2026-05-18",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        }
+      }
+    },
+    {
+      "date": "2026-06-04",
+      "time": "13:20:27",
+      "updated": 19,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Dentsu",
+        "Digikore",
+        "Digital Domain",
+        "Fuji Media",
+        "Grammy",
+        "MD Entertainment",
+        "NW18",
+        "NTV",
+        "Saregama",
+        "Seven West Media",
+        "SM Entertainment",
+        "Studio Dragon",
+        "Tips Industries",
+        "Toei Animation",
+        "Toho",
+        "Zee Entertainment",
+        "MFE MediaForEurope",
+        "MultiChoice",
+        "Vantiva",
+        "TV2 Denmark"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 19,
+        "ir": 18
+      },
+      "companies": {
+        "Netflix": {
+          "lastAnnouncement": "2026-04-16",
+          "upcomingDate": "2026-07-16",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Disney": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "RTL Group": {
+          "lastAnnouncement": "2026-05-13",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Amazon": {
+          "lastAnnouncement": "2026-04-29",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Paramount": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": "2026-08-03",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Bros Discovery": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "AMC Networks": {
+          "lastAnnouncement": "2026-05-08",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Lionsgate": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "BCE": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Cineplex": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Comcast": {
+          "lastAnnouncement": "2026-04-23",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Curiosity Stream": {
+          "lastAnnouncement": "2026-05-14",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Fox Corporation": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gaia": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Banijay": {
+          "lastAnnouncement": "2026-05-18",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gray Television": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "IMAX": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Kartoon Studios": {
+          "lastAnnouncement": "2026-05-15",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Nexstar": {
+          "lastAnnouncement": null,
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Rogers": {
+          "lastAnnouncement": "2026-04-22",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Roku": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sinclair": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": null,
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sphere Entertainment": {
+          "lastAnnouncement": "2026-05-05",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Telecom Argentina": {
+          "lastAnnouncement": "2026-03-10",
+          "upcomingDate": "2026-08-10",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Televisa": {
+          "lastAnnouncement": "2026-04-28",
+          "upcomingDate": "2026-07-28",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Music Group": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Bilibili": {
+          "lastAnnouncement": "2026-05-19",
+          "upcomingDate": "2026-08-20",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Eros Media": {
+          "lastAnnouncement": "2026-05-18",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Maoyan": {
+          "lastAnnouncement": "2026-04-28",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "NetEase": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-13",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Emtek": {
+          "lastAnnouncement": "2026-03-31",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "low"
+        },
+        "Mahaka": {
+          "lastAnnouncement": "2025-12-31",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "low"
+        },
+        "ITV": {
+          "lastAnnouncement": "2026-03-23",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Groupe M6": {
+          "lastAnnouncement": "2025-08-06",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "PRISA": {
+          "lastAnnouncement": "2025-07-30",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "ProSiebenSat.1": {
+          "lastAnnouncement": "2026-05-13",
+          "upcomingDate": "2026-08-06",
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "TF1": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "date": "2026-06-04",
+      "time": "13:20:46",
+      "updated": 20,
+      "noData": [
+        "Viaplay Group",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Dentsu",
+        "Digikore",
+        "Digital Domain",
+        "Fuji Media",
+        "Grammy",
+        "MD Entertainment",
+        "NW18",
+        "NTV",
+        "Saregama",
+        "Seven West Media",
+        "SM Entertainment",
+        "Studio Dragon",
+        "Tips Industries",
+        "Toei Animation",
+        "Toho",
+        "Zee Entertainment",
+        "MFE MediaForEurope",
+        "MultiChoice",
+        "Vantiva",
+        "TV2 Denmark"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 21,
+        "ir": 21
+      },
+      "companies": {
+        "Netflix": {
+          "lastAnnouncement": "2026-04-16",
+          "upcomingDate": "2026-07-16",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Disney": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "RTL Group": {
+          "lastAnnouncement": "2026-05-13",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Amazon": {
+          "lastAnnouncement": "2026-04-29",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Paramount": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": "2026-08-03",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Bros Discovery": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "AMC Networks": {
+          "lastAnnouncement": "2026-05-08",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Lionsgate": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "BCE": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Cineplex": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Comcast": {
+          "lastAnnouncement": "2026-04-23",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Curiosity Stream": {
+          "lastAnnouncement": "2026-05-14",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Fox Corporation": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gaia": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Banijay": {
+          "lastAnnouncement": "2026-05-18",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Gray Television": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "IMAX": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Kartoon Studios": {
+          "lastAnnouncement": "2026-05-15",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Nexstar": {
+          "lastAnnouncement": null,
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Rogers": {
+          "lastAnnouncement": "2026-04-22",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Roku": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sinclair": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": null,
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sphere Entertainment": {
+          "lastAnnouncement": "2026-05-05",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Telecom Argentina": {
+          "lastAnnouncement": "2026-03-10",
+          "upcomingDate": "2026-08-10",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Televisa": {
+          "lastAnnouncement": "2026-04-28",
+          "upcomingDate": "2026-07-28",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Music Group": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Bilibili": {
+          "lastAnnouncement": "2026-05-19",
+          "upcomingDate": "2026-08-20",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Eros Media": {
+          "lastAnnouncement": "2026-05-18",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Maoyan": {
+          "lastAnnouncement": "2026-04-28",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "NetEase": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-13",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Emtek": {
+          "lastAnnouncement": "2026-03-31",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "low"
+        },
+        "Mahaka": {
+          "lastAnnouncement": "2025-12-31",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "low"
+        },
+        "ITV": {
+          "lastAnnouncement": "2026-03-23",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Groupe M6": {
+          "lastAnnouncement": "2025-08-06",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "PRISA": {
+          "lastAnnouncement": "2025-07-30",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "ProSiebenSat.1": {
+          "lastAnnouncement": "2026-05-13",
+          "upcomingDate": "2026-08-06",
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "TF1": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Vivendi": {
+          "lastAnnouncement": "2026-03-12",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        },
+        "Xilam": {
+          "lastAnnouncement": "2026-04-03",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "medium"
+        },
+        "Fubo TV": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": null,
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "TKO Group": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Scripps": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": null,
+          "source": "IR Page",
+          "confidence": "high"
+        }
+      }
     }
   ]
 }
