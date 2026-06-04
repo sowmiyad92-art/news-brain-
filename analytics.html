@@ -127,13 +127,10 @@ async function init() {
     const announced  = data.announcedDates || {};
     const lsAnn      = safeJSON(localStorage.getItem('announcedDates'), {});
     const allAnn     = { ...announced, ...lsAnn };
-    const lsComp     = safeJSON(localStorage.getItem('companiesData'), []);
-    const compMap    = {};
-    for (const c of lsComp) compMap[c.name] = c;
+    
     // merge localStorage dates
     for (const c of companies) {
-      if (compMap[c.name]?.lastAnnouncement > (c.lastAnnouncement||''))
-        c.lastAnnouncement = compMap[c.name].lastAnnouncement;
+      
     }
 
     render(companies, allAnn);
