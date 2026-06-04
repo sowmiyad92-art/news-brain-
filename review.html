@@ -24,7 +24,6 @@
 
   .container { max-width: 1200px; margin: 0 auto; padding: 28px 20px; }
 
-  /* ── Tabs ── */
   .tabs { display: flex; gap: 4px; margin-bottom: 22px; border-bottom: 2px solid #e2e8f0; }
   .tab-btn {
     padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer;
@@ -36,7 +35,6 @@
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
-  /* ── Section ── */
   .section {
     background: #fff; border-radius: 12px; padding: 22px 24px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 22px;
@@ -44,7 +42,6 @@
   .section h2 { font-size: 15px; font-weight: 700; margin-bottom: 18px;
                 color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
 
-  /* ── Tables ── */
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th { text-align: left; padding: 8px 12px; background: #f7fafc;
        color: #718096; font-size: 11px; font-weight: 600;
@@ -53,7 +50,6 @@
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: #f7fafc; }
 
-  /* ── Badges ── */
   .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
   .badge-red    { background: #fff5f5; color: #c53030; border: 1px solid #fed7d7; }
   .badge-green  { background: #f0fff4; color: #276749; border: 1px solid #c6f6d5; }
@@ -61,11 +57,6 @@
   .badge-blue   { background: #ebf8ff; color: #2c5282; border: 1px solid #bee3f8; }
   .badge-gray   { background: #f7fafc; color: #718096; border: 1px solid #e2e8f0; }
 
-  /* ── Sheet iframes ── */
-  .sheet-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; }
-  .sheet-wrap iframe { width: 100%; height: 520px; border: none; display: block; }
-
-  /* ── CSV Paste area ── */
   .paste-area {
     width: 100%; min-height: 120px; padding: 12px; font-size: 12px; font-family: monospace;
     border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical; outline: none;
@@ -85,7 +76,6 @@
   .btn-danger:hover  { background: #c53030; }
   .btn-sm { padding: 4px 12px; font-size: 12px; }
 
-  /* ── Review table row states ── */
   .row-needs-review td { background: #fffff0; }
   .row-approved td { background: #f0fff4; }
   .row-rejected td { background: #fff5f5; opacity: 0.6; }
@@ -93,7 +83,6 @@
   .approved-badge { color: #276749; font-weight: 700; font-size: 12px; }
   .rejected-badge { color: #c53030; font-weight: 700; font-size: 12px; }
 
-  /* ── Gap chips ── */
   .gap-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .gap-chip { background: #fff5f5; border: 1px solid #fed7d7; color: #c53030;
               padding: 2px 10px; border-radius: 12px; font-size: 12px; }
@@ -103,6 +92,22 @@
   .flex-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
 
   #pasteStatus { font-size: 13px; font-weight: 600; margin-left: 8px; }
+
+  /* CSV table wrapper */
+  .csv-table-wrap { overflow-x: auto; max-height: 500px; overflow-y: auto;
+                    border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 8px; }
+  .csv-table-wrap table { margin: 0; }
+  .csv-table-wrap thead th { position: sticky; top: 0; z-index: 1; }
+
+  .refresh-btn {
+    float: right; padding: 4px 12px; font-size: 12px; font-weight: 600;
+    border: 1px solid #bee3f8; background: #ebf8ff; color: #2c5282;
+    border-radius: 6px; cursor: pointer;
+  }
+  .refresh-btn:hover { background: #bee3f8; }
+
+  .error-box { background: #fff5f5; border: 1px solid #fed7d7; color: #c53030;
+               padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-top: 8px; }
 
   .notify {
     position: fixed; bottom: 24px; right: 24px; background: #2d3748; color: #fff;
@@ -128,47 +133,45 @@
 <div class="container">
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('agent')">🤖 Agent Log</button>
-    <button class="tab-btn" onclick="switchTab('alerts')">📰 Alert Results</button>
-    <button class="tab-btn" onclick="switchTab('earnings')">📅 Earnings Dates</button>
-    <button class="tab-btn" onclick="switchTab('queue')">✅ Review Queue</button>
+    <button class="tab-btn active" onclick="switchTab('agent', event)">🤖 Agent Log</button>
+    <button class="tab-btn" onclick="switchTab('alerts', event)">📰 Alert Results</button>
+    <button class="tab-btn" onclick="switchTab('earnings', event)">📅 Earnings Dates</button>
+    <button class="tab-btn" onclick="switchTab('queue', event)">✅ Review Queue</button>
   </div>
 
-  <!-- ── Tab 1: Agent Run Log ── -->
+  <!-- Tab 1: Agent Log -->
   <div id="tab-agent" class="tab-panel active">
     <div id="agentLogRoot"><div class="loading">⏳ Loading agent log…</div></div>
   </div>
 
-  <!-- ── Tab 2: Alert Results (live sheet) ── -->
+  <!-- Tab 2: Alert Results (CSV fetch) -->
   <div id="tab-alerts" class="tab-panel">
     <div class="section">
-      <h2>📰 Alert Results — Live Sheet</h2>
-      <p class="hint">Live view of your Google Alerts feed. Read-only.</p>
-      <div class="sheet-wrap">
-        <iframe src="https://docs.google.com/spreadsheets/d/13_gzOaJ5NNGQ3ax-I-tU2sXtX06Zij5UO1Mh4R9YTww/pubhtml?gid=1645337927&single=true&widget=false&headers=false"
-          title="Alert Results"></iframe>
-      </div>
+      <h2>📰 Alert Results — Live Sheet
+        <button class="refresh-btn" onclick="loadSheetCSV('alerts')">🔄 Refresh</button>
+      </h2>
+      <p class="hint">Live view fetched directly from Google Sheets. Read-only.</p>
+      <div id="alerts-table"><div class="loading">⏳ Loading…</div></div>
     </div>
   </div>
 
-  <!-- ── Tab 3: Earnings Dates (live sheet) ── -->
+  <!-- Tab 3: Earnings Dates (CSV fetch) -->
   <div id="tab-earnings" class="tab-panel">
     <div class="section">
-      <h2>📅 Earnings Dates — Live Sheet</h2>
-      <p class="hint">Earnings dates extracted from alerts. Copy this tab and paste in Review Queue to approve dates.</p>
-      <div class="sheet-wrap">
-        <iframe src="https://docs.google.com/spreadsheets/d/13_gzOaJ5NNGQ3ax-I-tU2sXtX06Zij5UO1Mh4R9YTww/pubhtml?gid=445435022&single=true&widget=false&headers=false"
-          title="Earnings Dates"></iframe>
-      </div>
+      <h2>📅 Earnings Dates — Live Sheet
+        <button class="refresh-btn" onclick="loadSheetCSV('earnings')">🔄 Refresh</button>
+      </h2>
+      <p class="hint">Earnings dates extracted from alerts. Copy rows and paste in Review Queue to approve.</p>
+      <div id="earnings-table"><div class="loading">⏳ Loading…</div></div>
     </div>
   </div>
 
-  <!-- ── Tab 4: Review Queue (CSV paste) ── -->
+  <!-- Tab 4: Review Queue -->
   <div id="tab-queue" class="tab-panel">
     <div class="section">
       <h2>✅ Review Queue — Approve Earnings Dates</h2>
-      <p class="hint">1. Open Earnings Dates sheet tab above → Select All → Copy &nbsp;|&nbsp; 2. Paste below → Parse &nbsp;|&nbsp; 3. Approve rows to push to Upcoming Earnings</p>
-      <textarea id="csvPaste" class="paste-area" placeholder="Paste copied cells from Earnings Dates sheet here (Ctrl+A, Ctrl+C from sheet, then paste here)…"></textarea>
+      <p class="hint">1. Open Earnings Dates tab above → Select All → Copy &nbsp;|&nbsp; 2. Paste below → Parse &nbsp;|&nbsp; 3. Approve rows</p>
+      <textarea id="csvPaste" class="paste-area" placeholder="Paste copied cells from Earnings Dates sheet here…"></textarea>
       <div class="flex-row">
         <button class="btn btn-primary" onclick="parsePaste()">🔍 Parse</button>
         <button class="btn btn-success" onclick="approveAll()">✅ Approve All Upcoming</button>
@@ -176,7 +179,6 @@
         <span id="pasteStatus"></span>
       </div>
     </div>
-
     <div id="queueRoot"></div>
   </div>
 
@@ -195,12 +197,74 @@
   }
 })();
 
+// ── Sheet config ──
+const SHEET_ID = '13_gzOaJ5NNGQ3ax-I-tU2sXtX06Zij5UO1Mh4R9YTww';
+const GIDS = {
+  alerts:   '1645337927',
+  earnings: '445435022'
+};
+
+// ── CSV fetch + render ──
+async function loadSheetCSV(tab) {
+  const el = document.getElementById(tab + '-table');
+  el.innerHTML = '<div class="loading">⏳ Fetching…</div>';
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GIDS[tab]}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    el.innerHTML = renderCSVTable(text);
+  } catch(e) {
+    el.innerHTML = `<div class="error-box">❌ Failed to load: ${e.message}<br>
+      Make sure the sheet is shared as "Anyone with the link → Viewer".</div>`;
+  }
+}
+
+function parseCSVLine(line) {
+  const cols = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"' && !inQ) { inQ = true; }
+    else if (c === '"' && inQ) {
+      if (line[i+1] === '"') { cur += '"'; i++; }
+      else inQ = false;
+    } else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+    else cur += c;
+  }
+  cols.push(cur);
+  return cols;
+}
+
+function renderCSVTable(csv) {
+  const lines = csv.trim().split('\n').filter(l => l.trim());
+  if (!lines.length) return '<p style="color:#a0aec0;font-size:13px;">No data found.</p>';
+
+  const headers = parseCSVLine(lines[0]);
+  const rows = lines.slice(1).map(l => parseCSVLine(l));
+
+  const thead = `<thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>`;
+  const tbody = `<tbody>${rows.map(r =>
+    `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`
+  ).join('')}</tbody>`;
+
+  return `<div class="csv-table-wrap"><table>${thead}${tbody}</table></div>
+    <p style="font-size:11px;color:#a0aec0;margin-top:8px;">
+      ${rows.length} rows · fetched ${new Date().toLocaleTimeString()}
+    </p>`;
+}
+
 // ── Tab switching ──
-function switchTab(name) {
+function switchTab(name, e) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
-  event.target.classList.add('active');
+  if (e && e.target) e.target.classList.add('active');
+  // Auto-load sheet tabs on first visit
+  if ((name === 'alerts' || name === 'earnings') &&
+      document.getElementById(name + '-table').querySelector('.loading')) {
+    loadSheetCSV(name);
+  }
 }
 
 // ── Notification ──
@@ -228,10 +292,8 @@ function renderAgentLog(log) {
       <p style="color:#a0aec0;font-size:13px;">No agent runs recorded yet.</p></div>`;
     return;
   }
-
   const runs = [...log.runs].reverse().slice(0, 14);
   const gaps = log.runs[log.runs.length - 1]?.noData || [];
-
   root.innerHTML = `
     <div class="section">
       <h2>🤖 Agent Run Log (last ${runs.length} runs)</h2>
@@ -264,8 +326,7 @@ function renderAgentLog(log) {
             ${gaps.map(n => `<span class="gap-chip">${n}</span>`).join('')}
           </div>
         </div>` : ''}
-    </div>
-  `;
+    </div>`;
 }
 
 // ── CSV Parse + Review Queue ──
@@ -274,30 +335,18 @@ let parsedRows = [];
 function parsePaste() {
   const raw = document.getElementById('csvPaste').value.trim();
   if (!raw) { document.getElementById('pasteStatus').textContent = '⚠️ Nothing pasted'; return; }
-
   const lines = raw.split('\n').filter(l => l.trim());
   const rows = [];
-
   for (const line of lines) {
     const cols = line.split('\t').map(c => c.trim());
     if (cols.length < 2) continue;
-    const company  = cols[0];
-    const period   = cols[1] || '';
-    const schedDate= cols[2] || '';
-    const relDate  = cols[3] || '';
-    const notes    = cols[4] || '';
-    const url      = cols[5] || '';
-
-    // Skip header row
-    if (company.toLowerCase() === 'company') continue;
-    if (!company) continue;
-
+    const company = cols[0], period = cols[1]||'', schedDate = cols[2]||'',
+          relDate = cols[3]||'', notes = cols[4]||'', url = cols[5]||'';
+    if (company.toLowerCase() === 'company' || !company) continue;
     const needsReview = notes.toLowerCase().includes('manual') || (!schedDate && !relDate);
     const date = schedDate || relDate || '';
-
     rows.push({ company, period, schedDate, relDate, date, notes, url, needsReview, status: 'pending' });
   }
-
   parsedRows = rows;
   document.getElementById('pasteStatus').textContent = `✅ ${rows.length} rows parsed`;
   renderQueue();
@@ -305,17 +354,15 @@ function parsePaste() {
 
 function renderQueue() {
   const root = document.getElementById('queueRoot');
-  if (parsedRows.length === 0) { root.innerHTML = ''; return; }
-
-  const pending  = parsedRows.filter(r => r.status === 'pending');
-  const approved = parsedRows.filter(r => r.status === 'approved');
-  const rejected = parsedRows.filter(r => r.status === 'rejected');
-
+  if (!parsedRows.length) { root.innerHTML = ''; return; }
+  const pending = parsedRows.filter(r => r.status==='pending').length;
+  const approved = parsedRows.filter(r => r.status==='approved').length;
+  const rejected = parsedRows.filter(r => r.status==='rejected').length;
   root.innerHTML = `
     <div class="section">
       <h2>📋 Parsed Rows
         <span style="font-size:12px;font-weight:400;color:#718096;margin-left:10px;">
-          ${pending.length} pending · ${approved.length} approved · ${rejected.length} rejected
+          ${pending} pending · ${approved} approved · ${rejected} rejected
         </span>
       </h2>
       <table>
@@ -324,10 +371,10 @@ function renderQueue() {
         </tr></thead>
         <tbody>
         ${parsedRows.map((r, i) => {
-          const rowClass = r.needsReview ? 'row-needs-review' : (r.status === 'approved' ? 'row-approved' : r.status === 'rejected' ? 'row-rejected' : '');
-          const actionHtml = r.status === 'approved'
+          const rowClass = r.status==='approved' ? 'row-approved' : r.status==='rejected' ? 'row-rejected' : r.needsReview ? 'row-needs-review' : '';
+          const actionHtml = r.status==='approved'
             ? `<span class="approved-badge">✅ Approved</span>`
-            : r.status === 'rejected'
+            : r.status==='rejected'
             ? `<span class="rejected-badge">❌ Rejected</span>`
             : `<div style="display:flex;gap:6px;flex-wrap:wrap;">
                 ${r.date
@@ -336,51 +383,36 @@ function renderQueue() {
                 }
                 <button class="btn btn-danger btn-sm" onclick="rejectRow(${i})">✕</button>
               </div>`;
-
           return `<tr class="${rowClass}">
             <td><strong>${r.company}</strong></td>
             <td><span class="badge badge-blue">${r.period}</span></td>
-            <td>${r.schedDate || '—'}</td>
-            <td>${r.relDate || '—'}</td>
-            <td>${r.needsReview ? '<span class="badge badge-yellow">⚑ Manual</span>' : (r.notes || '—')}</td>
+            <td>${r.schedDate||'—'}</td>
+            <td>${r.relDate||'—'}</td>
+            <td>${r.needsReview ? '<span class="badge badge-yellow">⚑ Manual</span>' : (r.notes||'—')}</td>
             <td>${r.url ? `<a href="${r.url}" target="_blank" style="color:#3182ce;font-size:11px;">🔗 Link</a>` : '—'}</td>
             <td>${actionHtml}</td>
           </tr>`;
         }).join('')}
         </tbody>
       </table>
-    </div>
-  `;
+    </div>`;
 }
 
 function approveRow(i) {
   const r = parsedRows[i];
   if (!r.date) { notify('⚠️ No date to approve', '#dd6b20'); return; }
-
-  // Normalize date — try to parse "7 May 2026" style
   const normalized = normalizeDate(r.date);
   if (!normalized) { notify(`⚠️ Could not parse date: ${r.date}`, '#dd6b20'); return; }
-
-  // Push to localStorage announcedDates
   let store = {};
   try { store = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
-  store[r.company] = {
-    date: normalized,
-    url: r.url || null,
-    timestamp: new Date().toLocaleString(),
-    source: 'review-queue'
-  };
+  store[r.company] = { date: normalized, url: r.url||null, timestamp: new Date().toLocaleString(), source: 'review-queue' };
   localStorage.setItem('announcedDates', JSON.stringify(store));
-
   parsedRows[i].status = 'approved';
   renderQueue();
-  notify(`📅 ${r.company} → ${normalized} saved to Upcoming Earnings`, '#38a169');
+  notify(`📅 ${r.company} → ${normalized} saved`, '#38a169');
 }
 
-function rejectRow(i) {
-  parsedRows[i].status = 'rejected';
-  renderQueue();
-}
+function rejectRow(i) { parsedRows[i].status = 'rejected'; renderQueue(); }
 
 function promptDate(i) {
   const r = parsedRows[i];
@@ -398,13 +430,13 @@ function approveAll() {
     if (!normalized) return;
     let store = {};
     try { store = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
-    store[r.company] = { date: normalized, url: r.url || null, timestamp: new Date().toLocaleString(), source: 'review-queue' };
+    store[r.company] = { date: normalized, url: r.url||null, timestamp: new Date().toLocaleString(), source: 'review-queue' };
     localStorage.setItem('announcedDates', JSON.stringify(store));
     parsedRows[i].status = 'approved';
     count++;
   });
   renderQueue();
-  notify(`✅ ${count} dates approved and saved`, '#38a169');
+  notify(`✅ ${count} dates approved`, '#38a169');
 }
 
 function clearQueue() {
@@ -414,28 +446,16 @@ function clearQueue() {
   document.getElementById('queueRoot').innerHTML = '';
 }
 
-// ── Date normalizer — handles "7 May 2026", "2026-05-07", "May 7 2026" ──
 function normalizeDate(str) {
   if (!str) return null;
   str = str.trim();
-  // Already YYYY-MM-DD
   if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
-
   const MONTHS = { jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12,
     january:1,february:2,march:3,april:4,june:6,july:7,august:8,september:9,october:10,november:11,december:12 };
-
-  // "7 May 2026" or "May 7 2026"
   const m1 = str.match(/^(\d{1,2})\s+([a-z]+)\s+(\d{4})$/i);
-  if (m1) {
-    const mo = MONTHS[m1[2].toLowerCase()];
-    if (mo) return `${m1[3]}-${String(mo).padStart(2,'0')}-${String(m1[1]).padStart(2,'0')}`;
-  }
+  if (m1) { const mo = MONTHS[m1[2].toLowerCase()]; if (mo) return `${m1[3]}-${String(mo).padStart(2,'0')}-${String(m1[1]).padStart(2,'0')}`; }
   const m2 = str.match(/^([a-z]+)\s+(\d{1,2})\s*,?\s*(\d{4})$/i);
-  if (m2) {
-    const mo = MONTHS[m2[1].toLowerCase()];
-    if (mo) return `${m2[3]}-${String(mo).padStart(2,'0')}-${String(m2[2]).padStart(2,'0')}`;
-  }
-  // Try native Date parse as last resort
+  if (m2) { const mo = MONTHS[m2[1].toLowerCase()]; if (mo) return `${m2[3]}-${String(mo).padStart(2,'0')}-${String(m2[2]).padStart(2,'0')}`; }
   const d = new Date(str);
   if (!isNaN(d)) return d.toISOString().split('T')[0];
   return null;
