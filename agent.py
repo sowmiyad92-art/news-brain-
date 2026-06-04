@@ -288,7 +288,7 @@ def groq_extract(name, text, retries=2):
                 'https://api.groq.com/openai/v1/chat/completions',
                 headers={'Authorization':f'Bearer {GROQ_API_KEY}',
                          'Content-Type':'application/json'},
-                json={'model':'llama-3.1-8b-instant',  # lighter model — avoids rate limits
+                json={'model':'llama-3.3-70b-versatile',  # lighter model — avoids rate limits
                       'messages':[{'role':'user','content':prompt}],
                       'max_tokens':100,'temperature':0},
                 timeout=25)
@@ -297,7 +297,7 @@ def groq_extract(name, text, retries=2):
                 msg = resp['error'].get('message','')
                 m   = re.search(r'try again in ([\d.]+)s', msg)
                 if m and attempt < retries:
-                    wait = float(m.group(1))+2
+                    wait = float(m.group(1))+12
                     print(f"  [Groq] rate limit — waiting {wait:.0f}s...")
                     time.sleep(wait); continue
                 print(f"  [Groq] {msg[:80]}")
