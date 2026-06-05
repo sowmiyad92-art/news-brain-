@@ -8,8 +8,8 @@
     // ── Helper: get companiesData from localStorage or window.DATA ──
     function getCompaniesData() {
         let companiesData = JSON.parse(localStorage.getItem('companiesData') || '[]');
-        if (companiesData.length === 0 && window.DATA && window.DATA.companies) {
-            companiesData = window.DATA.companies;
+        if (companiesData.length === 0 && window.allData && window.allData.companies) {
+            companiesData = window.allData.companies;
             localStorage.setItem('companiesData', JSON.stringify(companiesData));
             console.log('📦 Seeded companiesData from window.DATA');
         }
