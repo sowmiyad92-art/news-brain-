@@ -436,7 +436,7 @@ function renderTable(companies) {
 function updateDashboard() {
     const today = new Date();
     const thirtyDaysLater = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-    document.getElementById('footerCount').textContent = allData.companies.length;
+    
     const overdue = allData.companies.filter(c => {
         const dateInfo = calculateDaysInfo(c.lastAnnouncement);
         return dateInfo.isOverdue;
