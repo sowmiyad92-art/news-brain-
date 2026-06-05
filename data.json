@@ -201,8 +201,8 @@
       "irWebsite": "https://www.mbc.net/ir",
       "bestSource": "IR Website",
       "sourceReliability": 2,
-      "lastAnnouncement": "2026-04-10",
-      "expectedNext": "2026-07-09",
+      "lastAnnouncement": "2026-05-05",
+      "expectedNext": "2026-08-03",
       "articleUrl": "https://www.mbc.net/ir/reports-and-presentations"
     },
     {
@@ -627,8 +627,8 @@
       "irWebsite": "https://emtek.co.id/id/hubungan-investor/informasi-keuangan/laporan-keuangan",
       "bestSource": "IR Website",
       "sourceReliability": 1,
-      "lastAnnouncement": "2026-03-31",
-      "expectedNext": "2026-06-29"
+      "lastAnnouncement": "2026-05-05",
+      "expectedNext": "2026-08-03"
     },
     {
       "name": "Mahaka",
@@ -795,13 +795,13 @@
     "Telecom Argentina": {
       "date": "2026-08-10",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Warner Music Group": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "ITV": {
@@ -819,79 +819,79 @@
     "Netflix": {
       "date": "2026-07-16",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Disney": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Amazon": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Warner Bros Discovery": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "AMC Networks": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Comcast": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Gray Television": {
       "date": "2026-08-07",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "IMAX": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Roku": {
       "date": "2026-07-30",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Sphere Entertainment": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Televisa": {
       "date": "2026-07-28",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "TKO Group": {
       "date": "2026-08-05",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Nexstar": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Scripps": {
@@ -903,25 +903,25 @@
     "Lionsgate": {
       "date": "2026-08-06",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Bilibili": {
       "date": "2026-08-20",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "NetEase": {
       "date": "2026-08-13",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Paramount": {
       "date": "2026-08-03",
       "url": null,
-      "timestamp": "04/06/2026 13:20:46",
+      "timestamp": "05/06/2026 06:20:29",
       "source": "yfinance"
     },
     "Rogers": {
@@ -955,5 +955,5 @@
       "source": "yfinance"
     }
   },
-  "lastAgentRun": "2026-06-04"
+  "lastAgentRun": "2026-06-05"
 }
