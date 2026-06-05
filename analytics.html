@@ -129,10 +129,19 @@ async function init() {
     const allAnn     = { ...announced, ...lsAnn };
     
     // merge localStorage dates
-    for (const c of companies) {
-      
+    const lsCompanies = safeJSON(localStorage.getItem('companiesData'), []);
+    if (lsCompanies.length > 0) {
+      const lsMap = {};
+      for (const c of lsCompanies) lsMap[c.name] = c;
+      for (const c of companies) {
+        const ls = lsMap[c.name];
+        if (!ls) continue;
+        if (ls.lastAnnouncement && ls.lastAnnouncement > (c.lastAnnouncement || ''))
+          c.lastAnnouncement = ls.lastAnnouncement;
+        if (ls.expectedNext && ls.expectedNext > (c.expectedNext || ''))
+          c.expectedNext = ls.expectedNext;
+      }
     }
-
     render(companies, allAnn);
   } catch(e) {
     document.getElementById('root').innerHTML =
