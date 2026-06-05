@@ -104,7 +104,7 @@
                     .map(c => `<option value="${c.name}">${c.name}</option>`)
                     .join('');
             console.log('✅ Loaded', companiesData.length, 'companies into dropdown');
-        }, 1000);
+        }, 2000);
     });
 
 })();
