@@ -421,7 +421,7 @@ def write_agent_log(updated, no_data_list, cleared, source_breakdown, results):
     print(f"  agent_log.json updated ({len(log['runs'])} runs stored)")
 
 # -- Save yfinance results to data.json --
-def update_data_json(results):
+def update_data_json(results, write_log=False):
     with open(DATA_JSON,'r',encoding='utf-8') as f: data=json.load(f)
     is_dict   = isinstance(data,dict)
     companies = data.get('companies',[]) if is_dict else data
@@ -482,7 +482,8 @@ def update_data_json(results):
             source_counts[src] = source_counts.get(src,0)+1
 
     print(f"\n  Updated:{updated} | No data:{len(no_data_list)} | Cleared:{len(cleared)}")
-    write_agent_log(updated, no_data_list, len(cleared), source_counts, results)
+    if write_log:
+        write_agent_log(updated, no_data_list, len(cleared), source_counts, results)
 
 # -- Main --
 def main():
@@ -512,12 +513,34 @@ def main():
 
         if (i+1) % 25 == 0:
             print(f"\nCheckpoint {i+1}...")
-            update_data_json(results)
+            update_data_json(results, write_log=False)
 
         time.sleep(2)
 
     print("\nFinal save...")
-    update_data_json(results)
+
+    # merge suggestion source counts into final log
+    for s in suggestions:
+        src = s.get('source', '').lower().replace(' ', '_').replace('ir_page', 'ir').replace('rss_feed', 'rss')
+        # passed via write_agent_log inside update_data_json — collect here
+    suggestion_sources = {}
+    for s in suggestions:
+        src = s.get('source', '').lower().replace(' ', '_').replace('ir_page', 'ir').replace('rss_feed', 'rss')
+        suggestion_sources[src] = suggestion_sources.get(src, 0) + 1
+
+    update_data_json(results, write_log=False)  # saves data.json
+
+    # manually call write_agent_log with merged sources
+    no_data_list = [n for n, r in results.items() if not r or
+                    (not r.get('lastAnnouncement') and not r.get('upcomingDate'))]
+    source_counts = {}
+    for r in results.values():
+        if r and r.get('source'):
+            src = r['source'].lower().replace(' ', '_').replace('rss_feed', 'rss').replace('ir_page', 'ir')
+            source_counts[src] = source_counts.get(src, 0) + 1
+    source_counts.update(suggestion_sources)  # ← merges RSS/IR counts in
+
+    write_agent_log(len([r for r in results.values() if r]), no_data_list, 0, source_counts, results)
     write_suggestions(suggestions)
     print(f"Agent v3 complete! {len(suggestions)} suggestions pending review.")
 
