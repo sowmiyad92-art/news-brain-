@@ -78,22 +78,28 @@
         window.location.reload();
     };
 
-    // Populate company dropdown on load
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            const sel = document.getElementById('quCompany');
-            if (!sel) return;
-            const companiesData = JSON.parse(localStorage.getItem('companiesData') || '[]');
-            if (companiesData.length === 0) {
-                console.warn('⚠️ No companies in localStorage'); return;
-            }
-            sel.innerHTML = '<option value="">— Select company —</option>' +
-                companiesData
-                    .slice().sort((a, b) => a.name.localeCompare(b.name))
-                    .map(c => `<option value="${c.name}">${c.name}</option>`)
-                    .join('');
-            console.log('✅ Loaded', companiesData.length, 'companies into dropdown');
-        }, 1000);
-    });
+   // Populate company dropdown on load
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const sel = document.getElementById('quCompany');
+        if (!sel) return;
 
-})();
+        // Try localStorage first, fall back to window.DATA
+        let companiesData = JSON.parse(localStorage.getItem('companiesData') || '[]');
+        if (companiesData.length === 0 && window.DATA && window.DATA.companies) {
+            companiesData = window.DATA.companies;
+            // Cache into localStorage for next time
+            localStorage.setItem('companiesData', JSON.stringify(companiesData));
+            console.log('📦 Seeded companiesData from window.DATA');
+        }
+        if (companiesData.length === 0) {
+            console.warn('⚠️ No companies in localStorage or window.DATA'); return;
+        }
+        sel.innerHTML = '<option value="">— Select company —</option>' +
+            companiesData
+                .slice().sort((a, b) => a.name.localeCompare(b.name))
+                .map(c => `<option value="${c.name}">${c.name}</option>`)
+                .join('');
+        console.log('✅ Loaded', companiesData.length, 'companies into dropdown');
+    }, 1000);
+});
