@@ -120,7 +120,8 @@ const REGION_COLORS = {
 // ── Main ──────────────────────────────────────────────────────
 async function init() {
   try {
-    const [dataRes] = await Promise.all([fetch('./data.json')]);
+    const [dataRes, logRes] = await Promise.all([fetch('./data.json'), fetch('./agent_log.json')]);
+    const agentLog = logRes.ok ? await logRes.json() : null;
     const data = await dataRes.json();
 
     const companies  = data.companies || (Array.isArray(data) ? data : []);
@@ -142,7 +143,7 @@ async function init() {
           c.expectedNext = ls.expectedNext;
       }
     }
-    render(companies, allAnn);
+    render(companies, allAnn, agentLog);
   } catch(e) {
     document.getElementById('root').innerHTML =
       `<div class="error">❌ Could not load data.json<br><small>${e.message}</small></div>`;
