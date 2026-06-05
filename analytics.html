@@ -154,7 +154,7 @@ function safeJSON(str, fallback) {
   try { return JSON.parse(str||'null') || fallback; } catch(_) { return fallback; }
 }
 
-async function render(companies, allAnn) {
+async function render(companies, allAnn, agentLog) {
   const today     = new Date(); today.setHours(0,0,0,0);
   const todayStr  = fmt(today);
   const in30      = new Date(today); in30.setDate(in30.getDate()+30);
@@ -333,6 +333,8 @@ async function render(companies, allAnn) {
         </tbody>
       </table>
     </div>` : ''}
+
+   ${renderAgentLog(agentLog)}
 
    <div style="text-align:center;color:#a0aec0;font-size:12px;padding:16px 0;">
       Last updated: ${new Date().toLocaleString()} · 
