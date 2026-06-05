@@ -330,18 +330,9 @@ async function render(companies, allAnn) {
     </div>
   `;
 
-  // Append agent log
-  const log = await loadAgentLog();
-  document.getElementById('root').insertAdjacentHTML('beforeend', renderAgentLog(log));
+  
 }
 
-async function loadAgentLog() {
-  try {
-    const res = await fetch('./agent_log.json');
-    if (!res.ok) return null;
-    return await res.json();
-  } catch(_) { return null; }
-}
 
 function renderAgentLog(log) {
   if (!log || !log.runs || log.runs.length === 0) {
