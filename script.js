@@ -436,22 +436,11 @@ function renderTable(companies) {
 function updateDashboard() {
     const today = new Date();
     const thirtyDaysLater = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-    document.getElementById('totalCompanies').textContent = allData.companies.length;
-    document.getElementById('footerCount').textContent    = allData.companies.length;
-
-    const expectedThisMonth = allData.companies.filter(c => {
-        const expectedDate = new Date(c.expectedNext);
-        return expectedDate >= today && expectedDate <= thirtyDaysLater;
-    });
-    document.getElementById('expectedThisMonth').textContent = expectedThisMonth.length;
-
+    document.getElementById('footerCount').textContent = allData.companies.length;
     const overdue = allData.companies.filter(c => {
         const dateInfo = calculateDaysInfo(c.lastAnnouncement);
         return dateInfo.isOverdue;
     });
-    document.getElementById('overdueCount').textContent = overdue.length;
-
     if (overdue.length > 0) {
         const alertsHtml = overdue.map(c => {
             const dateInfo = calculateDaysInfo(c.lastAnnouncement);
@@ -467,7 +456,6 @@ function updateDashboard() {
         alertsSection.style.display = 'block';
     }
 }
-
 // =====================================================
 // DATA EXPORT/IMPORT
 // =====================================================
