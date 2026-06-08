@@ -134,7 +134,7 @@
 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('agent', event)">🤖 Agent Log</button>
-    <button class="tab-btn" onclick="switchTab('alerts', event)">📰 Alert Results</button>
+    <button class="tab-btn" onclick="switchTab('alerts', event)">📋 Dashboard</button>
     <button class="tab-btn" onclick="switchTab('earnings', event)">📅 Earnings Dates</button>
     <button class="tab-btn" onclick="switchTab('queue', event)">✅ Review Queue</button>
   </div>
@@ -144,10 +144,10 @@
     <div id="agentLogRoot"><div class="loading">⏳ Loading agent log…</div></div>
   </div>
 
-  <!-- Tab 2: Alert Results (CSV fetch) -->
+  <!-- Tab 2: Dashboard (CSV fetch) -->
   <div id="tab-alerts" class="tab-panel">
     <div class="section">
-      <h2>📰 Alert Results — Live Sheet
+      <h2>📰 Dashboard — Live Sheet
         <button class="refresh-btn" onclick="loadSheetCSV('alerts')">🔄 Refresh</button>
       </h2>
       <p class="hint">Live view fetched directly from Google Sheets. Read-only.</p>
