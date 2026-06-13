@@ -417,7 +417,7 @@ _alerts_cache = {}
 def process_company(co, suggestions_list):
     name   = co.get('name', '')
     ir_url = co.get('irWebsite', '')
-    trace  = []  # NEW: track every source attempt
+    trace  = []
 
     yf_result = yf_lookup(name)
     if yf_result:
@@ -473,11 +473,11 @@ def process_company(co, suggestions_list):
     else:
         trace.append({'source': 'Alerts', 'found': False, 'reason': 'no alerts for this company'})
 
-    return {'trace': trace}  # CHANGED: always return trace even if no winner
+    return {'trace': trace}
 
 
 # -- Write agent log --
-def write_agent_log(updated, no_data_list, cleared, source_breakdown, results):
+def write_agent_log(updated, no_data_list, cleared, source_breakdown, results, traces):
     LOG_FILE = 'agent_log.json'
     try:
         with open(LOG_FILE, 'r', encoding='utf-8') as f:
@@ -503,7 +503,7 @@ def write_agent_log(updated, no_data_list, cleared, source_breakdown, results):
         'cleared':         cleared,
         'sourceBreakdown': source_breakdown,
         'companies':       company_details,
-        'traces':          traces or {},  # NEW
+        'traces':          traces,
     })
     log['runs'] = log['runs'][-60:]
 
@@ -513,7 +513,7 @@ def write_agent_log(updated, no_data_list, cleared, source_breakdown, results):
 
 
 # -- Save yfinance results to data.json --
-def update_data_json(results, write_log=False):
+def update_data_json(results, write_log=False, traces=None):
     with open(DATA_JSON, 'r', encoding='utf-8') as f:
         data = json.load(f)
     is_dict   = isinstance(data, dict)
@@ -566,9 +566,9 @@ def update_data_json(results, write_log=False):
         print(f"  Cleared stale: {', '.join(cleared)}")
 
     if is_dict:
-        data['companies']     = companies
+        data['companies']      = companies
         data['announcedDates'] = announced
-        data['lastAgentRun']  = TODAY
+        data['lastAgentRun']   = TODAY
     with open(DATA_JSON, 'w', encoding='utf-8') as f:
         json.dump(
             data if is_dict else {'companies': companies, 'announcedDates': announced, 'lastAgentRun': TODAY},
@@ -585,7 +585,7 @@ def update_data_json(results, write_log=False):
 
     print(f"\n  Updated:{updated} | No data:{len(no_data_list)} | Cleared:{len(cleared)}")
     if write_log:
-        write_agent_log(updated, no_data_list, len(cleared), source_counts, results)
+        write_agent_log(updated, no_data_list, len(cleared), source_counts, results, traces or {})
 
 
 # -- Main --
@@ -605,24 +605,23 @@ def main():
     _alerts_cache = fetch_alerts_sheet()
 
     results     = {}
-    traces      = {}  # NEW
+    traces      = {}
     suggestions = []
 
     for i, co in enumerate(companies):
-    name = co.get('name', '')
-    if not name:
-        continue
-    r = process_company(co, suggestions)
-    traces[name] = r.get('trace', []) if r else []
-    if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-        results[name] = r
-    else:
-        results[name] = None
-    ...
+        name = co.get('name', '')
+        if not name:
+            continue
+        r = process_company(co, suggestions)
+        traces[name] = r.get('trace', []) if r else []
+        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
+            results[name] = r
+        else:
+            results[name] = None
 
         if (i + 1) % 25 == 0:
             print(f"\nCheckpoint {i+1}...")
-            update_data_json(results, write_log=False)
+            update_data_json(results, write_log=False, traces=traces)
 
         time.sleep(2)
 
@@ -633,7 +632,7 @@ def main():
         src = s.get('source', '').lower().replace(' ', '_').replace('ir_page', 'ir').replace('rss_feed', 'rss')
         suggestion_sources[src] = suggestion_sources.get(src, 0) + 1
 
-    update_data_json(results, write_log=False)  # saves data.json
+    update_data_json(results, write_log=False, traces=traces)
 
     no_data_list = [n for n, r in results.items() if not r or
                     (not r.get('lastAnnouncement') and not r.get('upcomingDate'))]
@@ -642,9 +641,9 @@ def main():
         if r and r.get('source'):
             src = r['source'].lower().replace(' ', '_').replace('rss_feed', 'rss').replace('ir_page', 'ir')
             source_counts[src] = source_counts.get(src, 0) + 1
-    source_counts.update(suggestion_sources)  # merges RSS/IR suggestion counts in
+    source_counts.update(suggestion_sources)
 
-    write_agent_log(len([r for r in results.values() if r]), no_data_list, 0, source_counts, results)
+    write_agent_log(len([r for r in results.values() if r]), no_data_list, 0, source_counts, results, traces)
     write_suggestions(suggestions)
     print(f"Agent v3 complete! {len(suggestions)} suggestions pending review.")
 
