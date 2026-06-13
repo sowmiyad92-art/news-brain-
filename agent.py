@@ -417,44 +417,63 @@ _alerts_cache = {}
 def process_company(co, suggestions_list):
     name   = co.get('name', '')
     ir_url = co.get('irWebsite', '')
+    trace  = []  # NEW: track every source attempt
 
-    # yfinance FIRST - trusted, goes direct to data.json
     yf_result = yf_lookup(name)
+    if yf_result:
+        trace.append({'source': 'yfinance', 'found': True,
+                       'date': yf_result.get('upcomingDate') or yf_result.get('lastAnnouncement')})
+    else:
+        trace.append({'source': 'yfinance', 'found': False, 'reason': 'no ticker or no data'})
+
     if yf_result and (yf_result.get('lastAnnouncement') or yf_result.get('upcomingDate')):
+        yf_result['trace'] = trace
         return yf_result
 
-    # RSS -> Groq - NOT trusted, goes to suggestions
     rss_text, rss_snippet, rss_url, rss_date = fetch_rss(name)
     if rss_text:
         r = groq_extract(name, rss_text)
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
             r['source'] = 'RSS Feed'
+            trace.append({'source': 'RSS', 'found': True, 'url': rss_url,
+                           'date': r.get('upcomingDate') or r.get('lastAnnouncement')})
             save_suggestion(suggestions_list, name, r, 'RSS Feed', rss_snippet, ir_url, rss_url, rss_date)
+        else:
+            trace.append({'source': 'RSS', 'found': False, 'url': rss_url, 'reason': 'no date extracted'})
+    else:
+        trace.append({'source': 'RSS', 'found': False, 'reason': 'no feed configured or fetch failed'})
 
-    # IR page -> Groq
     ir_text = scrape_ir(ir_url)
     if ir_text:
         r = groq_extract(name, ir_text)
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
             r['source'] = 'IR Page'
+            trace.append({'source': 'IR', 'found': True, 'url': ir_url,
+                           'date': r.get('upcomingDate') or r.get('lastAnnouncement')})
             save_suggestion(suggestions_list, name, r, 'IR Page', ir_text[:200], ir_url, ir_url, '')
+        else:
+            trace.append({'source': 'IR', 'found': False, 'url': ir_url, 'reason': 'no date extracted'})
+    else:
+        trace.append({'source': 'IR', 'found': False, 'url': ir_url, 'reason': 'no IR url or fetch failed/broken'})
 
-    # Alerts
     alert_items = _alerts_cache.get(name, [])
     if alert_items:
-        alert_text = '\n\n'.join(
-            f"TITLE: {a['title']}\nSNIPPET: {a['snippet']}" for a in alert_items[:3]
-        )
+        alert_text = '\n\n'.join(f"TITLE: {a['title']}\nSNIPPET: {a['snippet']}" for a in alert_items[:3])
         snippet    = f"{alert_items[0]['title']} - {alert_items[0]['snippet']}"
         alert_url  = alert_items[0].get('url', '')
         alert_date = alert_items[0].get('date', '')
         r = groq_extract(name, alert_text)
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
             r['source'] = 'Google Alerts'
+            trace.append({'source': 'Alerts', 'found': True, 'url': alert_url,
+                           'date': r.get('upcomingDate') or r.get('lastAnnouncement')})
             save_suggestion(suggestions_list, name, r, 'Google Alerts', snippet, ir_url, alert_url, alert_date)
-            print(f"  [suggest] {name}: Alerts -> suggestion saved")
+        else:
+            trace.append({'source': 'Alerts', 'found': False, 'reason': 'no date extracted'})
+    else:
+        trace.append({'source': 'Alerts', 'found': False, 'reason': 'no alerts for this company'})
 
-    return None
+    return {'trace': trace}  # CHANGED: always return trace even if no winner
 
 
 # -- Write agent log --
@@ -484,6 +503,7 @@ def write_agent_log(updated, no_data_list, cleared, source_breakdown, results):
         'cleared':         cleared,
         'sourceBreakdown': source_breakdown,
         'companies':       company_details,
+        'traces':          traces or {},  # NEW
     })
     log['runs'] = log['runs'][-60:]
 
@@ -585,18 +605,20 @@ def main():
     _alerts_cache = fetch_alerts_sheet()
 
     results     = {}
+    traces      = {}  # NEW
     suggestions = []
 
     for i, co in enumerate(companies):
-        name = co.get('name', '')
-        if not name:
-            continue
-        r = process_company(co, suggestions)
+    name = co.get('name', '')
+    if not name:
+        continue
+    r = process_company(co, suggestions)
+    traces[name] = r.get('trace', []) if r else []
+    if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
         results[name] = r
-        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-            print(f"  OK {name}: last={r.get('lastAnnouncement')} upcoming={r.get('upcomingDate')} [{r.get('source', '')}]")
-        else:
-            print(f"  -- {name}: no trusted data (check suggestions)")
+    else:
+        results[name] = None
+    ...
 
         if (i + 1) % 25 == 0:
             print(f"\nCheckpoint {i+1}...")
