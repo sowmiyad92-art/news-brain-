@@ -14012,6 +14012,1666 @@
           }
         ]
       }
+    },
+    {
+      "date": "2026-06-19",
+      "time": "07:04:22",
+      "updated": 26,
+      "noData": [
+        "Viaplay Group",
+        "RTL Group",
+        "BCE",
+        "Cineplex",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "Banijay",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "Rogers",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Dentsu",
+        "Digikore",
+        "Digital Domain",
+        "Eros Media",
+        "Fuji Media",
+        "Grammy",
+        "Maoyan",
+        "MD Entertainment",
+        "NW18",
+        "NTV",
+        "Saregama",
+        "Seven West Media",
+        "SM Entertainment",
+        "Studio Dragon",
+        "Tips Industries",
+        "Toei Animation",
+        "Toho",
+        "Zee Entertainment",
+        "Emtek",
+        "Mahaka",
+        "ITV",
+        "Groupe M6",
+        "MFE MediaForEurope",
+        "MultiChoice",
+        "PRISA",
+        "ProSiebenSat.1",
+        "Vantiva",
+        "TF1",
+        "TV2 Denmark",
+        "Vivendi",
+        "Xilam"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 26,
+        "ir": 15
+      },
+      "companies": {
+        "Netflix": {
+          "lastAnnouncement": null,
+          "upcomingDate": "2026-07-16",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Disney": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Amazon": {
+          "lastAnnouncement": "2026-04-29",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Paramount": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": "2026-08-03",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Bros Discovery": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "AMC Networks": {
+          "lastAnnouncement": "2026-05-08",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Lionsgate": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Comcast": {
+          "lastAnnouncement": null,
+          "upcomingDate": "2026-07-23",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Curiosity Stream": {
+          "lastAnnouncement": "2026-05-14",
+          "upcomingDate": "2026-08-04",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Fox Corporation": {
+          "lastAnnouncement": "2026-05-11",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Gaia": {
+          "lastAnnouncement": "2026-05-04",
+          "upcomingDate": null,
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Gray Television": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-07",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "IMAX": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Kartoon Studios": {
+          "lastAnnouncement": "2026-05-15",
+          "upcomingDate": "2026-08-13",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Nexstar": {
+          "lastAnnouncement": null,
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Roku": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": "2026-07-30",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sinclair": {
+          "lastAnnouncement": "2026-04-30",
+          "upcomingDate": null,
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Sphere Entertainment": {
+          "lastAnnouncement": "2026-05-05",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Telecom Argentina": {
+          "lastAnnouncement": null,
+          "upcomingDate": "2026-08-10",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Televisa": {
+          "lastAnnouncement": "2026-04-28",
+          "upcomingDate": "2026-07-28",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Warner Music Group": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Bilibili": {
+          "lastAnnouncement": "2026-05-19",
+          "upcomingDate": "2026-08-20",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "NetEase": {
+          "lastAnnouncement": "2026-05-21",
+          "upcomingDate": "2026-08-13",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Fubo TV": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "TKO Group": {
+          "lastAnnouncement": "2026-05-06",
+          "upcomingDate": "2026-08-05",
+          "source": "yfinance",
+          "confidence": "high"
+        },
+        "Scripps": {
+          "lastAnnouncement": "2026-05-07",
+          "upcomingDate": "2026-08-06",
+          "source": "yfinance",
+          "confidence": "high"
+        }
+      },
+      "traces": {
+        "Netflix": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-07-16"
+          }
+        ],
+        "Disney": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-05"
+          }
+        ],
+        "Viaplay Group": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.viaplaygroup.com/en/newsroom",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "RTL Group": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/gac-startet-hong-kong-action-2-0-und-prasentiert-erstmals-den-e9-premium--gac-prasentiert-auf-der-hong-kong-international-auto-expo-2026-eine-all-star-modellpalette-und-treibt-damit-seine-hochwertige-globale-expansion-voran-302805237.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://company.rtl.com/en/media/overview/press-releases-and-news/",
+            "date": "2026-05-13"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Amazon": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-07-30"
+          }
+        ],
+        "Paramount": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-03"
+          }
+        ],
+        "Warner Bros Discovery": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-06"
+          }
+        ],
+        "AMC Networks": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-07"
+          }
+        ],
+        "Lionsgate": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-06"
+          }
+        ],
+        "BCE": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.bce.ca/news-and-media/newsroom?category=Financial",
+            "date": "2026-05-07"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Cineplex": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/gac-startet-hong-kong-action-2-0-und-prasentiert-erstmals-den-e9-premium--gac-prasentiert-auf-der-hong-kong-international-auto-expo-2026-eine-all-star-modellpalette-und-treibt-damit-seine-hochwertige-globale-expansion-voran-302805237.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://corp.cineplex.com/news",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Sony": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.sony.com/en/SonyInfo/IR/",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Comcast": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-07-23"
+          }
+        ],
+        "Curiosity Stream": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-04"
+          }
+        ],
+        "Fox Corporation": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-05"
+          }
+        ],
+        "Gaia": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-05-04"
+          }
+        ],
+        "Universal Music Group": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/gac-startet-hong-kong-action-2-0-und-prasentiert-erstmals-den-e9-premium--gac-prasentiert-auf-der-hong-kong-international-auto-expo-2026-eine-all-star-modellpalette-und-treibt-damit-seine-hochwertige-globale-expansion-voran-302805237.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://investors.universalmusic.com/news/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "TV Asahi": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.tv-asahihd.co.jp/e/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Canal+": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.canalplusgroup.com/en/results-and-publications",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Banijay": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://group.banijay.com/press-releases/",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "MBC Group": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.mbc.net/ir",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Gray Television": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-07"
+          }
+        ],
+        "Grupo Clarin": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/gac-startet-hong-kong-action-2-0-und-prasentiert-erstmals-den-e9-premium--gac-prasentiert-auf-der-hong-kong-international-auto-expo-2026-eine-all-star-modellpalette-und-treibt-damit-seine-hochwertige-globale-expansion-voran-302805237.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://ir.grupoclarin.com/en/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "IMAX": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-07-30"
+          }
+        ],
+        "Kartoon Studios": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-13"
+          }
+        ],
+        "Megacable": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://inversionistas.megacable.com.mx/en/information-financial-quarterly",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Nexstar": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-06"
+          }
+        ],
+        "Quebecor": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/doritos-loaded-prasentiert-einen-spannenden-werbespot-mit-kuchenchef-gordon-ramsay-und-dem-mercedes-amg-petronas-f1-fahrer-george-russell-302804830.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.quebecor.com/en/investors/financial-documentation/quebecor-quarterly-documentation",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Rogers": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://investors.rogers.com/",
+            "date": "2026-04-22"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no date extracted"
+          }
+        ],
+        "Roku": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-07-30"
+          }
+        ],
+        "Sinclair": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-04-30"
+          }
+        ],
+        "Sphere Entertainment": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-06"
+          }
+        ],
+        "TEGNA": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/doritos-loaded-unveils-high-octane-commercial-starring-chef-gordon-ramsay-and-mercedes-amg-petronas-f1-driver-george-russell-302804831.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://investors.tegna.com/",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Telecom Argentina": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-10"
+          }
+        ],
+        "Televisa": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-07-28"
+          }
+        ],
+        "Warner Music Group": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-06"
+          }
+        ],
+        "Amagi": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.amagi.com/investors/annual-reports",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "WildBrain": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/doritos-loaded-estrena-un-anuncio-protagonizado-por-el-chef-gordon-ramsay-y-george-russell-302804829.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://investors.wildbrain.com/financial-information?cat=34",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Damai Holdings": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.damaiholdings.com/en/investor-relations/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Avex": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://avex.com/jp/en/ir/finance/highlight/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Balaji Telefilms": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.balajitelefilms.com/investor-data.php",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Baweja Studios": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.bawejastudios.com/investors",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Bilibili": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-20"
+          }
+        ],
+        "CJ ENM": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.cjenm.com/en/investors/ir/activities/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "DK Karaoke": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.dkkaraoke.co.jp/english/stockinfo/irnews/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Dentsu": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.group.dentsu.com/en/news/release/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Digikore": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://digikore.com/investor-zone/",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Digital Domain": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://hk.digitaldomain.com/investor-relations/?view=announcements&filter=2026&scroll_to=relations",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Eros Media": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://erosmediaworld.com/investor-relations-eros/eiml-financial-reports/",
+            "date": "2026-06-06"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Fuji Media": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.fujimediahd.co.jp/en/ir/index.html",
+            "date": "2026-05-12"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Grammy": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://grammy.listedcompany.com/cg_shareholders_meeting.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Maoyan": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://ir-en.maoyan.com/Financial-Reports",
+            "date": "2026-04-28"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "MD Entertainment": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://mdentertainment.com/press-release/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "NetEase": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-13"
+          }
+        ],
+        "NW18": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.nw18.com/investors",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "NTV": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.ntvhd.co.jp/english/ir/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Saregama": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.saregama.com/static/investors",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Seven West Media": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://sevenwestmedia.com.au/investors/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "SM Entertainment": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.smentertainment.com/en/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Studio Dragon": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.studiodragon.net/en/ir/activities/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Tips Industries": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://tips.in/financialresults",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Toei Animation": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://corp.toei-anim.co.jp/en/ir/library/result.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Toho": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.toho.co.jp/en/company/ir/disclosure",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Zee Entertainment": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/doritos-loaded-estrena-un-anuncio-protagonizado-por-el-chef-gordon-ramsay-y-george-russell-302804829.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.zee.com/investors/investor-financials/",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Emtek": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://emtek.co.id/id/hubungan-investor/informasi-keuangan/laporan-keuangan",
+            "date": "2026-03-31"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Mahaka": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.mahakax.com/investor-relation/",
+            "date": "2025-09-30"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "ITV": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/doritos-loaded-estrena-un-anuncio-protagonizado-por-el-chef-gordon-ramsay-y-george-russell-302804829.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.itvplc.com/investors/results-centre/reports-and-results-archive/2025",
+            "date": "2026-03-05"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Groupe M6": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.groupem6.fr/en/tarifs-cgv/?_document_type=reports",
+            "date": "2025-08-06"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "MFE MediaForEurope": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.mfemediaforeurope.com/en/investors/financial-results/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "MultiChoice": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "url": "https://www.prnewswire.com/news-releases/doritos-loaded-estrena-un-anuncio-protagonizado-por-el-chef-gordon-ramsay-y-george-russell-302804829.html",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://investors.multichoice.com/latest-results.php",
+            "reason": "no IR url or fetch failed/broken"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "PRISA": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.prisa.com/en/datos/resultados-trimestrales",
+            "date": "2025-07-30"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "ProSiebenSat.1": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.prosiebensat1.com/en/investor-relations/publications/results",
+            "date": "2026-08-06"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Vantiva": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://www.vantiva.com/investor-center/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "TF1": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://groupe-tf1.fr/en/investors/results-and-publications",
+            "date": "2026-04-30"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "TV2 Denmark": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": false,
+            "url": "https://omtv2.tv2.dk/fakta/oekonomi-og-selskabsledelse/regnskabsrapporter/",
+            "reason": "no date extracted"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Vivendi": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://www.vivendi.com/en/shareholders-investors/financial-publications-and-reports/financial-results/",
+            "date": "2026-04-28"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Xilam": [
+          {
+            "source": "yfinance",
+            "found": false,
+            "reason": "no ticker or no data"
+          },
+          {
+            "source": "RSS",
+            "found": false,
+            "reason": "no feed configured or fetch failed"
+          },
+          {
+            "source": "IR",
+            "found": true,
+            "url": "https://xilam.com/en/reports/",
+            "date": "2026-04-03"
+          },
+          {
+            "source": "Alerts",
+            "found": false,
+            "reason": "no alerts for this company"
+          }
+        ],
+        "Fubo TV": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-06"
+          }
+        ],
+        "TKO Group": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-05"
+          }
+        ],
+        "Scripps": [
+          {
+            "source": "yfinance",
+            "found": true,
+            "date": "2026-08-06"
+          }
+        ]
+      }
     }
   ]
 }
