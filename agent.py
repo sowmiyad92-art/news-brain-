@@ -1,15 +1,8 @@
 """
-News Brain Agent v3
-Sources (in order):
-  1) Company IR RSS feeds (PR Newswire, GlobeNewswire, company-specific)
-  2) Direct IR page scrape
-  3) yfinance for US/major tickers
-  4) Google Alerts Sheet (CSV)
-Extractor: Groq with auto-retry
-
-Trust model:
-  yfinance -> data.json directly (high confidence)
-  IR Page / RSS / Alerts -> agent_suggestions.json (needs human review)
+News Brain Agent v4
+- No writes to data.json (all suggestions go to agent_suggestions.json)
+- Slim agent_log.json (no traces, no company details)
+- Human reviews all dates via review.html → Review Queue tab
 """
 
 import requests, json, os, time, re
@@ -185,16 +178,15 @@ def valid_future(s):
         return None
 
 
-# -- Source 1: Company RSS feeds --
+# -- Source 1: RSS feeds --
 def fetch_rss(name):
     feeds = RSS_FEEDS.get(name, [])
     if not feeds:
-        return None, None, None, None  # text, snippet, url, date
+        return None, None, None, None
     for feed_url in feeds:
         try:
             r = requests.get(feed_url, headers=HEADERS, timeout=12)
             if r.status_code != 200:
-                print(f"  [RSS] {name}: HTTP {r.status_code} from {feed_url.split('/')[2]}")
                 continue
             root = ET.fromstring(r.content)
             bits = []
@@ -211,53 +203,11 @@ def fetch_rss(name):
                 if not first_date:
                     first_date = pubdate
             if bits:
-                print(f"  [RSS] {name}: {len(bits)} items from {feed_url.split('/')[2]}")
-                text = '\n\n'.join(bits)
-                snippet = bits[0][:200] if bits else ''
-                return text, snippet, first_url, first_date
-        except Exception as e:
+                print(f"  [RSS] {name}: {len(bits)} items")
+                return '\n\n'.join(bits), bits[0][:200], first_url, first_date
+        except:
             pass
     return None, None, None, None
-
-
-# -- Source 4: Google Alerts Sheet (CSV) --
-ALERTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRm1ifG16mCqJu0u7DeMr4I_np7nPa8aU2BGgPFtyXG2JvaUfJfiBUaXgG2Ol_5kDDuF1L_ghMQmvVG/pub?gid=86938798&single=true&output=csv'
-
-EARNINGS_KEYWORDS = [
-    'q1', 'q2', 'q3', 'q4', 'quarterly', 'earnings', 'financial results',
-    'revenue', 'net profit', 'operating profit', 'results', 'fiscal'
-]
-
-
-def fetch_alerts_sheet():
-    try:
-        r = requests.get(ALERTS_CSV_URL, timeout=15)
-        if r.status_code != 200:
-            print(f"  Alerts sheet fetch failed: {r.status_code}")
-            return {}
-        lines = r.text.strip().split('\n')
-        alerts = {}
-        for line in lines[1:]:
-            try:
-                parts = line.split(',')
-                if len(parts) < 6:
-                    continue
-                company = parts[2].strip().strip('"')
-                title   = parts[3].strip().strip('"')
-                snippet = parts[5].strip().strip('"')
-                combined = (title + ' ' + snippet).lower()
-                if not any(kw in combined for kw in EARNINGS_KEYWORDS):
-                    continue
-                if company not in alerts:
-                    alerts[company] = []
-                alerts[company].append({'title': title, 'snippet': snippet})
-            except:
-                continue
-        print(f"  Alerts sheet: {len(alerts)} companies with earnings news")
-        return alerts
-    except Exception as e:
-        print(f"  Alerts sheet error: {e}")
-        return {}
 
 
 # -- Source 2: IR page scrape --
@@ -275,7 +225,7 @@ def scrape_ir(url):
     return None
 
 
-# -- Source 3: yfinance for US tickers --
+# -- Source 3: yfinance --
 def yf_lookup(name):
     if not HAS_YF:
         return None
@@ -293,31 +243,55 @@ def yf_lookup(name):
         ne = info.get('earningsTimestampEnd') or info.get('nextEarningsDate')
         if ne:
             if isinstance(ne, (int, float)):
-                dt       = datetime.fromtimestamp(ne)
-                upcoming = valid_future(dt.strftime('%Y-%m-%d'))
+                upcoming = valid_future(datetime.fromtimestamp(ne).strftime('%Y-%m-%d'))
             else:
                 upcoming = valid_future(str(ne)[:10])
         if last or upcoming:
             print(f"  [yfinance] {name} ({sym}): last={last} upcoming={upcoming}")
-            return {
-                'lastAnnouncement': last,
-                'upcomingDate':     upcoming,
-                'confidence':       'high',
-                'source':           'yfinance'
-            }
-    except Exception as e:
+            return {'lastAnnouncement': last, 'upcomingDate': upcoming,
+                    'confidence': 'high', 'source': 'yfinance'}
+    except:
         pass
     return None
 
 
-# -- Groq extraction with auto-retry --
+# -- Google Alerts Sheet --
+ALERTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRm1ifG16mCqJu0u7DeMr4I_np7nPa8aU2BGgPFtyXG2JvaUfJfiBUaXgG2Ol_5kDDuF1L_ghMQmvVG/pub?gid=86938798&single=true&output=csv'
+EARNINGS_KEYWORDS = ['q1','q2','q3','q4','quarterly','earnings','financial results','revenue','results','fiscal']
+
+def fetch_alerts_sheet():
+    try:
+        r = requests.get(ALERTS_CSV_URL, timeout=15)
+        if r.status_code != 200:
+            return {}
+        alerts = {}
+        for line in r.text.strip().split('\n')[1:]:
+            try:
+                parts = line.split(',')
+                if len(parts) < 6:
+                    continue
+                company = parts[2].strip().strip('"')
+                title   = parts[3].strip().strip('"')
+                snippet = parts[5].strip().strip('"')
+                if not any(kw in (title+snippet).lower() for kw in EARNINGS_KEYWORDS):
+                    continue
+                alerts.setdefault(company, []).append({'title': title, 'snippet': snippet})
+            except:
+                continue
+        print(f"  Alerts sheet: {len(alerts)} companies")
+        return alerts
+    except:
+        return {}
+
+
+# -- Groq extraction --
 def groq_extract(name, text, retries=2):
     if not GROQ_API_KEY or not text:
         return None
     prompt = (
         f"Today: {TODAY}. Find earnings/financial results dates for {name}.\n"
-        f"lastAnnouncement = date they RELEASED results (past date, before {TODAY})\n"
-        f"upcomingDate = date they WILL report next (future date, after {TODAY})\n"
+        f"lastAnnouncement = date they RELEASED results (past, before {TODAY})\n"
+        f"upcomingDate = date they WILL report next (future, after {TODAY})\n"
         f"Only use dates explicitly mentioned. null if not found.\n"
         f"Content:\n{text[:1500]}\n\n"
         f'JSON only: {{"lastAnnouncement":"YYYY-MM-DD or null","upcomingDate":"YYYY-MM-DD or null","confidence":"high/medium/low"}}'
@@ -326,50 +300,37 @@ def groq_extract(name, text, retries=2):
         try:
             r = requests.post(
                 'https://api.groq.com/openai/v1/chat/completions',
-                headers={
-                    'Authorization': f'Bearer {GROQ_API_KEY}',
-                    'Content-Type': 'application/json'
-                },
-                json={
-                    'model': 'llama-3.3-70b-versatile',
-                    'messages': [{'role': 'user', 'content': prompt}],
-                    'max_tokens': 100,
-                    'temperature': 0
-                },
+                headers={'Authorization': f'Bearer {GROQ_API_KEY}', 'Content-Type': 'application/json'},
+                json={'model': 'llama-3.3-70b-versatile', 'messages': [{'role': 'user', 'content': prompt}],
+                      'max_tokens': 100, 'temperature': 0},
                 timeout=25
             )
             resp = r.json()
             if 'error' in resp:
                 msg = resp['error'].get('message', '')
-                m   = re.search(r'try again in ([\d.]+)s', msg)
+                m = re.search(r'try again in ([\d.]+)s', msg)
                 if m and attempt < retries:
-                    wait = float(m.group(1)) + 12
-                    print(f"  [Groq] rate limit - waiting {wait:.0f}s...")
-                    time.sleep(wait)
+                    time.sleep(float(m.group(1)) + 12)
                     continue
-                print(f"  [Groq] {msg[:80]}")
                 return None
             raw = resp['choices'][0]['message']['content'].strip()
-            raw = raw.replace('```json', '').replace('```', '').strip()
+            raw = raw.replace('```json','').replace('```','').strip()
             if raw.count('{') > raw.count('}'):
                 raw += '}'
             result = json.loads(raw)
             result['lastAnnouncement'] = valid_past(result.get('lastAnnouncement'))
             result['upcomingDate']     = valid_future(result.get('upcomingDate'))
             return result
-        except json.JSONDecodeError as e:
+        except json.JSONDecodeError:
             if attempt < retries:
                 time.sleep(2)
                 continue
-            print(f"  [Groq] JSON error: {e}")
-            return None
-        except Exception as e:
-            print(f"  [Groq] error: {e}")
+        except:
             return None
     return None
 
 
-# -- Write agent_suggestions.json --
+# -- Save to agent_suggestions.json --
 def save_suggestion(suggestions_list, name, result, source, snippet, ir_url, article_url=None, article_date=None):
     if not result:
         return
@@ -381,10 +342,9 @@ def save_suggestion(suggestions_list, name, result, source, snippet, ir_url, art
         'upcomingDate':     result.get('upcomingDate'),
         'confidence':       result.get('confidence', 'medium'),
         'source':           source,
-        'snippet':          snippet[:300] if snippet else '',
+        'snippet':          (snippet or '')[:300],
         'articleUrl':       article_url or ir_url or '',
         'articleDate':      article_date or '',
-        'irUrl':            ir_url or '',
         'runDate':          TODAY,
         'status':           'pending',
     })
@@ -395,89 +355,26 @@ def write_suggestions(suggestions_list):
         with open(SUGGESTIONS_JSON, 'r', encoding='utf-8') as f:
             existing = json.load(f)
     except:
-        existing = {'runs': []}
+        existing = {'pending': [], 'runs': []}
 
-    existing['runs'].append({
-        'date':        TODAY,
-        'time':        datetime.now().strftime('%H:%M:%S'),
-        'suggestions': suggestions_list,
-        'total':       len(suggestions_list),
+    # Keep existing pending items not from today, add today's
+    kept = [s for s in existing.get('pending', []) if s.get('runDate') != TODAY]
+    existing['pending'] = kept + suggestions_list
+
+    existing.setdefault('runs', []).append({
+        'date':  TODAY,
+        'time':  datetime.now().strftime('%H:%M:%S'),
+        'total': len(suggestions_list),
     })
     existing['runs'] = existing['runs'][-30:]
 
     with open(SUGGESTIONS_JSON, 'w', encoding='utf-8') as f:
         json.dump(existing, f, indent=2, ensure_ascii=False)
-    print(f"  agent_suggestions.json: {len(suggestions_list)} suggestions saved")
+    print(f"  agent_suggestions.json: {len(suggestions_list)} new suggestions")
 
 
-# -- Global alerts cache --
-_alerts_cache = {}
-
-
-def process_company(co, suggestions_list):
-    name   = co.get('name', '')
-    ir_url = co.get('irWebsite', '')
-    trace  = []
-
-    yf_result = yf_lookup(name)
-    if yf_result:
-        trace.append({'source': 'yfinance', 'found': True,
-                       'date': yf_result.get('upcomingDate') or yf_result.get('lastAnnouncement')})
-    else:
-        trace.append({'source': 'yfinance', 'found': False, 'reason': 'no ticker or no data'})
-
-    if yf_result and (yf_result.get('lastAnnouncement') or yf_result.get('upcomingDate')):
-        yf_result['trace'] = trace
-        return yf_result
-
-    rss_text, rss_snippet, rss_url, rss_date = fetch_rss(name)
-    if rss_text:
-        r = groq_extract(name, rss_text)
-        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-            r['source'] = 'RSS Feed'
-            trace.append({'source': 'RSS', 'found': True, 'url': rss_url,
-                           'date': r.get('upcomingDate') or r.get('lastAnnouncement')})
-            save_suggestion(suggestions_list, name, r, 'RSS Feed', rss_snippet, ir_url, rss_url, rss_date)
-        else:
-            trace.append({'source': 'RSS', 'found': False, 'url': rss_url, 'reason': 'no date extracted'})
-    else:
-        trace.append({'source': 'RSS', 'found': False, 'reason': 'no feed configured or fetch failed'})
-
-    ir_text = scrape_ir(ir_url)
-    if ir_text:
-        r = groq_extract(name, ir_text)
-        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-            r['source'] = 'IR Page'
-            trace.append({'source': 'IR', 'found': True, 'url': ir_url,
-                           'date': r.get('upcomingDate') or r.get('lastAnnouncement')})
-            save_suggestion(suggestions_list, name, r, 'IR Page', ir_text[:200], ir_url, ir_url, '')
-        else:
-            trace.append({'source': 'IR', 'found': False, 'url': ir_url, 'reason': 'no date extracted'})
-    else:
-        trace.append({'source': 'IR', 'found': False, 'url': ir_url, 'reason': 'no IR url or fetch failed/broken'})
-
-    alert_items = _alerts_cache.get(name, [])
-    if alert_items:
-        alert_text = '\n\n'.join(f"TITLE: {a['title']}\nSNIPPET: {a['snippet']}" for a in alert_items[:3])
-        snippet    = f"{alert_items[0]['title']} - {alert_items[0]['snippet']}"
-        alert_url  = alert_items[0].get('url', '')
-        alert_date = alert_items[0].get('date', '')
-        r = groq_extract(name, alert_text)
-        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-            r['source'] = 'Google Alerts'
-            trace.append({'source': 'Alerts', 'found': True, 'url': alert_url,
-                           'date': r.get('upcomingDate') or r.get('lastAnnouncement')})
-            save_suggestion(suggestions_list, name, r, 'Google Alerts', snippet, ir_url, alert_url, alert_date)
-        else:
-            trace.append({'source': 'Alerts', 'found': False, 'reason': 'no date extracted'})
-    else:
-        trace.append({'source': 'Alerts', 'found': False, 'reason': 'no alerts for this company'})
-
-    return {'trace': trace}
-
-
-# -- Write agent log --
-def write_agent_log(updated, no_data_list, cleared, source_breakdown, results, traces):
+# -- Slim agent_log.json --
+def write_agent_log(updated, no_data_list, source_breakdown):
     LOG_FILE = 'agent_log.json'
     try:
         with open(LOG_FILE, 'r', encoding='utf-8') as f:
@@ -485,112 +382,67 @@ def write_agent_log(updated, no_data_list, cleared, source_breakdown, results, t
     except:
         log = {'runs': []}
 
-    company_details = {}
-    for name, r in results.items():
-        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-            company_details[name] = {
-                'lastAnnouncement': r.get('lastAnnouncement'),
-                'upcomingDate':     r.get('upcomingDate'),
-                'source':           r.get('source', 'unknown'),
-                'confidence':       r.get('confidence', 'unknown'),
-            }
-
+    # Keep only slim summary — no traces, no company details
     log['runs'].append({
         'date':            TODAY,
         'time':            datetime.now().strftime('%H:%M:%S'),
         'updated':         updated,
         'noData':          no_data_list,
-        'cleared':         cleared,
+        'cleared':         0,
         'sourceBreakdown': source_breakdown,
-        'companies':       company_details,
-        'traces':          traces,
     })
-    log['runs'] = log['runs'][-60:]
+    log['runs'] = log['runs'][-30:]  # keep last 30 only
 
     with open(LOG_FILE, 'w', encoding='utf-8') as f:
         json.dump(log, f, indent=2, ensure_ascii=False)
-    print(f"  agent_log.json updated ({len(log['runs'])} runs stored)")
+    print(f"  agent_log.json: slim entry saved ({len(log['runs'])} runs)")
 
 
-# -- Save yfinance results to data.json --
-def update_data_json(results, write_log=False, traces=None):
-    with open(DATA_JSON, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    is_dict   = isinstance(data, dict)
-    companies = data.get('companies', []) if is_dict else data
-    announced = (data.get('announcedDates') or {}) if is_dict else {}
+# -- Process one company --
+_alerts_cache = {}
 
-    updated = 0
-    for co in companies:
-        name = co.get('name', '')
-        r    = results.get(name)
-        if not r:
-            continue
-        changed = False
+def process_company(co, suggestions_list):
+    name   = co.get('name', '')
+    ir_url = co.get('irWebsite', '')
 
-        nl = r.get('lastAnnouncement')
-        if nl and (not co.get('lastAnnouncement') or nl > co.get('lastAnnouncement', '')):
-            co['lastAnnouncement'] = nl
-            try:
-                co['expectedNext'] = (datetime.strptime(nl, '%Y-%m-%d') + timedelta(days=90)).strftime('%Y-%m-%d')
-            except:
-                pass
-            changed = True
-            if name in announced and announced[name]['date'] <= nl:
-                print(f"  {name}: clearing announcedDate - consumed by lastAnnouncement {nl}")
-                del announced[name]
+    # yfinance → suggestions (not data.json)
+    yf_result = yf_lookup(name)
+    if yf_result and (yf_result.get('lastAnnouncement') or yf_result.get('upcomingDate')):
+        save_suggestion(suggestions_list, name, yf_result, 'yfinance', '', ir_url)
+        return yf_result
 
-        nu = r.get('upcomingDate')
-        if nu:
-            last_ann = co.get('lastAnnouncement', '')
-            if nu > last_ann:
-                announced[name] = {
-                    'date':      nu,
-                    'url':       None,
-                    'timestamp': datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
-                    'source':    r.get('source', 'agent')
-                }
-                changed = True
-            else:
-                print(f"  {name}: skipping upcomingDate {nu} - not after lastAnnouncement {last_ann}")
+    # RSS
+    rss_text, rss_snippet, rss_url, rss_date = fetch_rss(name)
+    if rss_text:
+        r = groq_extract(name, rss_text)
+        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
+            save_suggestion(suggestions_list, name, r, 'RSS Feed', rss_snippet, ir_url, rss_url, rss_date)
+            return r
 
-        if changed:
-            updated += 1
+    # IR page
+    ir_text = scrape_ir(ir_url)
+    if ir_text:
+        r = groq_extract(name, ir_text)
+        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
+            save_suggestion(suggestions_list, name, r, 'IR Page', ir_text[:200], ir_url)
+            return r
 
-    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    cleared = [n for n, e in list(announced.items())
-               if datetime.strptime(e['date'], '%Y-%m-%d') < today - timedelta(days=1)]
-    for n in cleared:
-        del announced[n]
-    if cleared:
-        print(f"  Cleared stale: {', '.join(cleared)}")
+    # Google Alerts
+    alert_items = _alerts_cache.get(name, [])
+    if alert_items:
+        alert_text = '\n\n'.join(f"TITLE: {a['title']}\nSNIPPET: {a['snippet']}" for a in alert_items[:3])
+        r = groq_extract(name, alert_text)
+        if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
+            save_suggestion(suggestions_list, name, r, 'Google Alerts',
+                            f"{alert_items[0]['title']}", ir_url)
+            return r
 
-    if is_dict:
-        data['companies']      = companies
-        data['announcedDates'] = announced
-        data['lastAgentRun']   = TODAY
-    with open(DATA_JSON, 'w', encoding='utf-8') as f:
-        json.dump(
-            data if is_dict else {'companies': companies, 'announcedDates': announced, 'lastAgentRun': TODAY},
-            f, indent=2, ensure_ascii=False
-        )
-
-    no_data_list  = [n for n, r in results.items() if not r or
-                     (not r.get('lastAnnouncement') and not r.get('upcomingDate'))]
-    source_counts = {}
-    for r in results.values():
-        if r and r.get('source'):
-            src = r['source'].lower().replace(' ', '_').replace('rss_feed', 'rss').replace('ir_page', 'ir')
-            source_counts[src] = source_counts.get(src, 0) + 1
-
-    print(f"\n  Updated:{updated} | No data:{len(no_data_list)} | Cleared:{len(cleared)}")
-    if write_log:
-        write_agent_log(updated, no_data_list, len(cleared), source_counts, results, traces or {})
+    return None
 
 
 # -- Main --
 def main():
-    print(f"News Brain Agent v3 - {TODAY} ({CURRENT_Q})")
+    print(f"News Brain Agent v4 - {TODAY} ({CURRENT_Q})")
     print(f"GROQ_API_KEY: {'SET' if GROQ_API_KEY else 'MISSING'}")
     if not os.path.exists(DATA_JSON):
         print("data.json not found")
@@ -599,53 +451,34 @@ def main():
     with open(DATA_JSON, 'r', encoding='utf-8') as f:
         data = json.load(f)
     companies = data.get('companies', data) if isinstance(data, dict) else data
-    print(f"{len(companies)} companies | RSS feeds:{len(RSS_FEEDS)} | yfinance:{'yes' if HAS_YF else 'no'}")
+    print(f"{len(companies)} companies")
 
     global _alerts_cache
     _alerts_cache = fetch_alerts_sheet()
 
-    results     = {}
-    traces      = {}
-    suggestions = []
+    suggestions  = []
+    found_count  = 0
+    no_data_list = []
+    source_counts = {}
 
     for i, co in enumerate(companies):
         name = co.get('name', '')
         if not name:
             continue
         r = process_company(co, suggestions)
-        traces[name] = r.get('trace', []) if r else []
         if r and (r.get('lastAnnouncement') or r.get('upcomingDate')):
-            results[name] = r
+            found_count += 1
+            src = r.get('source', 'unknown').lower().replace(' ', '_')
+            source_counts[src] = source_counts.get(src, 0) + 1
         else:
-            results[name] = None
-
-        if (i + 1) % 25 == 0:
-            print(f"\nCheckpoint {i+1}...")
-            update_data_json(results, write_log=False, traces=traces)
+            no_data_list.append(name)
 
         time.sleep(2)
 
-    print("\nFinal save...")
-
-    suggestion_sources = {}
-    for s in suggestions:
-        src = s.get('source', '').lower().replace(' ', '_').replace('ir_page', 'ir').replace('rss_feed', 'rss')
-        suggestion_sources[src] = suggestion_sources.get(src, 0) + 1
-
-    update_data_json(results, write_log=False, traces=traces)
-
-    no_data_list = [n for n, r in results.items() if not r or
-                    (not r.get('lastAnnouncement') and not r.get('upcomingDate'))]
-    source_counts = {}
-    for r in results.values():
-        if r and r.get('source'):
-            src = r['source'].lower().replace(' ', '_').replace('rss_feed', 'rss').replace('ir_page', 'ir')
-            source_counts[src] = source_counts.get(src, 0) + 1
-    source_counts.update(suggestion_sources)
-
-    write_agent_log(len([r for r in results.values() if r]), no_data_list, 0, source_counts, results, traces)
+    print(f"\nDone. Found:{found_count} | No data:{len(no_data_list)}")
     write_suggestions(suggestions)
-    print(f"Agent v3 complete! {len(suggestions)} suggestions pending review.")
+    write_agent_log(found_count, no_data_list, source_counts)
+    print("Agent v4 complete!")
 
 
 if __name__ == '__main__':
