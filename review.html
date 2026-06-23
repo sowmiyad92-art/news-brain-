@@ -56,6 +56,7 @@
   .badge-yellow { background: #fffff0; color: #744210; border: 1px solid #faf089; }
   .badge-blue   { background: #ebf8ff; color: #2c5282; border: 1px solid #bee3f8; }
   .badge-gray   { background: #f7fafc; color: #718096; border: 1px solid #e2e8f0; }
+  .badge-purple { background: #faf5ff; color: #553c9a; border: 1px solid #e9d8fd; }
 
   .paste-area {
     width: 100%; min-height: 120px; padding: 12px; font-size: 12px; font-family: monospace;
@@ -79,9 +80,11 @@
   .row-needs-review td { background: #fffff0; }
   .row-approved td { background: #f0fff4; }
   .row-rejected td { background: #fff5f5; opacity: 0.6; }
+  .row-dismissed td { background: #f7fafc; opacity: 0.5; }
 
   .approved-badge { color: #276749; font-weight: 700; font-size: 12px; }
   .rejected-badge { color: #c53030; font-weight: 700; font-size: 12px; }
+  .dismissed-badge { color: #718096; font-weight: 700; font-size: 12px; }
 
   .gap-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .gap-chip { background: #fff5f5; border: 1px solid #fed7d7; color: #c53030;
@@ -93,7 +96,6 @@
 
   #pasteStatus { font-size: 13px; font-weight: 600; margin-left: 8px; }
 
-  /* CSV table wrapper */
   .csv-table-wrap { overflow-x: auto; max-height: 500px; overflow-y: auto;
                     border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 8px; }
   .csv-table-wrap table { margin: 0; }
@@ -116,6 +118,26 @@
     animation: slideIn .2s ease; display: none;
   }
   @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .divider {
+    border: none; border-top: 2px dashed #e2e8f0;
+    margin: 28px 0;
+  }
+
+  .suggestions-header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+    border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .suggestions-header h2 { font-size: 15px; font-weight: 700; color: #2d3748; margin: 0; border: none; padding: 0; }
+  .suggestions-meta { font-size: 12px; color: #718096; }
+
+  .snippet-text {
+    font-size: 11px; color: #718096; max-width: 220px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .upcoming-date { font-weight: 700; color: #2b6cb0; }
+  .past-date { color: #718096; font-size: 12px; }
 </style>
 </head>
 <body>
@@ -144,7 +166,7 @@
     <div id="agentLogRoot"><div class="loading">⏳ Loading agent log…</div></div>
   </div>
 
-  <!-- Tab 2: Dashboard (CSV fetch) -->
+  <!-- Tab 2: Dashboard -->
   <div id="tab-alerts" class="tab-panel">
     <div class="section">
       <h2>📰 Dashboard — Live Sheet
@@ -155,7 +177,7 @@
     </div>
   </div>
 
-  <!-- Tab 3: Earnings Dates (CSV fetch) -->
+  <!-- Tab 3: Earnings Dates -->
   <div id="tab-earnings" class="tab-panel">
     <div class="section">
       <h2>📅 Earnings Dates — Live Sheet
@@ -168,9 +190,26 @@
 
   <!-- Tab 4: Review Queue -->
   <div id="tab-queue" class="tab-panel">
+
+    <!-- SECTION A: Agent Suggestions -->
     <div class="section">
-      <h2>✅ Review Queue — Approve Earnings Dates</h2>
-      <p class="hint">1. Open Earnings Dates tab above → Select All → Copy &nbsp;|&nbsp; 2. Paste below → Parse &nbsp;|&nbsp; 3. Approve rows</p>
+      <div class="suggestions-header">
+        <h2>🤖 Agent Suggestions — Upcoming Dates</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="suggestions-meta" id="suggestionsMetaText"></span>
+          <button class="refresh-btn" onclick="loadSuggestions()">🔄 Refresh</button>
+        </div>
+      </div>
+      <p class="hint">Dates found by the daily agent. Accept to save as Upcoming Earnings. Dismiss to hide.</p>
+      <div id="suggestionsRoot"><div class="loading">⏳ Loading suggestions…</div></div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SECTION B: Manual Paste Queue -->
+    <div class="section">
+      <h2>📋 Manual Paste Queue</h2>
+      <p class="hint">1. Open Earnings Dates tab → Select All → Copy &nbsp;|&nbsp; 2. Paste below → Parse &nbsp;|&nbsp; 3. Approve rows</p>
       <textarea id="csvPaste" class="paste-area" placeholder="Paste copied cells from Earnings Dates sheet here…"></textarea>
       <div class="flex-row">
         <button class="btn btn-primary" onclick="parsePaste()">🔍 Parse</button>
@@ -180,6 +219,7 @@
       </div>
     </div>
     <div id="queueRoot"></div>
+
   </div>
 
 </div>
@@ -199,10 +239,7 @@
 
 // ── Sheet config ──
 const SHEET_ID = '13_gzOaJ5NNGQ3ax-I-tU2sXtX06Zij5UO1Mh4R9YTww';
-const GIDS = {
-  alerts:   '86938798',
-  earnings: '445435022'
-};
+const GIDS = { alerts: '86938798', earnings: '445435022' };
 
 // ── CSV fetch + render ──
 async function loadSheetCSV(tab) {
@@ -212,46 +249,34 @@ async function loadSheetCSV(tab) {
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const text = await res.text();
-    el.innerHTML = renderCSVTable(text);
+    el.innerHTML = renderCSVTable(await res.text());
   } catch(e) {
-    el.innerHTML = `<div class="error-box">❌ Failed to load: ${e.message}<br>
-      Make sure the sheet is shared as "Anyone with the link → Viewer".</div>`;
+    el.innerHTML = `<div class="error-box">❌ Failed to load: ${e.message}</div>`;
   }
 }
 
 function parseCSVLine(line) {
-  const cols = [];
-  let cur = '', inQ = false;
+  const cols = []; let cur = '', inQ = false;
   for (let i = 0; i < line.length; i++) {
     const c = line[i];
-    if (c === '"' && !inQ) { inQ = true; }
-    else if (c === '"' && inQ) {
-      if (line[i+1] === '"') { cur += '"'; i++; }
-      else inQ = false;
-    } else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+    if (c === '"' && !inQ) inQ = true;
+    else if (c === '"' && inQ) { if (line[i+1] === '"') { cur += '"'; i++; } else inQ = false; }
+    else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
     else cur += c;
   }
-  cols.push(cur);
-  return cols;
+  cols.push(cur); return cols;
 }
 
 function renderCSVTable(csv) {
   const lines = csv.trim().split('\n').filter(l => l.trim());
   if (!lines.length) return '<p style="color:#a0aec0;font-size:13px;">No data found.</p>';
-
   const headers = parseCSVLine(lines[0]);
   const rows = lines.slice(1).map(l => parseCSVLine(l));
-
-  const thead = `<thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>`;
-  const tbody = `<tbody>${rows.map(r =>
-    `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`
-  ).join('')}</tbody>`;
-
-  return `<div class="csv-table-wrap"><table>${thead}${tbody}</table></div>
-    <p style="font-size:11px;color:#a0aec0;margin-top:8px;">
-      ${rows.length} rows · fetched ${new Date().toLocaleTimeString()}
-    </p>`;
+  return `<div class="csv-table-wrap"><table>
+    <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table></div>
+  <p style="font-size:11px;color:#a0aec0;margin-top:8px;">${rows.length} rows · ${new Date().toLocaleTimeString()}</p>`;
 }
 
 // ── Tab switching ──
@@ -260,18 +285,17 @@ function switchTab(name, e) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   if (e && e.target) e.target.classList.add('active');
-  // Auto-load sheet tabs on first visit
   if ((name === 'alerts' || name === 'earnings') &&
       document.getElementById(name + '-table').querySelector('.loading')) {
     loadSheetCSV(name);
   }
+  if (name === 'queue') loadSuggestions();
 }
 
 // ── Notification ──
 function notify(msg, color) {
   const el = document.getElementById('nbNotify');
-  el.textContent = msg;
-  el.style.background = color || '#2d3748';
+  el.textContent = msg; el.style.background = color || '#2d3748';
   el.style.display = 'block';
   setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
@@ -299,7 +323,7 @@ function renderAgentLog(log) {
       <h2>🤖 Agent Run Log (last ${runs.length} runs)</h2>
       <table>
         <thead><tr>
-          <th>Date</th><th>Time</th><th>Updated</th><th>No Data</th><th>Cleared</th><th>Sources</th>
+          <th>Date</th><th>Time</th><th>Found</th><th>No Data</th><th>Sources</th>
         </tr></thead>
         <tbody>
         ${runs.map(r => `<tr>
@@ -307,12 +331,8 @@ function renderAgentLog(log) {
           <td style="color:#718096;font-size:12px;">${r.time||''}</td>
           <td><span class="badge badge-green">${r.updated}</span></td>
           <td><span class="badge badge-red">${r.noData?.length ?? 0}</span></td>
-          <td>${r.cleared ?? 0}</td>
           <td style="font-size:11px;color:#718096;">
-            RSS:${r.sourceBreakdown?.rss??0}
-            IR:${r.sourceBreakdown?.ir??0}
-            yf:${r.sourceBreakdown?.yfinance??0}
-            Groq:${r.sourceBreakdown?.groq??0}
+            ${Object.entries(r.sourceBreakdown||{}).map(([k,v])=>`${k}:${v}`).join(' ')}
           </td>
         </tr>`).join('')}
         </tbody>
@@ -320,7 +340,7 @@ function renderAgentLog(log) {
       ${gaps.length > 0 ? `
         <div style="margin-top:16px;">
           <div style="font-size:12px;font-weight:600;color:#718096;margin-bottom:8px;">
-            ⚠️ Coverage gaps in last run (${gaps.length} companies):
+            ⚠️ No data in last run (${gaps.length} companies):
           </div>
           <div class="gap-chips">
             ${gaps.map(n => `<span class="gap-chip">${n}</span>`).join('')}
@@ -329,7 +349,161 @@ function renderAgentLog(log) {
     </div>`;
 }
 
-// ── CSV Parse + Review Queue ──
+// ── Agent Suggestions ──
+let allSuggestions = [];
+const DISMISSED_KEY = 'nb_dismissed_suggestions';
+
+function getDismissed() {
+  try { return JSON.parse(localStorage.getItem(DISMISSED_KEY) || '[]'); } catch(_) { return []; }
+}
+function addDismissed(key) {
+  const d = getDismissed();
+  if (!d.includes(key)) d.push(key);
+  localStorage.setItem(DISMISSED_KEY, JSON.stringify(d));
+}
+
+async function loadSuggestions() {
+  const root = document.getElementById('suggestionsRoot');
+  root.innerHTML = '<div class="loading">⏳ Loading…</div>';
+  try {
+    const res = await fetch('./agent_suggestions.json?t=' + Date.now());
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    allSuggestions = data.pending || [];
+    const lastRun = data.runs && data.runs.length ? data.runs[data.runs.length-1] : null;
+    document.getElementById('suggestionsMetaText').textContent =
+      lastRun ? `Last run: ${lastRun.date} ${lastRun.time||''} · ${allSuggestions.length} pending` : '';
+    renderSuggestions();
+  } catch(e) {
+    root.innerHTML = `<div class="error-box">❌ Could not load agent_suggestions.json: ${e.message}<br>
+      <span style="font-size:11px;">Run the agent at least once to generate this file.</span></div>`;
+    document.getElementById('suggestionsMetaText').textContent = '';
+  }
+}
+
+function renderSuggestions() {
+  const root = document.getElementById('suggestionsRoot');
+  const dismissed = getDismissed();
+
+  // Separate upcoming vs past-only suggestions
+  const upcoming = allSuggestions.filter(s => s.upcomingDate && s.status !== 'accepted');
+  const pastOnly  = allSuggestions.filter(s => !s.upcomingDate && s.lastAnnouncement && s.status !== 'accepted');
+  const visible   = upcoming.filter(s => !dismissed.includes(s.company + '_' + s.upcomingDate));
+
+  if (!allSuggestions.length) {
+    root.innerHTML = '<p style="color:#a0aec0;font-size:13px;padding:12px 0;">No suggestions yet — agent has not run or found no dates.</p>';
+    return;
+  }
+
+  const acceptedCount  = allSuggestions.filter(s => s.status === 'accepted').length;
+  const dismissedCount = dismissed.length;
+
+  root.innerHTML = `
+    <div style="font-size:12px;color:#718096;margin-bottom:12px;">
+      ${visible.length} upcoming to review
+      ${dismissedCount ? `· <span style="color:#a0aec0;">${dismissedCount} dismissed</span>` : ''}
+      ${acceptedCount  ? `· <span style="color:#276749;">${acceptedCount} accepted</span>` : ''}
+      ${pastOnly.length ? `· ${pastOnly.length} past-date only (no upcoming)` : ''}
+      ${dismissedCount ? `&nbsp;<button onclick="clearDismissed()" style="font-size:11px;color:#3182ce;background:none;border:none;cursor:pointer;">↩ restore dismissed</button>` : ''}
+    </div>
+    ${visible.length === 0 ? '<p style="color:#a0aec0;font-size:13px;">All suggestions reviewed ✅</p>' : `
+    <div class="csv-table-wrap">
+    <table>
+      <thead><tr>
+        <th>Company</th>
+        <th>Upcoming Date</th>
+        <th>Last Announcement</th>
+        <th>Source</th>
+        <th>Confidence</th>
+        <th>Snippet</th>
+        <th>Action</th>
+      </tr></thead>
+      <tbody>
+      ${visible.map((s, i) => `<tr>
+        <td><strong>${s.company}</strong></td>
+        <td><span class="upcoming-date">${s.upcomingDate}</span></td>
+        <td><span class="past-date">${s.lastAnnouncement || '—'}</span></td>
+        <td><span class="badge badge-blue">${s.source}</span></td>
+        <td><span class="badge ${s.confidence==='high'?'badge-green':s.confidence==='medium'?'badge-yellow':'badge-gray'}">${s.confidence}</span></td>
+        <td>
+          ${s.articleUrl
+            ? `<a href="${s.articleUrl}" target="_blank" style="color:#3182ce;font-size:11px;">🔗 Link</a><br>`
+            : ''}
+          <span class="snippet-text" title="${(s.snippet||'').replace(/"/g,'&quot;')}">${s.snippet||'—'}</span>
+        </td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-success btn-sm" onclick="acceptSuggestion(${i})">✅ Accept</button>
+            <button class="btn btn-sm" style="background:#f7fafc;border:1px solid #e2e8f0;color:#718096;"
+              onclick="dismissSuggestion(${i})">✕</button>
+          </div>
+        </td>
+      </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>`}
+    ${pastOnly.length > 0 ? `
+    <div style="margin-top:16px;">
+      <div style="font-size:12px;font-weight:600;color:#718096;margin-bottom:8px;">
+        📋 Past dates found (no upcoming date) — for reference only:
+      </div>
+      <div class="gap-chips">
+        ${pastOnly.map(s => `<span class="gap-chip" title="${s.lastAnnouncement} · ${s.source}">${s.company}: ${s.lastAnnouncement}</span>`).join('')}
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function acceptSuggestion(visibleIndex) {
+  const dismissed = getDismissed();
+  const visible = allSuggestions.filter(s =>
+    s.upcomingDate && s.status !== 'accepted' &&
+    !dismissed.includes(s.company + '_' + s.upcomingDate)
+  );
+  const s = visible[visibleIndex];
+  if (!s) return;
+
+  const normalized = normalizeDate(s.upcomingDate);
+  if (!normalized) { notify('⚠️ Could not parse date: ' + s.upcomingDate, '#dd6b20'); return; }
+
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
+  store[s.company] = {
+    date: normalized,
+    url: s.articleUrl || null,
+    timestamp: new Date().toLocaleString(),
+    source: 'agent-suggestion'
+  };
+  localStorage.setItem('announcedDates', JSON.stringify(store));
+
+  // Mark as accepted in local array
+  const idx = allSuggestions.indexOf(s);
+  if (idx !== -1) allSuggestions[idx].status = 'accepted';
+
+  renderSuggestions();
+  notify(`📅 ${s.company} → ${normalized} saved as Upcoming`, '#38a169');
+}
+
+function dismissSuggestion(visibleIndex) {
+  const dismissed = getDismissed();
+  const visible = allSuggestions.filter(s =>
+    s.upcomingDate && s.status !== 'accepted' &&
+    !dismissed.includes(s.company + '_' + s.upcomingDate)
+  );
+  const s = visible[visibleIndex];
+  if (!s) return;
+  addDismissed(s.company + '_' + s.upcomingDate);
+  renderSuggestions();
+  notify(`✕ ${s.company} dismissed`, '#718096');
+}
+
+function clearDismissed() {
+  localStorage.removeItem(DISMISSED_KEY);
+  renderSuggestions();
+  notify('↩ Dismissed suggestions restored', '#3182ce');
+}
+
+// ── Manual Paste Queue ──
 let parsedRows = [];
 
 function parsePaste() {
@@ -355,7 +529,7 @@ function parsePaste() {
 function renderQueue() {
   const root = document.getElementById('queueRoot');
   if (!parsedRows.length) { root.innerHTML = ''; return; }
-  const pending = parsedRows.filter(r => r.status==='pending').length;
+  const pending  = parsedRows.filter(r => r.status==='pending').length;
   const approved = parsedRows.filter(r => r.status==='approved').length;
   const rejected = parsedRows.filter(r => r.status==='rejected').length;
   root.innerHTML = `
@@ -386,8 +560,7 @@ function renderQueue() {
           return `<tr class="${rowClass}">
             <td><strong>${r.company}</strong></td>
             <td><span class="badge badge-blue">${r.period}</span></td>
-            <td>${r.schedDate||'—'}</td>
-            <td>${r.relDate||'—'}</td>
+            <td>${r.schedDate||'—'}</td><td>${r.relDate||'—'}</td>
             <td>${r.needsReview ? '<span class="badge badge-yellow">⚑ Manual</span>' : (r.notes||'—')}</td>
             <td>${r.url ? `<a href="${r.url}" target="_blank" style="color:#3182ce;font-size:11px;">🔗 Link</a>` : '—'}</td>
             <td>${actionHtml}</td>
@@ -463,6 +636,7 @@ function normalizeDate(str) {
 
 // ── Init ──
 loadAgentLog().then(renderAgentLog);
+loadSuggestions();
 </script>
 </body>
 </html>
