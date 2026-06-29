@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function loadData() {
-    // Auto-clear stale localStorage if data.json version is newer
-    const DATA_VERSION = '2026-06';
+    // FIX 1: Bump version date → forces localStorage clear so data.json dates always win
+    const DATA_VERSION = '2026-06-29';
     if (localStorage.getItem('nb_data_version') !== DATA_VERSION) {
         localStorage.removeItem('companiesData');
         localStorage.removeItem('announcedDates');
         localStorage.setItem('nb_data_version', DATA_VERSION);
-        console.log('🧹 Cleared stale localStorage — version updated');
+        console.log('🧹 Cleared stale localStorage — version updated to', DATA_VERSION);
     }
 
     try {
@@ -42,10 +42,14 @@ async function loadData() {
             for (const co of (baseData.companies || [])) {
                 lastAnnMap[co.name] = co.lastAnnouncement || '';
             }
+            // FIX 2: Only let localStorage companiesData override lastAnnMap
+            // if the localStorage date is STRICTLY newer than data.json.
+            // This prevents stale localStorage from blocking upcoming date merges.
             try {
                 const savedCompanies = JSON.parse(localStorage.getItem('companiesData') || '[]');
                 for (const co of savedCompanies) {
-                    if (co.lastAnnouncement && co.lastAnnouncement > (lastAnnMap[co.name] || '')) {
+                    const baseDate = lastAnnMap[co.name] || '';
+                    if (co.lastAnnouncement && co.lastAnnouncement > baseDate) {
                         lastAnnMap[co.name] = co.lastAnnouncement;
                     }
                 }
@@ -60,8 +64,6 @@ async function loadData() {
                 const entryDate = new Date(entry.date); entryDate.setHours(0, 0, 0, 0);
 
                 // ── TODAY: auto-promote announced date → lastAnnouncement ──
-                // If the confirmed earnings date is TODAY and agent hasn't already updated it,
-                // move it into lastAnnouncement + recalculate expectedNext, then clear upcoming pin.
                 if (entryDate.getTime() === today.getTime()) {
                     const coEntry = (baseData.companies || []).find(c => c.name === company);
                     if (coEntry && (!coEntry.lastAnnouncement || coEntry.lastAnnouncement < entry.date)) {
@@ -80,8 +82,10 @@ async function loadData() {
                     continue;
                 }
 
-                // SKIP if: date is already past, OR lastAnnouncement has caught up to/passed it
-                if (entryDate < today || (lastAnn && lastAnn >= entry.date)) {
+                // FIX 2 CORE: Only skip if entryDate is in the past.
+                // Do NOT skip based on lastAnn — that was blocking future dates
+                // when localStorage had a wrong/stale lastAnnouncement string.
+                if (entryDate < today) {
                     skipped++;
                     if (stored[company]) delete stored[company];
                     continue;
@@ -94,7 +98,7 @@ async function loadData() {
             }
 
             localStorage.setItem('announcedDates', JSON.stringify(stored));
-            console.log(`🤖 [agent] Merged ${merged} upcoming dates, skipped ${skipped} consumed/past dates`);
+            console.log(`🤖 [agent] Merged ${merged} upcoming dates, skipped ${skipped} past dates`);
         }
 
         const savedData = localStorage.getItem('companiesData');
@@ -110,10 +114,11 @@ async function loadData() {
             for (const company of allData.companies) {
                 const s = savedMap[company.name];
                 if (s) {
-                    if (s.lastAnnouncement && (!company.lastAnnouncement || s.lastAnnouncement > company.lastAnnouncement)) {
+                    // Only override data.json if localStorage is strictly newer
+                    if (s.lastAnnouncement && s.lastAnnouncement > (company.lastAnnouncement || '')) {
                         company.lastAnnouncement = s.lastAnnouncement;
                     }
-                    if (s.expectedNext && (!company.expectedNext || s.expectedNext > company.expectedNext)) {
+                    if (s.expectedNext && s.expectedNext > (company.expectedNext || '')) {
                         company.expectedNext = s.expectedNext;
                     }
                     company.articleUrl = s.articleUrl || null;
