@@ -306,10 +306,10 @@ function handleSearch(e) {
     }
 }
 
-function filterByRegion(region) {
+window.filterByRegion = function filterByRegion(region, btn) {
     currentFilter = region;
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    if (clickedBtn) clickedBtn.classList.add('active');
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
     if (!allData || !allData.companies) return;
     const filtered = region === 'all'
         ? allData.companies
