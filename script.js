@@ -10,19 +10,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupDataExport();
     loadNewsHistory();
     updateDashboard();
-    // checkTomorrowAlerts() REMOVED — banner lives in Analytics tab only
     setupNewsHistoryPanel();
     document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
 });
 
 async function loadData() {
-    // FIX 1: Bump version date → forces localStorage clear so data.json dates always win
     const DATA_VERSION = '2026-06-29';
     if (localStorage.getItem('nb_data_version') !== DATA_VERSION) {
         localStorage.removeItem('companiesData');
         localStorage.removeItem('announcedDates');
         localStorage.setItem('nb_data_version', DATA_VERSION);
-        console.log('🧹 Cleared stale localStorage — version updated to', DATA_VERSION);
+        console.log('CLEARED stale localStorage - version updated to', DATA_VERSION);
     }
 
     try {
@@ -32,19 +30,14 @@ async function loadData() {
 
         loadAnnouncedDates();
 
-        // Merge agent announcedDates from data.json into localStorage
         if (baseData.announcedDates && typeof baseData.announcedDates === 'object') {
             let stored = {};
             try { stored = JSON.parse(localStorage.getItem('announcedDates') || '{}'); } catch(_) {}
 
-            // Build lastAnnouncement map from base data + localStorage overrides
             const lastAnnMap = {};
             for (const co of (baseData.companies || [])) {
                 lastAnnMap[co.name] = co.lastAnnouncement || '';
             }
-            // FIX 2: Only let localStorage companiesData override lastAnnMap
-            // if the localStorage date is STRICTLY newer than data.json.
-            // This prevents stale localStorage from blocking upcoming date merges.
             try {
                 const savedCompanies = JSON.parse(localStorage.getItem('companiesData') || '[]');
                 for (const co of savedCompanies) {
@@ -56,14 +49,19 @@ async function loadData() {
             } catch(_) {}
 
             const today = new Date(); today.setHours(0, 0, 0, 0);
-            let merged = 0, skipped = 0;
+            let merged = 0, skipped = 0, protectedManual = 0;
 
             for (const [company, entry] of Object.entries(baseData.announcedDates)) {
-                const existing  = stored[company]?.date;
-                const lastAnn   = lastAnnMap[company] || '';
+                const existingEntry = stored[company];
+                const existing = existingEntry?.date;
                 const entryDate = new Date(entry.date); entryDate.setHours(0, 0, 0, 0);
 
-                // ── TODAY: auto-promote announced date → lastAnnouncement ──
+                // MANUAL PROTECTION: never let agent/data.json overwrite a manually-saved date
+                if (existingEntry && existingEntry.source === 'manual') {
+                    protectedManual++;
+                    continue;
+                }
+
                 if (entryDate.getTime() === today.getTime()) {
                     const coEntry = (baseData.companies || []).find(c => c.name === company);
                     if (coEntry && (!coEntry.lastAnnouncement || coEntry.lastAnnouncement < entry.date)) {
@@ -75,16 +73,13 @@ async function loadData() {
                                 String(next.getMonth() + 1).padStart(2, '0') + '-' +
                                 String(next.getDate()).padStart(2, '0');
                         } catch(_) {}
-                        console.log(`📅 [auto-promote] ${company}: announcedDate ${entry.date} → lastAnnouncement`);
+                        console.log('[auto-promote]', company, ':', entry.date, '-> lastAnnouncement');
                     }
                     if (stored[company]) delete stored[company];
                     skipped++;
                     continue;
                 }
 
-                // FIX 2 CORE: Only skip if entryDate is in the past.
-                // Do NOT skip based on lastAnn — that was blocking future dates
-                // when localStorage had a wrong/stale lastAnnouncement string.
                 if (entryDate < today) {
                     skipped++;
                     if (stored[company]) delete stored[company];
@@ -98,7 +93,7 @@ async function loadData() {
             }
 
             localStorage.setItem('announcedDates', JSON.stringify(stored));
-            console.log(`🤖 [agent] Merged ${merged} upcoming dates, skipped ${skipped} past dates`);
+            console.log('[agent] Merged', merged, 'upcoming dates, skipped', skipped, 'past dates, protected', protectedManual, 'manual saves');
         }
 
         const savedData = localStorage.getItem('companiesData');
@@ -114,7 +109,6 @@ async function loadData() {
             for (const company of allData.companies) {
                 const s = savedMap[company.name];
                 if (s) {
-                    // Only override data.json if localStorage is strictly newer
                     if (s.lastAnnouncement && s.lastAnnouncement > (company.lastAnnouncement || '')) {
                         company.lastAnnouncement = s.lastAnnouncement;
                     }
@@ -138,21 +132,21 @@ async function loadData() {
                         sourceReliability: s.sourceReliability || 3,
                         articleUrl: s.articleUrl || null,
                     });
-                    console.log('✅ Restored user-added company:', s.name);
+                    console.log('Restored user-added company:', s.name);
                 }
             }
-            console.log('✅ Loaded data.json + localStorage —', allData.companies.length, 'total companies');
+            console.log('Loaded data.json + localStorage -', allData.companies.length, 'total companies');
         } else {
             allData = baseData;
             window.allData = allData;
-            console.log('✅ Loaded fresh data from data.json');
+            console.log('Loaded fresh data from data.json');
         }
 
         renderTable(allData.companies);
     } catch (error) {
         console.error('Error loading data:', error);
         document.getElementById('tableBody').innerHTML =
-            '<tr><td colspan="9" style="text-align:center;color:red;padding:30px;">❌ Error loading data.json</td></tr>';
+            '<tr><td colspan="9" style="text-align:center;color:red;padding:30px;">Error loading data.json</td></tr>';
     }
 }
 
@@ -163,7 +157,7 @@ async function loadData() {
 function loadNewsHistory() {
     const saved = localStorage.getItem('newsHistory');
     newsHistory = saved ? JSON.parse(saved) : [];
-    console.log('📰 Loaded', newsHistory.length, 'news articles in history');
+    console.log('Loaded', newsHistory.length, 'news articles in history');
 }
 
 function saveNewsHistory() {
@@ -182,7 +176,7 @@ function addNewsToHistory(company, date, url, source = 'manual') {
     newsHistory.unshift(entry);
     if (newsHistory.length > 100) newsHistory = newsHistory.slice(0, 100);
     saveNewsHistory();
-    console.log('📰 Added to history:', company, date);
+    console.log('Added to history:', company, date);
 }
 
 function getNewsHistory(company = null) {
@@ -198,7 +192,7 @@ function exportNewsHistory() {
     link.href = url;
     link.download = `news-history-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
-    showNotification('✅ News history exported!', 'success');
+    showNotification('News history exported!', 'success');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -211,18 +205,21 @@ function loadAnnouncedDates() {
     try {
         const saved = localStorage.getItem('announcedDates');
         announcedDates = saved ? JSON.parse(saved) : {};
-        console.log('📅 Loaded upcoming earnings dates for', Object.keys(announcedDates).length, 'companies');
+        console.log('Loaded upcoming earnings dates for', Object.keys(announcedDates).length, 'companies');
     } catch(e) { announcedDates = {}; }
 }
 
+// FIX: manual saves now tagged source:'manual' so the agent merge
+// in loadData() will never overwrite them, regardless of date comparison.
 function saveAnnouncedDate(companyName, date, url) {
     announcedDates[companyName] = {
         date,
         url: url || null,
-        timestamp: new Date().toLocaleString()
+        timestamp: new Date().toLocaleString(),
+        source: 'manual'
     };
     localStorage.setItem('announcedDates', JSON.stringify(announcedDates));
-    console.log('📅 Saved upcoming earnings date for', companyName, '→', date);
+    console.log('Saved upcoming earnings date (manual) for', companyName, '->', date);
 }
 
 function clearAnnouncedDate(companyName) {
@@ -276,18 +273,18 @@ window.quSave = function() {
     const date    = document.getElementById('quDate')?.value;
     const url     = document.getElementById('quUrl')?.value.trim() || null;
 
-    if (!company) { showNotification('⚠️ Please select a company', 'warning'); return; }
-    if (!date)    { showNotification('⚠️ Please pick a date', 'warning'); return; }
+    if (!company) { showNotification('Please select a company', 'warning'); return; }
+    if (!date)    { showNotification('Please pick a date', 'warning'); return; }
 
     if (quTab === 'past') {
         updateCompanyNews(company, date, url);
         addNewsToHistory(company, date, url, 'quick-update');
-        showNotification(`✅ Last Announcement updated: ${company} → ${date}`, 'success');
+        showNotification(`Last Announcement updated: ${company} -> ${date}`, 'success');
     } else {
         saveAnnouncedDate(company, date, url);
         addNewsToHistory(company, date, url, 'upcoming-date');
         renderTable(allData.companies);
-        showNotification(`📅 Upcoming Earnings saved: ${company} → ${date}`, 'success');
+        showNotification(`Upcoming Earnings saved: ${company} -> ${date}`, 'success');
     }
 
     document.getElementById('quUrl').value = '';
@@ -371,7 +368,6 @@ function renderTable(companies) {
 
         const isTomorrow = company.expectedNext === tomorrowStr;
 
-        // ── Upcoming Earnings Date column ──
         const announced = getAnnouncedDate(company.name);
         const today = new Date(); today.setHours(0,0,0,0);
 
@@ -407,13 +403,11 @@ function renderTable(companies) {
             isTomorrow            ? 'due-tomorrow'   : ''
         ].filter(Boolean).join(' ');
 
-       // Pattern badge
         const pat = company.pattern || 'Q';
         const patLabel = { Q:'Q', H:'H', A:'A' }[pat] || 'Q';
         const patClass = { Q:'pattern-q', H:'pattern-h', A:'pattern-a' }[pat] || 'pattern-q';
         const patBadge = `<span class="pattern-badge ${patClass}" title="${{Q:'Quarterly',H:'Half-Yearly',A:'Annual'}[pat]}">${patLabel}</span>`;
 
-        // Manual check flag — show if no data from agent AND no upcoming date
         const overdueThreshold = { Q: 120, H: 240, A: 400 }[pat] || 120;
         const needsManualCheck = !announced && dateInfo.days > overdueThreshold;
         const manualFlag = needsManualCheck
@@ -441,7 +435,7 @@ function renderTable(companies) {
 function updateDashboard() {
     const today = new Date();
     const thirtyDaysLater = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-    
+
     const overdue = allData.companies.filter(c => {
         const dateInfo = calculateDaysInfo(c.lastAnnouncement);
         return dateInfo.isOverdue;
@@ -494,7 +488,7 @@ function exportDataToJSON() {
     link.href = url;
     link.download = `news-brain-backup-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
-    showNotification('✅ Data exported! File downloaded', 'success');
+    showNotification('Data exported! File downloaded', 'success');
 }
 
 function importDataFromJSON(event) {
@@ -519,10 +513,10 @@ function importDataFromJSON(event) {
             localStorage.setItem('companiesData', JSON.stringify(allData.companies));
             renderTable(allData.companies);
             updateDashboard();
-            showNotification(`✅ Imported ${updated} companies!`, 'success');
+            showNotification(`Imported ${updated} companies!`, 'success');
         } catch (error) {
             console.error('Import error:', error);
-            showNotification('❌ Error importing file', 'error');
+            showNotification('Error importing file', 'error');
         }
     };
     reader.readAsText(file);
@@ -573,69 +567,69 @@ function handleUrlPaste(e) {
 }
 
 function processNewsUrl(url) {
-    console.log('📰 Processing URL:', url);
-    showNotification('🔍 Analyzing article...', 'info');
+    console.log('Processing URL:', url);
+    showNotification('Analyzing article...', 'info');
 
     try {
         const result = extractNewsInfo(url);
-        if (!result.company) { showNotification('❌ Could not identify company', 'error'); return; }
+        if (!result.company) { showNotification('Could not identify company', 'error'); return; }
 
         const isPastResults = confirm(
-            `🏢 Company: ${result.company}\n\n` +
+            `Company: ${result.company}\n\n` +
             `Is this article about PAST earnings results?\n\n` +
-            `✅ OK     → 📊 YES — past results (updates "Last Announcement")\n` +
-            `❌ Cancel → 📅 NO  — future date announcement (saves to "Upcoming Earnings")`
+            `OK     -> YES — past results (updates "Last Announcement")\n` +
+            `Cancel -> NO  — future date announcement (saves to "Upcoming Earnings")`
         );
 
         if (isPastResults) {
             if (!result.date) result.date = extractDateFromQuarter(url);
             if (!result.date) {
                 const manualDate = prompt(
-                    `📅 Enter the earnings RESULTS date:\n\nCompany: ${result.company}\nExamples: 2026-04-07 | April 7 2026`, '');
-                if (!manualDate) { showNotification('⏸️ Cancelled', 'warning'); return; }
+                    `Enter the earnings RESULTS date:\n\nCompany: ${result.company}\nExamples: 2026-04-07 | April 7 2026`, '');
+                if (!manualDate) { showNotification('Cancelled', 'warning'); return; }
                 result.date = extractDateFromText(manualDate) || (isValidDate(manualDate) ? manualDate : null);
-                if (!result.date) { showNotification('❌ Could not parse that date', 'error'); return; }
+                if (!result.date) { showNotification('Could not parse that date', 'error'); return; }
             }
             updateCompanyNews(result.company, result.date, url);
             addNewsToHistory(result.company, result.date, url, 'url-paste');
-            showNotification(`✅ Last Announcement updated: ${result.company} → ${result.date}`, 'success');
+            showNotification(`Last Announcement updated: ${result.company} -> ${result.date}`, 'success');
         } else {
             let announcedDate = extractAnnouncedDateFromUrl(url) || extractDateFromQuarter(url);
             if (!announcedDate) {
                 const manualDate = prompt(
-                    `📅 Enter the UPCOMING earnings date:\n\nCompany: ${result.company}\nExamples: 2026-05-06 | May 6 2026`, '');
-                if (!manualDate) { showNotification('⏸️ Cancelled', 'warning'); return; }
+                    `Enter the UPCOMING earnings date:\n\nCompany: ${result.company}\nExamples: 2026-05-06 | May 6 2026`, '');
+                if (!manualDate) { showNotification('Cancelled', 'warning'); return; }
                 announcedDate = extractDateFromText(manualDate) || (isValidDate(manualDate) ? manualDate : null);
-                if (!announcedDate) { showNotification('❌ Could not parse that date', 'error'); return; }
+                if (!announcedDate) { showNotification('Could not parse that date', 'error'); return; }
             }
             saveAnnouncedDate(result.company, announcedDate, url);
             addNewsToHistory(result.company, announcedDate, url, 'announced-date');
             renderTable(allData.companies);
-            showNotification(`📅 Upcoming Earnings saved: ${result.company} → ${announcedDate}`, 'success');
+            showNotification(`Upcoming Earnings saved: ${result.company} -> ${announcedDate}`, 'success');
         }
     } catch (error) {
         console.error('Error:', error);
-        showNotification('❌ Error processing URL', 'error');
+        showNotification('Error processing URL', 'error');
     }
 }
 
 function handleAddAnnounced(companyName) {
-    const date = prompt(`📅 Enter confirmed earnings date for ${companyName}:\n\nFormat: YYYY-MM-DD\nExample: 2026-07-15`, '');
+    const date = prompt(`Enter confirmed earnings date for ${companyName}:\n\nFormat: YYYY-MM-DD\nExample: 2026-07-15`, '');
     if (!date || !isValidDate(date)) {
-        if (date) showNotification('❌ Invalid date. Use YYYY-MM-DD', 'error');
+        if (date) showNotification('Invalid date. Use YYYY-MM-DD', 'error');
         return;
     }
-    const url = prompt(`🔗 Paste source article URL (optional — press OK to skip):`, '') || null;
+    const url = prompt(`Paste source article URL (optional — press OK to skip):`, '') || null;
     saveAnnouncedDate(companyName, date, url && url.startsWith('http') ? url : null);
     renderTable(allData.companies);
-    showNotification(`📅 Confirmed date saved for ${companyName}`, 'success');
+    showNotification(`Confirmed date saved for ${companyName}`, 'success');
 }
 
 function handleClearAnnounced(companyName) {
     if (!confirm(`Remove announced date for ${companyName}?`)) return;
     clearAnnouncedDate(companyName);
     renderTable(allData.companies);
-    showNotification(`🗑️ Cleared announced date for ${companyName}`, 'info');
+    showNotification(`Cleared announced date for ${companyName}`, 'info');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -936,13 +930,13 @@ function closeNewsHistory() {
 
 function quickAddUrl(companyName, url) {
     if (!url || !url.startsWith('http')) {
-        showNotification('❌ Please enter a valid URL starting with http', 'error');
+        showNotification('Please enter a valid URL starting with http', 'error');
         return;
     }
     let date = extractDateFromQuarter(url) || extractNewsInfo(url).date;
     if (!date) date = new Date().toISOString().split('T')[0];
     updateCompanyNews(companyName, date, url);
     addNewsToHistory(companyName, date, url, 'panel-add');
-    showNotification(`✅ URL attached to ${companyName}`, 'success');
+    showNotification(`URL attached to ${companyName}`, 'success');
     openNewsHistory(companyName);
 }
