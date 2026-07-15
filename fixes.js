@@ -38,7 +38,7 @@
                  source: 'manual'          // ← ADD THIS LINE
              };
             localStorage.setItem(UPCOMING_KEY, JSON.stringify(store));
-            ...
+            
 
             // Keep in-memory copy in sync
             if (window.announcedDates) {
