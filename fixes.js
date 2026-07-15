@@ -32,11 +32,13 @@
             let store = {};
             try { store = JSON.parse(localStorage.getItem(UPCOMING_KEY) || '{}'); } catch(_) {}
             store[companyName] = {
-                date,
-                url: url || null,
-                timestamp: new Date().toLocaleString()
-            };
+                 date,
+                 url: url || null,
+                 timestamp: new Date().toLocaleString(),
+                 source: 'manual'          // ← ADD THIS LINE
+             };
             localStorage.setItem(UPCOMING_KEY, JSON.stringify(store));
+            ...
 
             // Keep in-memory copy in sync
             if (window.announcedDates) {
