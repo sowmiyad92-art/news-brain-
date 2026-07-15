@@ -36,8 +36,8 @@
       "irWebsite": "https://company.rtl.com/en/media/overview/press-releases-and-news/",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-05-28",
-      "expectedNext": "2026-08-26",
+      "lastAnnouncement": "2026-04-30",
+      "expectedNext": "2026-07-29",
       "articleUrl": "https://www.bertelsmann.com/en/investor-relations/"
     },
     {
@@ -55,8 +55,8 @@
       "irWebsite": "https://ir.paramount.com/press-releases",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-05-05",
-      "expectedNext": "2026-08-03"
+      "lastAnnouncement": "2026-05-04",
+      "expectedNext": "2026-08-02"
     },
     {
       "name": "Warner Bros Discovery",
@@ -122,8 +122,8 @@
       "irWebsite": "https://www.cmcsa.com/investor-news",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-26",
-      "expectedNext": "2026-07-25",
+      "lastAnnouncement": "2026-04-23",
+      "expectedNext": "2026-07-22",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/countdown-comcast-cmcsa-q1-earnings-131502488.html"
     },
     {
@@ -142,8 +142,8 @@
       "irWebsite": "https://www.foxcorporation.com/news/press-releases/",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-05-11",
-      "expectedNext": "2026-08-09",
+      "lastAnnouncement": "2026-05-07",
+      "expectedNext": "2026-08-05",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/fox-corporation-executives-discuss-third-160000410.html"
     },
     {
@@ -162,8 +162,8 @@
       "irWebsite": "https://investors.universalmusic.com/news/",
       "bestSource": "IR Website",
       "sourceReliability": 4,
-      "lastAnnouncement": "2026-04-30",
-      "expectedNext": "2026-07-29"
+      "lastAnnouncement": "2026-04-23",
+      "expectedNext": "2026-07-22"
     },
     {
       "name": "TV Asahi",
@@ -231,8 +231,8 @@
       "irWebsite": "https://www.imax.com/en/in/investor-relations",
       "bestSource": "GNews",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-05-04",
-      "expectedNext": "2026-08-02",
+      "lastAnnouncement": "2026-04-30",
+      "expectedNext": "2026-07-29",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/imax-corporation-announce-first-quarter-200500982.html"
     },
     {
@@ -259,8 +259,8 @@
       "irWebsite": "https://www.nexstar.tv/investor-relations/#reports",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-05-07",
-      "expectedNext": "2026-08-05",
+      "lastAnnouncement": "2026-05-08",
+      "expectedNext": "2026-08-06",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/nexstar-media-group-report-2026-110000423.html"
     },
     {
@@ -415,8 +415,8 @@
       "irWebsite": "https://ir.bilibili.com/",
       "bestSource": "GNews",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-05-19",
-      "expectedNext": "2026-08-17",
+      "lastAnnouncement": "2026-05-27",
+      "expectedNext": "2026-08-25",
       "articleUrl": "https://finance.yahoo.com/markets/stocks/articles/bilibili-inc-files-2025-annual-102500275.html"
     },
     {
@@ -443,8 +443,8 @@
       "irWebsite": "https://www.group.dentsu.com/en/news/release/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-05-14",
-      "expectedNext": "2026-08-12"
+      "lastAnnouncement": "2026-03-02",
+      "expectedNext": "2026-05-31"
     },
     {
       "name": "Digikore",
@@ -569,8 +569,8 @@
       "irWebsite": "https://www.smentertainment.com/en/",
       "bestSource": "IR Website",
       "sourceReliability": 3,
-      "lastAnnouncement": "2026-05-11",
-      "expectedNext": "2026-08-09"
+      "lastAnnouncement": "2026-05-07",
+      "expectedNext": "2026-08-05"
     },
     {
       "name": "Studio Dragon",
