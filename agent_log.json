@@ -1245,6 +1245,60 @@
         "yfinance": 26,
         "unknown": 13
       }
+    },
+    {
+      "date": "2026-07-18",
+      "time": "04:46:07",
+      "updated": 38,
+      "noData": [
+        "Disney",
+        "Paramount",
+        "Cineplex",
+        "Sony",
+        "Universal Music Group",
+        "TV Asahi",
+        "Canal+",
+        "MBC Group",
+        "Grupo Clarin",
+        "Megacable",
+        "Quebecor",
+        "TEGNA",
+        "Amagi",
+        "WildBrain",
+        "Damai Holdings",
+        "Avex",
+        "Balaji Telefilms",
+        "Baweja Studios",
+        "CJ ENM",
+        "DK Karaoke",
+        "Dentsu",
+        "Digikore",
+        "Digital Domain",
+        "Eros Media",
+        "Grammy",
+        "MD Entertainment",
+        "NW18",
+        "NTV",
+        "Saregama",
+        "Seven West Media",
+        "SM Entertainment",
+        "Studio Dragon",
+        "Tips Industries",
+        "Toei Animation",
+        "Toho",
+        "Zee Entertainment",
+        "Mahaka",
+        "MFE MediaForEurope",
+        "MultiChoice",
+        "PRISA",
+        "Vantiva",
+        "TV2 Denmark"
+      ],
+      "cleared": 0,
+      "sourceBreakdown": {
+        "yfinance": 21,
+        "unknown": 17
+      }
     }
   ]
 }
