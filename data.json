@@ -826,4 +826,6 @@
     "Curiosity Stream": {"date": "2026-08-04", "url": null, "timestamp": "22/06/2026 07:18:19", "source": "yfinance"},
     "Kartoon Studios": {"date": "2026-08-13", "url": null, "timestamp": "22/06/2026 07:18:19", "source": "yfinance"},
     "Mahaka": {"date": "2026-09-30", "url": null, "timestamp": "04/06/2026 13:02:06", "source": "IR Page"}
-},
+  },
+  "lastAgentRun": "2026-06-22"
+}
