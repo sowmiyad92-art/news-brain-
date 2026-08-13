@@ -679,3 +679,37 @@ tr.due-tomorrow td {
     vertical-align: middle;
     cursor: help;
 }
+/* ── Row Edit/Delete icons ── */
+.row-edit, .row-delete {
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: 8px;
+    display: inline-block;
+    transition: transform 0.15s, opacity 0.15s;
+    opacity: 0.55;
+    vertical-align: middle;
+}
+.row-edit:hover, .row-delete:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+.row-delete:hover {
+    filter: drop-shadow(0 0 2px rgba(245, 101, 101, 0.5));
+}
+
+/* ── Edit modal buttons (match existing btn language) ── */
+#editCompanyModal input:focus,
+#editCompanyModal select:focus {
+    outline: none;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ── JSON export panel scrollbar polish ── */
+#jsonExportPanel textarea::-webkit-scrollbar {
+    width: 8px;
+}
+#jsonExportPanel textarea::-webkit-scrollbar-thumb {
+    background: #4a5568;
+    border-radius: 4px;
+}
