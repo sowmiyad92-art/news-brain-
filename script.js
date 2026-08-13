@@ -106,6 +106,11 @@ async function loadData() {
             allData = baseData;
             window.allData = allData;
 
+            const deleted = getDeletedCompanies();
+            if (deleted.length) {
+                allData.companies = allData.companies.filter(c => !deleted.includes(c.name));
+            }
+
             for (const company of allData.companies) {
                 const s = savedMap[company.name];
                 if (s) {
@@ -139,6 +144,11 @@ async function loadData() {
         } else {
             allData = baseData;
             window.allData = allData;
+
+            const deleted = getDeletedCompanies();
+            if (deleted.length) {
+                allData.companies = allData.companies.filter(c => !deleted.includes(c.name));
+            }
             console.log('Loaded fresh data from data.json');
         }
 
@@ -426,6 +436,8 @@ function renderTable(companies) {
                 <td style="text-align:center;">${newsIndicator}</td>
                 <td>
                     <a href="${company.irWebsite}" target="_blank" class="ir-link">Check IR →</a>
+                    <span class="row-edit" onclick="openEditModal('${safeName}')" title="Edit company">✏️</span>
+                    <span class="row-delete" onclick="handleDeleteCompany('${safeName}')" title="Delete company">🗑️</span>
                 </td>
             </tr>
         `;
@@ -939,4 +951,171 @@ function quickAddUrl(companyName, url) {
     addNewsToHistory(companyName, date, url, 'panel-add');
     showNotification(`URL attached to ${companyName}`, 'success');
     openNewsHistory(companyName);
+}
+
+// ═══════════════════════════════════════════════════════
+// EDIT / DELETE COMPANY
+// ═══════════════════════════════════════════════════════
+
+function getDeletedCompanies() {
+    try { return JSON.parse(localStorage.getItem('deletedCompanies') || '[]'); }
+    catch(_) { return []; }
+}
+
+function addDeletedCompany(name) {
+    const list = getDeletedCompanies();
+    if (!list.includes(name)) list.push(name);
+    localStorage.setItem('deletedCompanies', JSON.stringify(list));
+}
+
+function persistCompaniesToStorage() {
+    const dataToSave = allData.companies.map(c => ({
+        name: c.name,
+        lastAnnouncement: c.lastAnnouncement,
+        expectedNext: c.expectedNext,
+        articleUrl: c.articleUrl || null,
+        region: c.region,
+        bestSource: c.bestSource,
+        sourceReliability: c.sourceReliability,
+        irWebsite: c.irWebsite,
+        pattern: c.pattern || 'Q'
+    }));
+    localStorage.setItem('companiesData', JSON.stringify(dataToSave));
+}
+
+function openEditModal(companyName) {
+    const company = allData.companies.find(c => c.name === companyName);
+    if (!company) return;
+
+    let modal = document.getElementById('editCompanyModal');
+    if (modal) modal.remove();
+
+    modal = document.createElement('div');
+    modal.id = 'editCompanyModal';
+    modal.innerHTML = `
+        <div onclick="closeEditModal()" style="position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1998;"></div>
+        <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+            background:#fff;border-radius:12px;padding:24px;width:400px;max-width:90vw;
+            z-index:1999;box-shadow:0 10px 40px rgba(0,0,0,0.2);font-family:inherit;">
+            <h3 style="margin:0 0 16px;font-size:16px;">✏️ Edit ${company.name}</h3>
+
+            <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">Name</label>
+            <input id="editName" value="${company.name}" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;margin-bottom:10px;">
+
+            <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">Region</label>
+            <select id="editRegion" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;margin-bottom:10px;">
+                ${['North America','Europe','Asia','Africa','Latin America','Middle East']
+                    .map(r => `<option value="${r}" ${company.region===r?'selected':''}>${r}</option>`).join('')}
+            </select>
+
+            <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">IR Website</label>
+            <input id="editIrWebsite" value="${company.irWebsite || ''}" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;margin-bottom:10px;">
+
+            <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">Best Source</label>
+            <input id="editBestSource" value="${company.bestSource || ''}" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;margin-bottom:10px;">
+
+            <label style="font-size:12px;color:#666;display:block;margin-bottom:4px;">Source Reliability (1-5)</label>
+            <input id="editReliability" type="number" min="1" max="5" value="${company.sourceReliability || 3}" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;margin-bottom:16px;">
+
+            <div style="display:flex;gap:8px;">
+                <button onclick="closeEditModal()" style="flex:1;padding:10px;background:#edf2f7;border:none;border-radius:8px;cursor:pointer;font-size:13px;">Cancel</button>
+                <button onclick="saveEditModal('${company.name.replace(/'/g,"\\'")}')" style="flex:1;padding:10px;background:#38a169;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">Save</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editCompanyModal');
+    if (modal) modal.remove();
+}
+
+function saveEditModal(originalName) {
+    const company = allData.companies.find(c => c.name === originalName);
+    if (!company) return;
+
+    const newName = document.getElementById('editName').value.trim();
+    if (!newName) { showNotification('Name cannot be empty', 'error'); return; }
+
+    company.name              = newName;
+    company.region            = document.getElementById('editRegion').value;
+    company.irWebsite         = document.getElementById('editIrWebsite').value.trim();
+    company.bestSource        = document.getElementById('editBestSource').value.trim();
+    company.sourceReliability = parseInt(document.getElementById('editReliability').value) || 3;
+
+    // If renamed, migrate its announcedDates entry too
+    if (newName !== originalName && announcedDates[originalName]) {
+        announcedDates[newName] = announcedDates[originalName];
+        delete announcedDates[originalName];
+        localStorage.setItem('announcedDates', JSON.stringify(announcedDates));
+    }
+
+    persistCompaniesToStorage();
+    closeEditModal();
+    renderTable(allData.companies);
+    showNotification(`${newName} updated`, 'success');
+    showJsonExportPanel();
+}
+
+function handleDeleteCompany(companyName) {
+    if (!confirm(`Delete ${companyName}? This can't be undone.`)) return;
+
+    allData.companies = allData.companies.filter(c => c.name !== companyName);
+    delete announcedDates[companyName];
+    localStorage.setItem('announcedDates', JSON.stringify(announcedDates));
+    addDeletedCompany(companyName);
+    persistCompaniesToStorage();
+
+    renderTable(allData.companies);
+    showNotification(`${companyName} deleted`, 'info');
+    showJsonExportPanel();
+}
+
+function showJsonExportPanel() {
+    let panel = document.getElementById('jsonExportPanel');
+    if (panel) panel.remove();
+
+    const exportObj = {
+        companies: allData.companies.map(c => ({
+            name: c.name,
+            region: c.region,
+            irWebsite: c.irWebsite,
+            bestSource: c.bestSource,
+            sourceReliability: c.sourceReliability,
+            lastAnnouncement: c.lastAnnouncement,
+            expectedNext: c.expectedNext,
+            articleUrl: c.articleUrl || undefined
+        })),
+        announcedDates: announcedDates,
+        lastAgentRun: allData.lastAgentRun || ''
+    };
+    const jsonStr = JSON.stringify(exportObj, null, 2);
+
+    panel = document.createElement('div');
+    panel.id = 'jsonExportPanel';
+    panel.innerHTML = `
+        <div style="position:fixed;bottom:0;left:0;right:0;background:#1a202c;color:#fff;
+            padding:16px 20px;z-index:2000;box-shadow:0 -4px 20px rgba(0,0,0,0.3);
+            max-height:40vh;display:flex;flex-direction:column;font-family:inherit;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <strong style="font-size:13px;">📋 Updated data.json — paste into GitHub to make permanent</strong>
+                <div>
+                    <button onclick="copyJsonExport()" style="background:#38a169;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;margin-right:8px;">Copy</button>
+                    <button onclick="document.getElementById('jsonExportPanel').remove()" style="background:none;border:none;color:#aaa;font-size:18px;cursor:pointer;">&times;</button>
+                </div>
+            </div>
+            <textarea id="jsonExportText" readonly style="flex:1;background:#0d1117;color:#e6e6e6;
+                border:1px solid #2a2f3a;border-radius:6px;padding:10px;font-family:monospace;
+                font-size:11px;resize:none;">${jsonStr}</textarea>
+        </div>
+    `;
+    document.body.appendChild(panel);
+}
+
+function copyJsonExport() {
+    const textarea = document.getElementById('jsonExportText');
+    textarea.select();
+    document.execCommand('copy');
+    showNotification('Copied! Paste into data.json on GitHub', 'success');
 }
